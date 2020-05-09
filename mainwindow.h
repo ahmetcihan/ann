@@ -5,7 +5,8 @@
 #include <QDebug>
 #include <math.h>
 
-typedef unsigned char u8;
+typedef unsigned char   u8;
+typedef unsigned int    u32;
 
 namespace Ui {
 class MainWindow;
