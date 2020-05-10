@@ -25,6 +25,9 @@ private:
 
     double sigmoid_func(double val);
     double derivative_of_sigmoid_func(double val);
+
+    void xor_ann(void);
+    void two_in_ann(double input1,double input2, double desired_output, u32 epoch);
 };
 
 #endif // MAINWINDOW_H
