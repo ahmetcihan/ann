@@ -23,8 +23,6 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    double _2_3_1_weights[9];
-
     double input_2_4_2[2];
     double desired_output_2_4_2[2];
 
@@ -37,8 +35,6 @@ private:
     void xor_ann(void);
     void _2_4_2_ann_train(double *input, double *desired_output, u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
     void _2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
-    void _2_3_1_ann_train(double input1,double input2, double desired_output, u32 epoch, double *weight);
-    void _2_3_1_ann_test(double input1,double input2, double *weight);
 };
 
 #endif // MAINWINDOW_H
