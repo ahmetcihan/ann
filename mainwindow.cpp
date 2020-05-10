@@ -24,7 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _2_4_2_ann_train(input_2_4_2,desired_output_2_4_2,270, _2_4_2_input_to_hidden_weight, _2_4_2_hidden_to_output_weight);
 
-    //_2_4_2_ann_test(input_2_4_2,_2_4_2_weights);
+    input_2_4_2[0] = 11.2;
+    input_2_4_2[1] = -0.3;
+    _2_4_2_ann_test(input_2_4_2, _2_4_2_input_to_hidden_weight, _2_4_2_hidden_to_output_weight);
 }
 void MainWindow::_2_3_1_ann_test(double input1, double input2, double *weight){
     double A_in,B_in,C_in;
@@ -42,30 +44,42 @@ void MainWindow::_2_3_1_ann_test(double input1, double input2, double *weight){
     Y_in = A_out*weight[6] + B_out*weight[7] + C_out*weight[8];
     Y_out = sigmoid_func(Y_in);
 
+    qDebug() << "************test result*********************";
     qDebug() << "tested input1 :" << input1 << "input2 :" << input2 << "output :" << Y_out ;
 }
-void MainWindow::_2_4_2_ann_test(double *input, double *weight){
-    double A_in,B_in,C_in,D_in;
-    double A_out,B_out,C_out,D_out;
-    double Y1_in,Y1_out;
-    double Y2_in,Y2_out;
+void MainWindow::_2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]){
+#define INPUT_COUNT 2
+#define HIDDEN_COUNT 4
+#define OUTPUT_COUNT 2
 
-    A_in = input[0]*weight[0] + input[1]*weight[1];
-    B_in = input[0]*weight[2] + input[1]*weight[3];
-    C_in = input[0]*weight[4] + input[1]*weight[5];
-    D_in = input[0]*weight[6] + input[1]*weight[7];
+    double Y_in[OUTPUT_COUNT];
+    double Y_out[OUTPUT_COUNT];
 
-    A_out = sigmoid_func(A_in);
-    B_out = sigmoid_func(B_in);
-    C_out = sigmoid_func(C_in);
-    D_out = sigmoid_func(D_in);
+    double hidden_in[HIDDEN_COUNT];
+    double hidden_out[HIDDEN_COUNT];
 
-    Y1_in = A_out*weight[8] + B_out*weight[9] + C_out*weight[10] + D_out*weight[11];
-    Y1_out = sigmoid_func(Y1_in);
-    Y2_in = A_out*weight[12] + B_out*weight[13] + C_out*weight[14] + D_out*weight[15];
-    Y2_out = sigmoid_func(Y2_in);
+    hidden_in[0] = input[0]*input_to_hidden_weight[0][0] + input[1]*input_to_hidden_weight[1][0];
+    hidden_in[1] = input[0]*input_to_hidden_weight[0][1] + input[1]*input_to_hidden_weight[1][1];
+    hidden_in[2] = input[0]*input_to_hidden_weight[0][2] + input[1]*input_to_hidden_weight[1][2];
+    hidden_in[3] = input[0]*input_to_hidden_weight[0][3] + input[1]*input_to_hidden_weight[1][3];
 
-    qDebug() << "output1 : " << Y1_out << "output2 : " << Y2_out;
+    hidden_out[0] = sigmoid_func(hidden_in[0]);
+    hidden_out[1] = sigmoid_func(hidden_in[1]);
+    hidden_out[2] = sigmoid_func(hidden_in[2]);
+    hidden_out[3] = sigmoid_func(hidden_in[3]);
+
+    Y_in[0] = hidden_out[0]*hidden_to_output_weight[0][0] + hidden_out[1]*hidden_to_output_weight[1][0] +
+            hidden_out[2]*hidden_to_output_weight[2][0] + hidden_out[3]*hidden_to_output_weight[3][0];
+    Y_out[0] = sigmoid_func(Y_in[0]);
+
+    Y_in[1] = hidden_out[0]*hidden_to_output_weight[0][1] + hidden_out[1]*hidden_to_output_weight[1][1] +
+            hidden_out[2]*hidden_to_output_weight[2][1] + hidden_out[3]*hidden_to_output_weight[3][1];
+    Y_out[1] = sigmoid_func(Y_in[1]);
+
+    qDebug() << "************test result*********************";
+    for(u8 i = 0; i < OUTPUT_COUNT; i++){
+        qDebug() << QString("output[%1] : ").arg(i) << Y_out[i];
+    }
 }
 
 void MainWindow::_2_4_2_ann_train(double *input, double *desired_output, u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]){
