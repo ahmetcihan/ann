@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "***************************************";
 
     //_2_3_1_ann_test(0.2,0.3,_2_3_1_weights);
+    //_2_4_2_ann_test(10.2,-0.3,_2_4_2_weights);
 }
 void MainWindow::_2_3_1_ann_test(double input1, double input2, double *weight){
     double A_in,B_in,C_in;
@@ -49,6 +50,30 @@ void MainWindow::_2_3_1_ann_test(double input1, double input2, double *weight){
 
     qDebug() << "tested input1 :" << input1 << "input2 :" << input2 << "output :" << Y_out ;
 }
+void MainWindow::_2_4_2_ann_test(double input1, double input2, double *weight){
+    double A_in,B_in,C_in,D_in;
+    double A_out,B_out,C_out,D_out;
+    double Y1_in,Y1_out;
+    double Y2_in,Y2_out;
+
+    A_in = input1*weight[0] + input2*weight[1];
+    B_in = input1*weight[2] + input2*weight[3];
+    C_in = input1*weight[4] + input2*weight[5];
+    D_in = input1*weight[6] + input2*weight[7];
+
+    A_out = sigmoid_func(A_in);
+    B_out = sigmoid_func(B_in);
+    C_out = sigmoid_func(C_in);
+    D_out = sigmoid_func(D_in);
+
+    Y1_in = A_out*weight[8] + B_out*weight[9] + C_out*weight[10] + D_out*weight[11];
+    Y1_out = sigmoid_func(Y1_in);
+    Y2_in = A_out*weight[12] + B_out*weight[13] + C_out*weight[14] + D_out*weight[15];
+    Y2_out = sigmoid_func(Y2_in);
+
+    qDebug() << "output1 : " << Y1_out << "output2 : " << Y2_out;
+}
+
 void MainWindow::_2_4_2_ann_train(double input1,double input2, double desired_output1,  double desired_output2, u32 epoch, double *weight){
     {
         double calculated_output1,calculated_output2;
