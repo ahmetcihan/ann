@@ -7,10 +7,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    input_2_4_2[0] = 10.2;
-    input_2_4_2[1] = -100.3;
-    desired_output_2_4_2[0] = 0.59;
-    desired_output_2_4_2[1] = 0.44;
+    input_2_4_2[0][0] = 3;
+    input_2_4_2[1][0] = 6;
+    desired_output_2_4_2[0][0] = 0.3;
+    desired_output_2_4_2[1][0] = 0.6;
+
+    input_2_4_2[0][1] = 3;
+    input_2_4_2[1][1] = 6;
+    desired_output_2_4_2[0][1] = 0.3;
+    desired_output_2_4_2[1][1] = 0.6;
+
     for(u8 i = 0; i < 2; i++){
         for(u8 j = 0; j < 4; j++){
             _2_4_2_input_to_hidden_weight[i][j] = 0.1;
@@ -22,11 +28,10 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     }
 
-    _2_4_2_ann_train(input_2_4_2,desired_output_2_4_2,100, _2_4_2_input_to_hidden_weight, _2_4_2_hidden_to_output_weight);
+    _2_4_2_ann_train(input_2_4_2,desired_output_2_4_2,10000000, _2_4_2_input_to_hidden_weight, _2_4_2_hidden_to_output_weight);
 
-    input_2_4_2[0] = 10.2;
-    input_2_4_2[1] = -100.3;
-    _2_4_2_ann_test(input_2_4_2, _2_4_2_input_to_hidden_weight, _2_4_2_hidden_to_output_weight);
+    double denemeci[2] = {3,6};
+    _2_4_2_ann_test(denemeci, _2_4_2_input_to_hidden_weight, _2_4_2_hidden_to_output_weight);
 }
 void MainWindow::_2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]){
 #define INPUT_COUNT 2
@@ -60,12 +65,13 @@ void MainWindow::_2_4_2_ann_test(double *input, double input_to_hidden_weight[2]
     }
 }
 
-void MainWindow::_2_4_2_ann_train(double *input, double *desired_output, u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]){
+void MainWindow::_2_4_2_ann_train(double input[2][2], double desired_output[2][2], u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]){
 #define INPUT_COUNT 2
 #define HIDDEN_COUNT 4
 #define OUTPUT_COUNT 2
+#define IO_ARRAY_LENGTH 2
 
-    double calculated_output[OUTPUT_COUNT];
+    double calculated_output[OUTPUT_COUNT][IO_ARRAY_LENGTH];
     double Y_in[OUTPUT_COUNT];
     double Y_out[OUTPUT_COUNT];
     double delta_Y[OUTPUT_COUNT];
@@ -78,80 +84,87 @@ void MainWindow::_2_4_2_ann_train(double *input, double *desired_output, u32 epo
     double delta_input_to_hidden_weight[2][4];
     double delta_hidden_to_output_weight[4][2];
 
-    for(u8 i = 0; i < INPUT_COUNT; i++){
-        qDebug() << QString("input[%1] : ").arg(i) << input[i];
+    for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
+        for(u8 i = 0; i < INPUT_COUNT; i++){
+            qDebug() << QString("input[%1][%2] : ").arg(i).arg(j) << input[i][j];
+        }
     }
-    for(u8 i = 0; i < OUTPUT_COUNT; i++){
-        qDebug() << QString("desired_output[%1] : ").arg(i) << desired_output[i];
+    for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
+        for(u8 i = 0; i < OUTPUT_COUNT; i++){
+            qDebug() << QString("desired_output[%1][%2] : ").arg(i).arg(j) << desired_output[i][j];
+        }
     }
 
     for(u32 era = 0; era < epoch; era++){
-
-        for(u8 i = 0; i < HIDDEN_COUNT; i++){
-            hidden_in[i] = 0;
-            for(u8 j = 0; j < INPUT_COUNT; j++){
-                hidden_in[i] += input[j]*input_to_hidden_weight[j][i];
-            }
-            hidden_out[i] = sigmoid_func(hidden_in[i]);
-        }
-
-        for(u8 i = 0; i < OUTPUT_COUNT; i++){
-            Y_in[i] = 0;
-            for(u8 j = 0; j < HIDDEN_COUNT; j++){
-                Y_in[i] += hidden_out[j]*hidden_to_output_weight[j][i];
-            }
-            Y_out[i] = sigmoid_func(Y_in[i]);
-            error[i] = desired_output[i] - Y_out[i];
-            calculated_output[i] = Y_out[i];
-            delta_Y[i] = derivative_of_sigmoid_func(Y_in[i]) * error[i];
-        }
-
-        for(u8 i = 0; i < HIDDEN_COUNT; i++){
-            delta_hidden[i] = 0;
-            for(u8 j = 0; j < OUTPUT_COUNT; j++){
-                delta_hidden[i] +=   (delta_Y[j]/hidden_to_output_weight[i][j] * derivative_of_sigmoid_func(hidden_in[i]));
-            }
-        }
-
-        for(u8 i = 0; i < HIDDEN_COUNT; i++){
-            if(hidden_out[i] == 0){
-                for(u8 j = 0; j < OUTPUT_COUNT; j++){
-                    delta_hidden_to_output_weight[i][j] = 0;
+        for(u8 io_no = 0; io_no < IO_ARRAY_LENGTH; io_no++){
+            for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                hidden_in[i] = 0;
+                for(u8 j = 0; j < INPUT_COUNT; j++){
+                    hidden_in[i] += input[j][io_no]*input_to_hidden_weight[j][i];
                 }
+                hidden_out[i] = sigmoid_func(hidden_in[i]);
             }
-            else{
-                for(u8 j = 0; j < OUTPUT_COUNT; j++){
-                    delta_hidden_to_output_weight[i][j] = delta_Y[j] / hidden_out[i];
-                }
-            }
-        }
 
-        for(u8 i = 0; i < INPUT_COUNT; i++){
-            if (input[i] == 0){
+            for(u8 i = 0; i < OUTPUT_COUNT; i++){
+                Y_in[i] = 0;
                 for(u8 j = 0; j < HIDDEN_COUNT; j++){
-                    delta_input_to_hidden_weight[i][j] = 0;
+                    Y_in[i] += hidden_out[j]*hidden_to_output_weight[j][i];
                 }
+                Y_out[i] = sigmoid_func(Y_in[i]);
+                error[i] = desired_output[i][io_no] - Y_out[i];
+                calculated_output[i][io_no] = Y_out[i];
+                delta_Y[i] = derivative_of_sigmoid_func(Y_in[i]) * error[i];
             }
-            else{
-                for(u8 j = 0; j < HIDDEN_COUNT; j++){
-                    delta_input_to_hidden_weight[i][j] = delta_hidden[j]/input[i];
-                }
-            }
-        }
 
-        for(u8 i = 0; i < INPUT_COUNT; i++){
-            for(u8 j = 0; j < HIDDEN_COUNT; j++){
-                input_to_hidden_weight[i][j] = input_to_hidden_weight[i][j] + delta_input_to_hidden_weight[i][j];
+            for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                delta_hidden[i] = 0;
+                for(u8 j = 0; j < OUTPUT_COUNT; j++){
+                    delta_hidden[i] +=   (delta_Y[j]/hidden_to_output_weight[i][j] * derivative_of_sigmoid_func(hidden_in[i]));
+                }
             }
-        }
-        for(u8 i = 0; i < HIDDEN_COUNT; i++){
-            for(u8 j = 0; j < OUTPUT_COUNT; j++){
-                hidden_to_output_weight[i][j] = hidden_to_output_weight[i][j] + delta_hidden_to_output_weight[i][j];
+
+            for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                if(hidden_out[i] == 0){
+                    for(u8 j = 0; j < OUTPUT_COUNT; j++){
+                        delta_hidden_to_output_weight[i][j] = 0;
+                    }
+                }
+                else{
+                    for(u8 j = 0; j < OUTPUT_COUNT; j++){
+                        delta_hidden_to_output_weight[i][j] = delta_Y[j] / hidden_out[i];
+                    }
+                }
+            }
+
+            for(u8 i = 0; i < INPUT_COUNT; i++){
+                if (input[i][io_no] == 0){
+                    for(u8 j = 0; j < HIDDEN_COUNT; j++){
+                        delta_input_to_hidden_weight[i][j] = 0;
+                    }
+                }
+                else{
+                    for(u8 j = 0; j < HIDDEN_COUNT; j++){
+                        delta_input_to_hidden_weight[i][j] = delta_hidden[j]/input[i][io_no];
+                    }
+                }
+            }
+
+            for(u8 i = 0; i < INPUT_COUNT; i++){
+                for(u8 j = 0; j < HIDDEN_COUNT; j++){
+                    input_to_hidden_weight[i][j] = input_to_hidden_weight[i][j] + delta_input_to_hidden_weight[i][j];
+                }
+            }
+            for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                for(u8 j = 0; j < OUTPUT_COUNT; j++){
+                    hidden_to_output_weight[i][j] = hidden_to_output_weight[i][j] + delta_hidden_to_output_weight[i][j];
+                }
             }
         }
     }
-    for(u8 i = 0; i < OUTPUT_COUNT; i++){
-        qDebug() << QString("output[%1] : ").arg(i) << calculated_output[i];
+    for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
+        for(u8 i = 0; i < OUTPUT_COUNT; i++){
+            qDebug() << QString("output[%1][%2] : ").arg(i).arg(j) << calculated_output[i][j];
+        }
     }
 }
 
