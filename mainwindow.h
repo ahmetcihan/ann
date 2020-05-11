@@ -33,8 +33,19 @@ private:
     double derivative_of_sigmoid_func(double val);
 
     void xor_ann(void);
-    void _2_4_2_ann_train(double input[2][2], double desired_output[2][2], u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
-    void _2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
+    //void _2_4_2_ann_train(double input[2][2], double desired_output[2][2], u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
+    //void _2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
+
+    void _2_4_2_tryout(void);
+
+    double input_64_128_5[64][5];
+    double desired_output_64_128_5[5][5];
+    double _64_128_5_input_to_hidden_weight[64][128];
+    double _64_128_5_hidden_to_output_weight[128][5];
+
+    void _64_128_5_ann_train(double input[64][5], double desired_output[5][5], u32 epoch, double input_to_hidden_weight[64][128], double hidden_to_output_weight[128][5]);
+    void _64_128_5_ann_test(double *input, double input_to_hidden_weight[64][128], double hidden_to_output_weight[128][5]);
+
 };
 
 #endif // MAINWINDOW_H
