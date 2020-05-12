@@ -401,7 +401,15 @@ void MainWindow::xor_ann(void){
     double A_out,B_out,C_out;
     double delta_A,delta_B,delta_C;
     double error;
-    u32 epoch = 200000;
+
+    double bias1 = 0.1;
+    double bias2 = 0.2;
+    double bias3 = 0.3;
+    double bias4 = 0.4;
+
+    u32 epoch = 2000;
+
+    double global_error;
 
     for(u8 i = 0; i < 4; i++){
         qDebug() << " input1 : " << input1[i] << " input2 : " << input2[i] << "output : " << desired_output[i];
@@ -420,80 +428,46 @@ void MainWindow::xor_ann(void){
     for(u32 era = 0; era < epoch; era++){
         for(u8 k = 0; k < 4; k++){
 
-            A_in = input1[k]*w_input_to_hidden[0][0] + input2[k]*w_input_to_hidden[1][0];
-            B_in = input1[k]*w_input_to_hidden[0][1] + input2[k]*w_input_to_hidden[1][1];
-            C_in = input1[k]*w_input_to_hidden[0][2] + input2[k]*w_input_to_hidden[1][2];
-
+            A_in = input1[k]*w_input_to_hidden[0][0] + input2[k]*w_input_to_hidden[1][0] + bias1;
+            B_in = input1[k]*w_input_to_hidden[0][1] + input2[k]*w_input_to_hidden[1][1] + bias2;
+            C_in = input1[k]*w_input_to_hidden[0][2] + input2[k]*w_input_to_hidden[1][2] + bias3;
 
             A_out = sigmoid_func(A_in);
             B_out = sigmoid_func(B_in);
             C_out = sigmoid_func(C_in);
 
-            Y_in = A_out*w_hidden_to_output[0] + B_out*w_hidden_to_output[1] + C_out*w_hidden_to_output[2];
+            //qDebug() << "A_in" << A_in << "A_out" << A_out;
+
+            Y_in = A_out*w_hidden_to_output[0] + B_out*w_hidden_to_output[1] + C_out*w_hidden_to_output[2] + bias4;
             Y_out = sigmoid_func(Y_in);
             error = desired_output[k] - Y_out;
             calculated_output[k] = Y_out;
 
-            delta_Y = derivative_of_sigmoid_func(Y_in) * error;
+            global_error = derivative_of_sigmoid_func(Y_in) * error;
 
-            delta_A = delta_Y/w_hidden_to_output[0] * derivative_of_sigmoid_func(A_in);
-            delta_B = delta_Y/w_hidden_to_output[0] * derivative_of_sigmoid_func(B_in);
-            delta_C = delta_Y/w_hidden_to_output[0] * derivative_of_sigmoid_func(C_in);
+            w_hidden_to_output[0] += global_error * A_out;
+            w_hidden_to_output[1] += global_error * B_out;
+            w_hidden_to_output[2] += global_error * C_out;
+            bias4 += global_error;
 
-            if (input1[k] == 0){
-                delta_w_input_to_hidden[0][0] = 0;
-                delta_w_input_to_hidden[0][1] = 0;
-                delta_w_input_to_hidden[0][2] = 0;
-            }
-            else{
-                delta_w_input_to_hidden[0][0] = delta_A/input1[k];
-                delta_w_input_to_hidden[0][1] = delta_B/input1[k];
-                delta_w_input_to_hidden[0][2] = delta_C/input1[k];
-            }
+            double error1,error2,error3;
 
-            if (input2[k] == 0){
-                delta_w_input_to_hidden[1][0] = 0;
-                delta_w_input_to_hidden[1][1] = 0;
-                delta_w_input_to_hidden[1][2] = 0;
-            }
-            else{
-                delta_w_input_to_hidden[1][0] = delta_A/input2[k];
-                delta_w_input_to_hidden[1][1] = delta_B/input2[k];
-                delta_w_input_to_hidden[1][2] = delta_C/input2[k];
-            }
+            error1 = derivative_of_sigmoid_func(A_in) * global_error * w_hidden_to_output[0];
+            error2 = derivative_of_sigmoid_func(B_in) * global_error * w_hidden_to_output[1];
+            error3 = derivative_of_sigmoid_func(C_in) * global_error * w_hidden_to_output[2];
 
-            if(A_out == 0){
-                delta_w_hidden_to_output[0] = 0;
-            }
-            else{
-                delta_w_hidden_to_output[0] = delta_Y / A_out;
-            }
-
-            if(B_out == 0){
-                delta_w_hidden_to_output[1] = 0;
-            }
-            else{
-                delta_w_hidden_to_output[1] = delta_Y / B_out;
-            }
-
-            if(C_out == 0){
-                delta_w_hidden_to_output[3] = 0;
-            }
-            else{
-                delta_w_hidden_to_output[3] = delta_Y / C_out;
-            }
-
-            w_input_to_hidden[0][0] += delta_w_input_to_hidden[0][0];
-            w_input_to_hidden[0][1] += delta_w_input_to_hidden[0][1];
-            w_input_to_hidden[0][2] += delta_w_input_to_hidden[0][2];
-            w_input_to_hidden[1][0] += delta_w_input_to_hidden[1][0];
-            w_input_to_hidden[1][1] += delta_w_input_to_hidden[1][1];
-            w_input_to_hidden[1][2] += delta_w_input_to_hidden[1][2];
-
-            w_hidden_to_output[0] += delta_w_hidden_to_output[0];
-            w_hidden_to_output[1] += delta_w_hidden_to_output[1];
-            w_hidden_to_output[2] += delta_w_hidden_to_output[2];
-
+            w_input_to_hidden[0][0] += error1 * input1[k];
+            w_input_to_hidden[0][1] += error2 * input1[k];
+            w_input_to_hidden[0][2] += error3 * input1[k];
+            w_input_to_hidden[1][0] += error1 * input2[k];
+            w_input_to_hidden[1][1] += error2 * input2[k];
+            w_input_to_hidden[1][2] += error3 * input2[k];
+            bias1 +=error1;
+            bias2 +=error2;
+            bias3 +=error3;
+        }
+        for(u8 k = 0; k < 4; k++){
+            qDebug() << QString("output-%1 : ").arg(k) << calculated_output[k];
         }
     }
 
@@ -502,12 +476,12 @@ void MainWindow::xor_ann(void){
     }
 }
 double MainWindow::sigmoid_func(double val){
-    //return (1 / (1 + exp(-val)));
-    return tanh(val);
+    return (1 / (1 + exp(-val)));
+    //return tanh(val);
 }
 double MainWindow::derivative_of_sigmoid_func(double val){
-    //return (sigmoid_func(val) * (1 - sigmoid_func(val)));
-    return (1-(tanh(val)*tanh(val)));
+    return (sigmoid_func(val) * (1 - sigmoid_func(val)));
+    //return (1-(tanh(val)*tanh(val)));
 }
 
 MainWindow::~MainWindow()
