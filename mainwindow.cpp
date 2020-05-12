@@ -7,25 +7,79 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     //_2_4_2_tryout();
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/add.png",addition_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/divide.png",divide_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/minus.png",minus_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/multiply.png",multiply_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/zero.png",zero_image);
 
-    u8 image_array[8][8];
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            input_64_128_5[8*i + j][0] = addition_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            input_64_128_5[8*i + j][1] = divide_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            input_64_128_5[8*i + j][2] = minus_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            input_64_128_5[8*i + j][3] = multiply_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            input_64_128_5[8*i + j][4] = zero_image[i][j];
+        }
+    }
+
+
+    for(u8 i = 0; i < 5; i++){
+        for(u8 j = 0; j < 5; j++){
+            desired_output_64_128_5[i][j] = 0;
+        }
+    }
+    desired_output_64_128_5[0][0] = 1;
+    desired_output_64_128_5[1][1] = 1;
+    desired_output_64_128_5[2][2] = 1;
+    desired_output_64_128_5[3][3] = 1;
+    desired_output_64_128_5[4][4] = 1;
+
+    for(u8 i = 0; i < 64; i++){
+        for(u8 j = 0; j < 128; j++){
+            _64_128_5_input_to_hidden_weight[i][j] = 0.1;
+        }
+    }
+    for(u8 i = 0; i < 128; i++){
+        for(u8 j = 0; j < 5; j++){
+            _64_128_5_hidden_to_output_weight[i][j] = 0.1;
+        }
+    }
+
+    _64_128_5_ann_train(input_64_128_5,desired_output_64_128_5,10000,_64_128_5_input_to_hidden_weight,_64_128_5_hidden_to_output_weight);
+}
+void MainWindow::image_to_array(QString location,u8 image_array[8][8]){
     QImage read_image;
 
-    read_image.load("/home/ahmet/Desktop/QT-Projects/ANN/zero.png");
+    read_image.load(location);
 
-    qDebug() << "height" << read_image.height();
-    qDebug() << "width" << read_image.width();
     for(u8 i = 0; i < read_image.height();i++){
         for(u8 j = 0; j < read_image.width();j++){
-            //qDebug() << QString("pixel[%1][%2] :").arg(i).arg(j) << QString("%1").arg(read_image.pixel(i,j),0,16);
             image_array[i][j] = 0;
             if((read_image.pixel(i,j) & 0xFF) == 0xFF){
                 image_array[i][j] = 1;
             }
-            qDebug() << QString("array[%1][%2] :").arg(i).arg(j) << QString("%1").arg(image_array[i][j],0,16);
+            //qDebug() << QString("array[%1][%2] :").arg(i).arg(j) << QString("%1").arg(image_array[i][j],0,16);
         }
     }
 }
+
 void MainWindow::_64_128_5_ann_test(double *input, double input_to_hidden_weight[64][128], double hidden_to_output_weight[128][5]){
     const u32 input_count = 64;
     const u32 hidden_count = 128;
@@ -61,7 +115,7 @@ void MainWindow::_64_128_5_ann_train(double input[64][5], double desired_output[
 #define INPUT_COUNT 64
 #define HIDDEN_COUNT 128
 #define OUTPUT_COUNT 5
-#define IO_ARRAY_LENGTH 5
+#define IO_ARRAY_LENGTH 2
 
     double calculated_output[OUTPUT_COUNT][IO_ARRAY_LENGTH];
     double Y_in[OUTPUT_COUNT];
@@ -74,16 +128,11 @@ void MainWindow::_64_128_5_ann_train(double input[64][5], double desired_output[
     double delta_hidden[HIDDEN_COUNT];
 
     double delta_input_to_hidden_weight[64][128];
-    double delta_hidden_to_output_weight[129][5];
+    double delta_hidden_to_output_weight[128][5];
 
     for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
         for(u8 i = 0; i < INPUT_COUNT; i++){
             qDebug() << QString("input[%1][%2] : ").arg(i).arg(j) << input[i][j];
-        }
-    }
-    for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
-        for(u8 i = 0; i < OUTPUT_COUNT; i++){
-            qDebug() << QString("desired_output[%1][%2] : ").arg(i).arg(j) << desired_output[i][j];
         }
     }
 
@@ -155,9 +204,11 @@ void MainWindow::_64_128_5_ann_train(double input[64][5], double desired_output[
     }
     for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
         for(u8 i = 0; i < OUTPUT_COUNT; i++){
-            qDebug() << QString("output[%1][%2] : ").arg(i).arg(j) << calculated_output[i][j];
+            qDebug() << QString("desired_output[%1][%2] : ").arg(i).arg(j) << desired_output[i][j]
+                        << QString("output[%1][%2] : ").arg(i).arg(j) << calculated_output[i][j];
         }
     }
+
 }
 
 void MainWindow::_2_4_2_tryout(void){

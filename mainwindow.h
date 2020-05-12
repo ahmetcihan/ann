@@ -23,6 +23,12 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    u8 zero_image[8][8];
+    u8 minus_image[8][8];
+    u8 addition_image[8][8];
+    u8 multiply_image[8][8];
+    u8 divide_image[8][8];
+
     double input_2_4_2[2][2];
     double desired_output_2_4_2[2][2];
 
@@ -45,6 +51,8 @@ private:
 
     void _64_128_5_ann_train(double input[64][5], double desired_output[5][5], u32 epoch, double input_to_hidden_weight[64][128], double hidden_to_output_weight[128][5]);
     void _64_128_5_ann_test(double *input, double input_to_hidden_weight[64][128], double hidden_to_output_weight[128][5]);
+
+    void image_to_array(QString location, u8 image_array[8][8]);
 
 };
 
