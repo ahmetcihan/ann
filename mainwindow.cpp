@@ -8,8 +8,133 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     //_2_4_2_tryout();
     //_64_128_5_tryout();
-    xor_ann();
+    //xor_ann();
+    _2_5_1_ann_train();
 }
+void MainWindow::_2_5_1_ann_train(void){
+    double input1[4] = {0,0,1,1};
+    double input2[4] = {0,1,0,1};
+    double desired_output[4] = {0,1,1,0};
+    double calculated_output[4] = {0,0,0,0};
+    double Y_in,Y_out;
+    double w_input_to_hidden[2][5];
+    double w_hidden_to_output[5];
+
+    double A_in,B_in,C_in,D_in,E_in;
+    double A_out,B_out,C_out,D_out,E_out;
+    double output_error;
+
+    double bias1 = 0.1;
+    double bias2 = 0.2;
+    double bias3 = 0.3;
+    double bias4 = 0.4;
+    double bias5 = 0.5;
+    double bias_output = 0.6;
+
+    double error1,error2,error3,error4,error5;
+
+    u32 epoch = 200000;
+
+    double global_error;
+
+    for(u8 i = 0; i < 4; i++){
+        qDebug() << " input1 : " << input1[i] << " input2 : " << input2[i] << "output : " << desired_output[i];
+    }
+
+    w_input_to_hidden[0][0] = 0.1;
+    w_input_to_hidden[0][1] = 0.1;
+    w_input_to_hidden[0][2] = 0.1;
+    w_input_to_hidden[0][3] = 0.1;
+    w_input_to_hidden[0][4] = 0.1;
+
+    w_input_to_hidden[1][0] = 0.1;
+    w_input_to_hidden[1][1] = 0.1;
+    w_input_to_hidden[1][2] = 0.1;
+    w_input_to_hidden[1][3] = 0.1;
+    w_input_to_hidden[1][4] = 0.1;
+
+    w_hidden_to_output[0] = 0.1;
+    w_hidden_to_output[1] = 0.1;
+    w_hidden_to_output[2] = 0.1;
+    w_hidden_to_output[3] = 0.1;
+    w_hidden_to_output[4] = 0.1;
+
+    for(u32 era = 0; era < epoch; era++){
+        for(u8 k = 0; k < 4; k++){
+
+            A_in = input1[k]*w_input_to_hidden[0][0] + input2[k]*w_input_to_hidden[1][0] + bias1;
+            B_in = input1[k]*w_input_to_hidden[0][1] + input2[k]*w_input_to_hidden[1][1] + bias2;
+            C_in = input1[k]*w_input_to_hidden[0][2] + input2[k]*w_input_to_hidden[1][2] + bias3;
+            D_in = input1[k]*w_input_to_hidden[0][3] + input2[k]*w_input_to_hidden[1][3] + bias4;
+            E_in = input1[k]*w_input_to_hidden[0][4] + input2[k]*w_input_to_hidden[1][4] + bias5;
+
+            A_out = sigmoid_func(A_in);
+            B_out = sigmoid_func(B_in);
+            C_out = sigmoid_func(C_in);
+            D_out = sigmoid_func(D_in);
+            E_out = sigmoid_func(E_in);
+
+            Y_in = A_out*w_hidden_to_output[0] + B_out*w_hidden_to_output[1] + C_out*w_hidden_to_output[2] +
+                   D_out*w_hidden_to_output[3] + E_out*w_hidden_to_output[4] +bias_output;
+            Y_out = sigmoid_func(Y_in);
+            output_error = desired_output[k] - Y_out;
+
+            calculated_output[k] = Y_out;
+
+            global_error = derivative_of_sigmoid_func(Y_in) * output_error;
+
+            w_hidden_to_output[0] += global_error * A_out;
+            w_hidden_to_output[1] += global_error * B_out;
+            w_hidden_to_output[2] += global_error * C_out;
+            w_hidden_to_output[3] += global_error * D_out;
+            w_hidden_to_output[4] += global_error * E_out;
+            bias_output += global_error;
+
+
+            error1 = derivative_of_sigmoid_func(A_in) * global_error * w_hidden_to_output[0];
+            error2 = derivative_of_sigmoid_func(B_in) * global_error * w_hidden_to_output[1];
+            error3 = derivative_of_sigmoid_func(C_in) * global_error * w_hidden_to_output[2];
+            error4 = derivative_of_sigmoid_func(D_in) * global_error * w_hidden_to_output[3];
+            error5 = derivative_of_sigmoid_func(E_in) * global_error * w_hidden_to_output[4];
+
+            w_input_to_hidden[0][0] += error1 * input1[k];
+            w_input_to_hidden[0][1] += error2 * input1[k];
+            w_input_to_hidden[0][2] += error3 * input1[k];
+            w_input_to_hidden[0][3] += error4 * input1[k];
+            w_input_to_hidden[0][4] += error5 * input1[k];
+
+            w_input_to_hidden[1][0] += error1 * input2[k];
+            w_input_to_hidden[1][1] += error2 * input2[k];
+            w_input_to_hidden[1][2] += error3 * input2[k];
+            w_input_to_hidden[1][3] += error4 * input2[k];
+            w_input_to_hidden[1][4] += error5 * input2[k];
+            bias1 +=error1;
+            bias2 +=error2;
+            bias3 +=error3;
+            bias4 +=error4;
+            bias5 +=error5;
+        }
+    }
+
+    for(u8 i = 0; i < 2; i++){
+        for(u8 j = 0; j < 5; j++){
+            qDebug() << "in_to_h_w[i][j] : " << w_input_to_hidden[i][j];
+        }
+    }
+    for(u8 j = 0; j < 5; j++){
+        qDebug() << "h_to_o_w[i] : " << w_hidden_to_output[j];
+    }
+    qDebug() << "bias1" << bias1;
+    qDebug() << "bias2" << bias2;
+    qDebug() << "bias3" << bias3;
+    qDebug() << "bias4" << bias4;
+    qDebug() << "bias5" << bias5;
+    qDebug() << "bias_output" << bias_output;
+    for(u8 k = 0; k < 4; k++){
+        qDebug() << "output : " << calculated_output[k];
+    }
+}
+
 void MainWindow::image_to_array(QString location,double image_array[8][8]){
     QImage read_image;
 
@@ -384,20 +509,17 @@ void MainWindow::_2_4_2_ann_train(double input[2][2], double desired_output[2][2
         }
     }
 }
-void MainWindow::xor_ann(void){
+void MainWindow::_2_3_1_ann_train(void){
     double input1[4] = {0,0,1,1};
     double input2[4] = {0,1,0,1};
-    double desired_output[4] = {0,1,1,0};
+    double desired_output[4] = {0,1,1,1};
     double calculated_output[4] = {0,0,0,0};
-    double Y_in,Y_out,delta_Y;
+    double Y_in,Y_out;
     double w_input_to_hidden[2][3];
     double w_hidden_to_output[3];
-    double delta_w_input_to_hidden[2][3];
-    double delta_w_hidden_to_output[3];
 
     double A_in,B_in,C_in;
     double A_out,B_out,C_out;
-    double delta_A,delta_B,delta_C;
     double error;
 
     double bias1 = 0.1;
@@ -405,7 +527,9 @@ void MainWindow::xor_ann(void){
     double bias3 = 0.3;
     double bias4 = 0.4;
 
-    u32 epoch = 2000;
+    double error1,error2,error3;
+
+    u32 epoch = 200000;
 
     double global_error;
 
@@ -434,13 +558,13 @@ void MainWindow::xor_ann(void){
             B_out = sigmoid_func(B_in);
             C_out = sigmoid_func(C_in);
 
-            //qDebug() << "A_in" << A_in << "A_out" << A_out;
-
             Y_in = A_out*w_hidden_to_output[0] + B_out*w_hidden_to_output[1] + C_out*w_hidden_to_output[2] + bias4;
             Y_out = sigmoid_func(Y_in);
             error = desired_output[k] - Y_out;
+
             calculated_output[k] = Y_out;
 
+            //global_error = derivative_of_sigmoid_func(Y_out) * error; //this is better
             global_error = derivative_of_sigmoid_func(Y_in) * error;
 
             w_hidden_to_output[0] += global_error * A_out;
@@ -448,7 +572,6 @@ void MainWindow::xor_ann(void){
             w_hidden_to_output[2] += global_error * C_out;
             bias4 += global_error;
 
-            double error1,error2,error3;
 
             error1 = derivative_of_sigmoid_func(A_in) * global_error * w_hidden_to_output[0];
             error2 = derivative_of_sigmoid_func(B_in) * global_error * w_hidden_to_output[1];
@@ -464,22 +587,118 @@ void MainWindow::xor_ann(void){
             bias2 +=error2;
             bias3 +=error3;
         }
+    }
+
+    for(u8 i = 0; i < 2; i++){
+        for(u8 j = 0; j < 3; j++){
+            qDebug() << "in_to_h_w[i][j] : " << w_input_to_hidden[i][j];
+        }
+    }
+    for(u8 j = 0; j < 3; j++){
+        qDebug() << "h_to_o_w[i] : " << w_hidden_to_output[j];
+    }
+    qDebug() << "bias1" << bias1;
+    qDebug() << "bias2" << bias2;
+    qDebug() << "bias3" << bias3;
+    qDebug() << "bias4" << bias4;
+    for(u8 k = 0; k < 4; k++){
+        qDebug() << "output : " << calculated_output[k];
+    }
+}
+
+void MainWindow::xor_ann(void){
+    double input1[4] = {0,0,1,1};
+    double input2[4] = {0,1,0,1};
+    double desired_output[4] = {0,1,1,0};
+    double calculated_output[4] = {0,0,0,0};
+    double Y_in,Y_out;
+    double w_input_to_hidden[2][3];
+    double w_hidden_to_output[3];
+
+    double A_in,B_in,C_in;
+    double A_out,B_out,C_out;
+    double error;
+
+    double bias1 = 0.1;
+    double bias2 = 0.2;
+    double bias3 = 0.3;
+    double bias4 = 0.4;
+
+    double error1,error2,error3;
+
+    u32 epoch = 20000;
+
+    double global_error;
+
+    for(u8 i = 0; i < 4; i++){
+        qDebug() << " input1 : " << input1[i] << " input2 : " << input2[i] << "output : " << desired_output[i];
+    }
+
+    w_input_to_hidden[0][0] = 0.1;
+    w_input_to_hidden[0][1] = 0.1;
+    w_input_to_hidden[0][2] = 0.1;
+    w_input_to_hidden[1][0] = 0.1;
+    w_input_to_hidden[1][1] = 0.1;
+    w_input_to_hidden[1][2] = 0.1;
+    w_hidden_to_output[0] = 0.1;
+    w_hidden_to_output[1] = 0.1;
+    w_hidden_to_output[2] = 0.1;
+
+    for(u32 era = 0; era < epoch; era++){
         for(u8 k = 0; k < 4; k++){
-            qDebug() << QString("output-%1 : ").arg(k) << calculated_output[k];
+
+            A_in = input1[k]*w_input_to_hidden[0][0] + input2[k]*w_input_to_hidden[1][0] + bias1;
+            B_in = input1[k]*w_input_to_hidden[0][1] + input2[k]*w_input_to_hidden[1][1] + bias2;
+            C_in = input1[k]*w_input_to_hidden[0][2] + input2[k]*w_input_to_hidden[1][2] + bias3;
+
+            A_out = sigmoid_func(A_in);
+            B_out = sigmoid_func(B_in);
+            C_out = sigmoid_func(C_in);
+
+            Y_in = A_out*w_hidden_to_output[0] + B_out*w_hidden_to_output[1] + C_out*w_hidden_to_output[2] + bias4;
+            Y_out = sigmoid_func(Y_in);
+            error = desired_output[k] - Y_out;
+            calculated_output[k] = Y_out;
+
+            global_error = derivative_of_sigmoid_func(Y_in) * error;
+
+            w_hidden_to_output[0] += global_error * A_out;
+            w_hidden_to_output[1] += global_error * B_out;
+            w_hidden_to_output[2] += global_error * C_out;
+            bias4 += global_error;
+
+
+            error1 = derivative_of_sigmoid_func(A_in) * global_error * w_hidden_to_output[0];
+            error2 = derivative_of_sigmoid_func(B_in) * global_error * w_hidden_to_output[1];
+            error3 = derivative_of_sigmoid_func(C_in) * global_error * w_hidden_to_output[2];
+
+            w_input_to_hidden[0][0] += error1 * input1[k];
+            w_input_to_hidden[0][1] += error2 * input1[k];
+            w_input_to_hidden[0][2] += error3 * input1[k];
+            w_input_to_hidden[1][0] += error1 * input2[k];
+            w_input_to_hidden[1][1] += error2 * input2[k];
+            w_input_to_hidden[1][2] += error3 * input2[k];
+            bias1 +=error1;
+            bias2 +=error2;
+            bias3 +=error3;
         }
     }
 
     for(u8 k = 0; k < 4; k++){
         qDebug() << "output : " << calculated_output[k];
     }
-}
-double MainWindow::sigmoid_func(double val){
-    return (1 / (1 + exp(-val)));
-    //return tanh(val);
-}
-double MainWindow::derivative_of_sigmoid_func(double val){
-    return (sigmoid_func(val) * (1 - sigmoid_func(val)));
-    //return (1-(tanh(val)*tanh(val)));
+    for(u8 i = 0; i < 2; i++){
+        for(u8 j = 0; j < 3; j++){
+            qDebug() << "in_to_h_w[i][j] : " << w_input_to_hidden[i][j];
+        }
+    }
+    for(u8 j = 0; j < 3; j++){
+        qDebug() << "h_to_o_w[i] : " << w_hidden_to_output[j];
+    }
+    qDebug() << "bias1" << bias1;
+    qDebug() << "bias2" << bias2;
+    qDebug() << "bias3" << bias3;
+    qDebug() << "bias4" << bias4;
 }
 
 MainWindow::~MainWindow()

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QDebug>
 #include <math.h>
+//#include <qmath.h>
 
 typedef unsigned char   u8;
 typedef unsigned int    u32;
@@ -39,6 +40,10 @@ private:
     double derivative_of_sigmoid_func(double val);
 
     void xor_ann(void);
+
+    void _2_3_1_ann_train(void);
+    void _2_5_1_ann_train(void);
+
     void _2_4_2_ann_train(double input[2][2], double desired_output[2][2], u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
     void _2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
 
