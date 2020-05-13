@@ -58,6 +58,7 @@ private:
     void advanced_2_5_2_ann_test(   double input[2],
                                     double hidden_bias[5], double output_bias[2],
                                     double w_input_to_hidden[2][5], double w_hidden_to_output[5][2]);
+    void advanced_2_5_2_tryout(void);
 
 
     double input_64_128_5[64][5];
