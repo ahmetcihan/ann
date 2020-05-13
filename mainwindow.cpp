@@ -6,81 +6,71 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //_2_4_2_tryout();
-    //_64_128_5_tryout();
-    //xor_ann();
-    advanced_2_5_2_ann_train();
-}
-void MainWindow::advanced_2_5_2_ann_train(void){
-    double input1[4] = {0,0,1,1};
-    double input2[4] = {0,1,0,1};
-    double desired_output_1[4] = {0,1,1,0};
-    double desired_output_2[4] = {1,0,0,1};
 
+    net_2_5_2.input[0][0] = 0;    net_2_5_2.input[1][0] = 0;
+    net_2_5_2.input[0][1] = 0;    net_2_5_2.input[1][1] = 1;
+    net_2_5_2.input[0][2] = 1;    net_2_5_2.input[1][2] = 0;
+    net_2_5_2.input[0][3] = 1;    net_2_5_2.input[1][3] = 1;
+    net_2_5_2.desired_output[0][0] = 0;    net_2_5_2.desired_output[1][0] = 1;
+    net_2_5_2.desired_output[0][1] = 1;    net_2_5_2.desired_output[1][1] = 0;
+    net_2_5_2.desired_output[0][2] = 1;    net_2_5_2.desired_output[1][2] = 0;
+    net_2_5_2.desired_output[0][3] = 0;    net_2_5_2.desired_output[1][3] = 1;
+
+    for(u8 i = 0; i < 5; i++){
+        net_2_5_2.hidden_bias[i] = 0.1 + 0.1*i;
+    }
+    for(u8 i = 0; i < 2; i++){
+        net_2_5_2.output_bias[i] = 10;
+    }
+    for(u8 i = 0; i < 2; i++){
+        for(u8 j = 0; j < 5; j++){
+            net_2_5_2.w_input_to_hidden[i][j] = 0.1;
+        }
+    }
+    for(u8 i = 0; i < 5; i++){
+        for(u8 j = 0; j < 2; j++){
+            net_2_5_2.w_hidden_to_output[i][j] = 0.1;
+        }
+    }
+
+    for(u8 i = 0; i < 2; i++){
+        for(u8 j = 0; j < 4; j++){
+            qDebug() << QString(" input[%1][%2] : ").arg(i).arg(j) << net_2_5_2.input[i][j];
+        }
+    }
+    for(u8 i = 0; i < 2; i++){
+        for(u8 j = 0; j < 4; j++){
+            qDebug() << QString(" output[%1][%2] : ").arg(i).arg(j) << net_2_5_2.desired_output[i][j];
+        }
+    }
+
+
+    advanced_2_5_2_ann_train(net_2_5_2.input, net_2_5_2.desired_output,
+                             net_2_5_2.hidden_bias,net_2_5_2.output_bias,
+                             net_2_5_2.w_input_to_hidden,net_2_5_2.w_hidden_to_output,
+                             40000, 1);
+}
+void MainWindow::advanced_2_5_2_ann_train(  double input[2][4], double desired_output[2][4],
+                                            double hidden_bias[5], double output_bias[2],
+                                            double w_input_to_hidden[2][5],double w_hidden_to_output[5][2],
+                                            u32 epoch,double learning_rate){
     double calculated_output_neuron[2][4];
     double output_neuron_in[2];
     double output_neuron_out[2];
-    double w_input_to_hidden[2][5];
-    double w_hidden_to_output[5][2];
-
     double hidden_neuron_in[5];
     double hidden_neuron_out[5];
     double output_error[2];
-    double hidden_bias[5];
-    double output_bias[2];
-
-    hidden_bias[0] = 0.1;
-    hidden_bias[1] = 0.2;
-    hidden_bias[2] = 0.3;
-    hidden_bias[3] = 0.4;
-    hidden_bias[4] = 0.5;
-
-    output_bias[0] = 10;
-    output_bias[1] = 10;
-
-    double error1,error2,error3,error4,error5;
-
-    u32 epoch = 400000;
-    double learning_rate = 1;
-
+    double hidden_error[5];
     double global_error[2];
-
-    for(u8 i = 0; i < 4; i++){
-        qDebug() << " input1 : " << input1[i] << " input2 : " << input2[i] << "output1 : " << desired_output_1[i] << "output2 : " << desired_output_2[i];
-    }
-
-    w_input_to_hidden[0][0] = 0.1;
-    w_input_to_hidden[0][1] = 0.1;
-    w_input_to_hidden[0][2] = 0.1;
-    w_input_to_hidden[0][3] = 0.1;
-    w_input_to_hidden[0][4] = 0.1;
-
-    w_input_to_hidden[1][0] = 0.1;
-    w_input_to_hidden[1][1] = 0.1;
-    w_input_to_hidden[1][2] = 0.1;
-    w_input_to_hidden[1][3] = 0.1;
-    w_input_to_hidden[1][4] = 0.1;
-
-    w_hidden_to_output[0][0] = 0.1;
-    w_hidden_to_output[1][0] = 0.1;
-    w_hidden_to_output[2][0] = 0.1;
-    w_hidden_to_output[3][0] = 0.1;
-    w_hidden_to_output[4][0] = 0.1;
-
-    w_hidden_to_output[0][1] = 0.1;
-    w_hidden_to_output[1][1] = 0.1;
-    w_hidden_to_output[2][1] = 0.1;
-    w_hidden_to_output[3][1] = 0.1;
-    w_hidden_to_output[4][1] = 0.1;
 
     for(u32 era = 0; era < epoch; era++){
         for(u8 k = 0; k < 4; k++){
 
-            hidden_neuron_in[0] = input1[k]*w_input_to_hidden[0][0] + input2[k]*w_input_to_hidden[1][0] + hidden_bias[0];
-            hidden_neuron_in[1] = input1[k]*w_input_to_hidden[0][1] + input2[k]*w_input_to_hidden[1][1] + hidden_bias[1];
-            hidden_neuron_in[2] = input1[k]*w_input_to_hidden[0][2] + input2[k]*w_input_to_hidden[1][2] + hidden_bias[2];
-            hidden_neuron_in[3] = input1[k]*w_input_to_hidden[0][3] + input2[k]*w_input_to_hidden[1][3] + hidden_bias[3];
-            hidden_neuron_in[4] = input1[k]*w_input_to_hidden[0][4] + input2[k]*w_input_to_hidden[1][4] + hidden_bias[4];
+            hidden_neuron_in[0] = input[0][k]*w_input_to_hidden[0][0] + input[1][k]*w_input_to_hidden[1][0] + hidden_bias[0];
+            hidden_neuron_in[1] = input[0][k]*w_input_to_hidden[0][1] + input[1][k]*w_input_to_hidden[1][1] + hidden_bias[1];
+            hidden_neuron_in[2] = input[0][k]*w_input_to_hidden[0][2] + input[1][k]*w_input_to_hidden[1][2] + hidden_bias[2];
+            hidden_neuron_in[3] = input[0][k]*w_input_to_hidden[0][3] + input[1][k]*w_input_to_hidden[1][3] + hidden_bias[3];
+            hidden_neuron_in[4] = input[0][k]*w_input_to_hidden[0][4] + input[1][k]*w_input_to_hidden[1][4] + hidden_bias[4];
 
             hidden_neuron_out[0] = sigmoid_func(hidden_neuron_in[0]);
             hidden_neuron_out[1] = sigmoid_func(hidden_neuron_in[1]);
@@ -93,7 +83,7 @@ void MainWindow::advanced_2_5_2_ann_train(void){
                    hidden_neuron_out[3]*w_hidden_to_output[3][0] + hidden_neuron_out[4]*w_hidden_to_output[4][0] + output_bias[0];
 
             output_neuron_out[0] = sigmoid_func(output_neuron_in[0]);
-            output_error[0] = desired_output_1[k] - output_neuron_out[0];
+            output_error[0] = desired_output[0][k] - output_neuron_out[0];
 
             calculated_output_neuron[0][k] = output_neuron_out[0];
 
@@ -102,7 +92,7 @@ void MainWindow::advanced_2_5_2_ann_train(void){
                    hidden_neuron_out[3]*w_hidden_to_output[3][1] + hidden_neuron_out[4]*w_hidden_to_output[4][1] + output_bias[1];
 
             output_neuron_out[1] = sigmoid_func(output_neuron_in[1]);
-            output_error[1] = desired_output_2[k] - output_neuron_out[1];
+            output_error[1] = desired_output[1][k] - output_neuron_out[1];
 
             calculated_output_neuron[1][k] = output_neuron_out[1];
 
@@ -125,53 +115,36 @@ void MainWindow::advanced_2_5_2_ann_train(void){
             output_bias[1] += global_error[1] * learning_rate;
 
 
-            error1 = derivative_of_sigmoid_func(hidden_neuron_in[0]) * global_error[0] * w_hidden_to_output[0][0] +
+            hidden_error[0] = derivative_of_sigmoid_func(hidden_neuron_in[0]) * global_error[0] * w_hidden_to_output[0][0] +
                     derivative_of_sigmoid_func(hidden_neuron_in[0]) * global_error[1] * w_hidden_to_output[0][1];
-            error2 = derivative_of_sigmoid_func(hidden_neuron_in[1]) * global_error[0] * w_hidden_to_output[1][0] +
+            hidden_error[1] = derivative_of_sigmoid_func(hidden_neuron_in[1]) * global_error[0] * w_hidden_to_output[1][0] +
                     derivative_of_sigmoid_func(hidden_neuron_in[1]) * global_error[1] * w_hidden_to_output[1][1];
-            error3 = derivative_of_sigmoid_func(hidden_neuron_in[2]) * global_error[0] * w_hidden_to_output[2][0] +
+            hidden_error[2] = derivative_of_sigmoid_func(hidden_neuron_in[2]) * global_error[0] * w_hidden_to_output[2][0] +
                     derivative_of_sigmoid_func(hidden_neuron_in[2]) * global_error[1] * w_hidden_to_output[2][1];
-            error4 = derivative_of_sigmoid_func(hidden_neuron_in[3]) * global_error[0] * w_hidden_to_output[3][0] +
+            hidden_error[3] = derivative_of_sigmoid_func(hidden_neuron_in[3]) * global_error[0] * w_hidden_to_output[3][0] +
                     derivative_of_sigmoid_func(hidden_neuron_in[3]) * global_error[1] * w_hidden_to_output[3][1];
-            error5 = derivative_of_sigmoid_func(hidden_neuron_in[4]) * global_error[0] * w_hidden_to_output[4][0] +
+            hidden_error[4] = derivative_of_sigmoid_func(hidden_neuron_in[4]) * global_error[0] * w_hidden_to_output[4][0] +
                     derivative_of_sigmoid_func(hidden_neuron_in[4]) * global_error[1] * w_hidden_to_output[4][1];
 
-            w_input_to_hidden[0][0] += error1 * input1[k] * learning_rate;
-            w_input_to_hidden[0][1] += error2 * input1[k] * learning_rate;
-            w_input_to_hidden[0][2] += error3 * input1[k] * learning_rate;
-            w_input_to_hidden[0][3] += error4 * input1[k] * learning_rate;
-            w_input_to_hidden[0][4] += error5 * input1[k] * learning_rate;
+            w_input_to_hidden[0][0] += hidden_error[0] * input[0][k] * learning_rate;
+            w_input_to_hidden[0][1] += hidden_error[1] * input[0][k] * learning_rate;
+            w_input_to_hidden[0][2] += hidden_error[2] * input[0][k] * learning_rate;
+            w_input_to_hidden[0][3] += hidden_error[3] * input[0][k] * learning_rate;
+            w_input_to_hidden[0][4] += hidden_error[4] * input[0][k] * learning_rate;
 
-            w_input_to_hidden[1][0] += error1 * input2[k] * learning_rate;
-            w_input_to_hidden[1][1] += error2 * input2[k] * learning_rate;
-            w_input_to_hidden[1][2] += error3 * input2[k] * learning_rate;
-            w_input_to_hidden[1][3] += error4 * input2[k] * learning_rate;
-            w_input_to_hidden[1][4] += error5 * input2[k] * learning_rate;
-            hidden_bias[0] +=error1 * learning_rate;
-            hidden_bias[1] +=error2 * learning_rate;
-            hidden_bias[2] +=error3 * learning_rate;
-            hidden_bias[3] +=error4 * learning_rate;
-            hidden_bias[4] +=error5 * learning_rate;
+            w_input_to_hidden[1][0] += hidden_error[0] * input[1][k] * learning_rate;
+            w_input_to_hidden[1][1] += hidden_error[1] * input[1][k] * learning_rate;
+            w_input_to_hidden[1][2] += hidden_error[2] * input[1][k] * learning_rate;
+            w_input_to_hidden[1][3] += hidden_error[3] * input[1][k] * learning_rate;
+            w_input_to_hidden[1][4] += hidden_error[4] * input[1][k] * learning_rate;
+            hidden_bias[0] +=hidden_error[0] * learning_rate;
+            hidden_bias[1] +=hidden_error[1] * learning_rate;
+            hidden_bias[2] +=hidden_error[2] * learning_rate;
+            hidden_bias[3] +=hidden_error[3] * learning_rate;
+            hidden_bias[4] +=hidden_error[4] * learning_rate;
         }
     }
 
-    for(u8 i = 0; i < 2; i++){
-        for(u8 j = 0; j < 5; j++){
-            qDebug() << "in_to_h_w[i][j] : " << w_input_to_hidden[i][j];
-        }
-    }
-    for(u8 i = 0; i < 5; i++){
-        for(u8 j = 0; j < 2; j++){
-            qDebug() << "h_to_o_w[i][j] : " << w_hidden_to_output[i][j];
-        }
-    }
-    qDebug() << "bias1" << hidden_bias[0];
-    qDebug() << "bias2" << hidden_bias[1];
-    qDebug() << "bias3" << hidden_bias[2];
-    qDebug() << "bias4" << hidden_bias[3];
-    qDebug() << "bias5" << hidden_bias[4];
-    qDebug() << "bias_output_1" << output_bias[0];
-    qDebug() << "bias_output_2" << output_bias[1];
     for(u8 k = 0; k < 4; k++){
         qDebug() << "output1 : " << calculated_output_neuron[0][k] << "output2 : " << calculated_output_neuron[1][k];
     }

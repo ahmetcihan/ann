@@ -24,6 +24,16 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    struct _2_5_2_str{
+        double input[2][4];
+        double desired_output[2][4];
+        double hidden_bias[5];
+        double output_bias[2];
+        double w_input_to_hidden[2][5];
+        double w_hidden_to_output[5][2];
+    };
+    struct _2_5_2_str net_2_5_2;
+
     double zero_image[8][8];
     double minus_image[8][8];
     double addition_image[8][8];
@@ -41,7 +51,10 @@ private:
 
     void _2_5_1_ann_train(void);
     void _2_5_2_ann_train(void);
-    void advanced_2_5_2_ann_train(void);
+    void advanced_2_5_2_ann_train(  double input[2][4], double desired_output[2][4],
+                                    double hidden_bias[5], double output_bias[2],
+                                    double w_input_to_hidden[2][5],double w_hidden_to_output[5][2],
+                                    u32 epoch,double learning_rate);
 
     void _2_4_2_ann_train(double input[2][2], double desired_output[2][2], u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
     void _2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
