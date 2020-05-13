@@ -49,104 +49,147 @@ MainWindow::MainWindow(QWidget *parent) :
                              net_2_5_2.hidden_bias,net_2_5_2.output_bias,
                              net_2_5_2.w_input_to_hidden,net_2_5_2.w_hidden_to_output,
                              40000, 1);
+
+    double my_input[2] = {0,1};
+    advanced_2_5_2_ann_test(my_input,
+                             net_2_5_2.hidden_bias,net_2_5_2.output_bias,
+                             net_2_5_2.w_input_to_hidden,net_2_5_2.w_hidden_to_output);
 }
+void MainWindow::advanced_2_5_2_ann_test(double input[2],
+                                double hidden_bias[5], double output_bias[2],
+                                double w_input_to_hidden[2][5],double w_hidden_to_output[5][2]){
+
+#define INPUT_COUNT 2
+#define HIDDEN_COUNT 5
+#define OUTPUT_COUNT 2
+#define IO_ARRAY_LENGTH 4
+
+    double hidden_neuron_in[HIDDEN_COUNT];
+    double hidden_neuron_out[HIDDEN_COUNT];
+    double output_neuron_in[OUTPUT_COUNT];
+    double output_neuron_out[OUTPUT_COUNT];
+
+    for(u8 i = 0; i < HIDDEN_COUNT; i++){
+        hidden_neuron_in[i] = hidden_bias[i];
+    }
+
+    for(u8 j = 0; j < INPUT_COUNT; j++){
+        for(u8 i = 0; i < HIDDEN_COUNT; i++){
+            hidden_neuron_in[i] += input[j]*w_input_to_hidden[j][i];
+        }
+    }
+
+    for(u8 i = 0; i < HIDDEN_COUNT; i++){
+        hidden_neuron_out[i] = sigmoid_func(hidden_neuron_in[i]);
+    }
+
+    for(u8 i = 0; i < OUTPUT_COUNT; i++){
+        output_neuron_in[i] = output_bias[i];
+    }
+
+    for(u8 j = 0; j < OUTPUT_COUNT; j++){
+        for(u8 i = 0; i < HIDDEN_COUNT; i++){
+            output_neuron_in[j] += hidden_neuron_out[i]*w_hidden_to_output[i][j];
+        }
+        output_neuron_out[j] = sigmoid_func(output_neuron_in[j]);
+    }
+
+    qDebug() << "**********testing***************";
+    for(u8 i = 0; i < OUTPUT_COUNT; i++){
+        qDebug() << QString("output[%1] :").arg(i) << output_neuron_out[i];
+    }
+
+}
+
 void MainWindow::advanced_2_5_2_ann_train(  double input[2][4], double desired_output[2][4],
                                             double hidden_bias[5], double output_bias[2],
                                             double w_input_to_hidden[2][5],double w_hidden_to_output[5][2],
                                             u32 epoch,double learning_rate){
-    double calculated_output_neuron[2][4];
-    double output_neuron_in[2];
-    double output_neuron_out[2];
-    double hidden_neuron_in[5];
-    double hidden_neuron_out[5];
-    double output_error[2];
-    double hidden_error[5];
-    double global_error[2];
+#define INPUT_COUNT 2
+#define HIDDEN_COUNT 5
+#define OUTPUT_COUNT 2
+#define IO_ARRAY_LENGTH 4
+
+    double calculated_output_neuron[OUTPUT_COUNT][IO_ARRAY_LENGTH];
+    double output_neuron_in[OUTPUT_COUNT];
+    double output_neuron_out[OUTPUT_COUNT];
+    double output_error[OUTPUT_COUNT];
+    double global_error[OUTPUT_COUNT];
+
+    double hidden_neuron_in[HIDDEN_COUNT];
+    double hidden_neuron_out[HIDDEN_COUNT];
+    double hidden_error[HIDDEN_COUNT];
 
     for(u32 era = 0; era < epoch; era++){
-        for(u8 k = 0; k < 4; k++){
+        for(u8 k = 0; k < IO_ARRAY_LENGTH; k++){
 
-            hidden_neuron_in[0] = input[0][k]*w_input_to_hidden[0][0] + input[1][k]*w_input_to_hidden[1][0] + hidden_bias[0];
-            hidden_neuron_in[1] = input[0][k]*w_input_to_hidden[0][1] + input[1][k]*w_input_to_hidden[1][1] + hidden_bias[1];
-            hidden_neuron_in[2] = input[0][k]*w_input_to_hidden[0][2] + input[1][k]*w_input_to_hidden[1][2] + hidden_bias[2];
-            hidden_neuron_in[3] = input[0][k]*w_input_to_hidden[0][3] + input[1][k]*w_input_to_hidden[1][3] + hidden_bias[3];
-            hidden_neuron_in[4] = input[0][k]*w_input_to_hidden[0][4] + input[1][k]*w_input_to_hidden[1][4] + hidden_bias[4];
+            for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                hidden_neuron_in[i] = hidden_bias[i];
+            }
 
-            hidden_neuron_out[0] = sigmoid_func(hidden_neuron_in[0]);
-            hidden_neuron_out[1] = sigmoid_func(hidden_neuron_in[1]);
-            hidden_neuron_out[2] = sigmoid_func(hidden_neuron_in[2]);
-            hidden_neuron_out[3] = sigmoid_func(hidden_neuron_in[3]);
-            hidden_neuron_out[4] = sigmoid_func(hidden_neuron_in[4]);
+            for(u8 j = 0; j < INPUT_COUNT; j++){
+                for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                    hidden_neuron_in[i] += input[j][k]*w_input_to_hidden[j][i];
+                }
+            }
 
-            output_neuron_in[0] = hidden_neuron_out[0]*w_hidden_to_output[0][0] + hidden_neuron_out[1]*w_hidden_to_output[1][0] +
-                    hidden_neuron_out[2]*w_hidden_to_output[2][0] +
-                   hidden_neuron_out[3]*w_hidden_to_output[3][0] + hidden_neuron_out[4]*w_hidden_to_output[4][0] + output_bias[0];
+            for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                hidden_neuron_out[i] = sigmoid_func(hidden_neuron_in[i]);
+            }
 
-            output_neuron_out[0] = sigmoid_func(output_neuron_in[0]);
-            output_error[0] = desired_output[0][k] - output_neuron_out[0];
+            for(u8 i = 0; i < OUTPUT_COUNT; i++){
+                output_neuron_in[i] = output_bias[i];
+            }
 
-            calculated_output_neuron[0][k] = output_neuron_out[0];
+            for(u8 j = 0; j < OUTPUT_COUNT; j++){
+                for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                    output_neuron_in[j] += hidden_neuron_out[i]*w_hidden_to_output[i][j];
+                }
+                output_neuron_out[j] = sigmoid_func(output_neuron_in[j]);
+                output_error[j] = desired_output[j][k] - output_neuron_out[j];
+                calculated_output_neuron[j][k] = output_neuron_out[j];
+            }
 
-            output_neuron_in[1] = hidden_neuron_out[0]*w_hidden_to_output[0][1] + hidden_neuron_out[1]*w_hidden_to_output[1][1] +
-                    hidden_neuron_out[2]*w_hidden_to_output[2][1] +
-                   hidden_neuron_out[3]*w_hidden_to_output[3][1] + hidden_neuron_out[4]*w_hidden_to_output[4][1] + output_bias[1];
+            for(u8 i = 0; i < OUTPUT_COUNT; i++){
+                global_error[i] = derivative_of_sigmoid_func(output_neuron_in[i]) * output_error[i];
+            }
 
-            output_neuron_out[1] = sigmoid_func(output_neuron_in[1]);
-            output_error[1] = desired_output[1][k] - output_neuron_out[1];
+            for(u8 j = 0; j < OUTPUT_COUNT; j++){
+                for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                    w_hidden_to_output[i][j] += global_error[j] * hidden_neuron_out[i] * learning_rate;
+                }
+            }
 
-            calculated_output_neuron[1][k] = output_neuron_out[1];
+            for(u8 i = 0; i < OUTPUT_COUNT; i++){
+                output_bias[i] += global_error[i] * learning_rate;
+            }
 
+            for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                hidden_error[i] = 0;
+            }
 
-            global_error[0] = derivative_of_sigmoid_func(output_neuron_in[0]) * output_error[0];
-            global_error[1] = derivative_of_sigmoid_func(output_neuron_in[1]) * output_error[1];
+            for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                for(u8 j = 0; j < OUTPUT_COUNT; j++){
+                    hidden_error[i] += derivative_of_sigmoid_func(hidden_neuron_in[i]) * global_error[j] * w_hidden_to_output[i][j];
+                }
+            }
 
-            w_hidden_to_output[0][0] += global_error[0] * hidden_neuron_out[0] * learning_rate;
-            w_hidden_to_output[1][0] += global_error[0] * hidden_neuron_out[1] * learning_rate;
-            w_hidden_to_output[2][0] += global_error[0] * hidden_neuron_out[2] * learning_rate;
-            w_hidden_to_output[3][0] += global_error[0] * hidden_neuron_out[3] * learning_rate;
-            w_hidden_to_output[4][0] += global_error[0] * hidden_neuron_out[4] * learning_rate;
-            output_bias[0] += global_error[0] * learning_rate;
+            for(u8 j = 0; j < INPUT_COUNT; j++){
+                for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                    w_input_to_hidden[j][i] += hidden_error[i] * input[j][k] * learning_rate;
+                }
+            }
 
-            w_hidden_to_output[0][1] += global_error[1] * hidden_neuron_out[0] * learning_rate;
-            w_hidden_to_output[1][1] += global_error[1] * hidden_neuron_out[1] * learning_rate;
-            w_hidden_to_output[2][1] += global_error[1] * hidden_neuron_out[2] * learning_rate;
-            w_hidden_to_output[3][1] += global_error[1] * hidden_neuron_out[3] * learning_rate;
-            w_hidden_to_output[4][1] += global_error[1] * hidden_neuron_out[4] * learning_rate;
-            output_bias[1] += global_error[1] * learning_rate;
-
-
-            hidden_error[0] = derivative_of_sigmoid_func(hidden_neuron_in[0]) * global_error[0] * w_hidden_to_output[0][0] +
-                    derivative_of_sigmoid_func(hidden_neuron_in[0]) * global_error[1] * w_hidden_to_output[0][1];
-            hidden_error[1] = derivative_of_sigmoid_func(hidden_neuron_in[1]) * global_error[0] * w_hidden_to_output[1][0] +
-                    derivative_of_sigmoid_func(hidden_neuron_in[1]) * global_error[1] * w_hidden_to_output[1][1];
-            hidden_error[2] = derivative_of_sigmoid_func(hidden_neuron_in[2]) * global_error[0] * w_hidden_to_output[2][0] +
-                    derivative_of_sigmoid_func(hidden_neuron_in[2]) * global_error[1] * w_hidden_to_output[2][1];
-            hidden_error[3] = derivative_of_sigmoid_func(hidden_neuron_in[3]) * global_error[0] * w_hidden_to_output[3][0] +
-                    derivative_of_sigmoid_func(hidden_neuron_in[3]) * global_error[1] * w_hidden_to_output[3][1];
-            hidden_error[4] = derivative_of_sigmoid_func(hidden_neuron_in[4]) * global_error[0] * w_hidden_to_output[4][0] +
-                    derivative_of_sigmoid_func(hidden_neuron_in[4]) * global_error[1] * w_hidden_to_output[4][1];
-
-            w_input_to_hidden[0][0] += hidden_error[0] * input[0][k] * learning_rate;
-            w_input_to_hidden[0][1] += hidden_error[1] * input[0][k] * learning_rate;
-            w_input_to_hidden[0][2] += hidden_error[2] * input[0][k] * learning_rate;
-            w_input_to_hidden[0][3] += hidden_error[3] * input[0][k] * learning_rate;
-            w_input_to_hidden[0][4] += hidden_error[4] * input[0][k] * learning_rate;
-
-            w_input_to_hidden[1][0] += hidden_error[0] * input[1][k] * learning_rate;
-            w_input_to_hidden[1][1] += hidden_error[1] * input[1][k] * learning_rate;
-            w_input_to_hidden[1][2] += hidden_error[2] * input[1][k] * learning_rate;
-            w_input_to_hidden[1][3] += hidden_error[3] * input[1][k] * learning_rate;
-            w_input_to_hidden[1][4] += hidden_error[4] * input[1][k] * learning_rate;
-            hidden_bias[0] +=hidden_error[0] * learning_rate;
-            hidden_bias[1] +=hidden_error[1] * learning_rate;
-            hidden_bias[2] +=hidden_error[2] * learning_rate;
-            hidden_bias[3] +=hidden_error[3] * learning_rate;
-            hidden_bias[4] +=hidden_error[4] * learning_rate;
+            for(u8 i = 0; i < HIDDEN_COUNT; i++){
+                hidden_bias[i] +=hidden_error[i] * learning_rate;
+            }
         }
     }
 
-    for(u8 k = 0; k < 4; k++){
-        qDebug() << "output1 : " << calculated_output_neuron[0][k] << "output2 : " << calculated_output_neuron[1][k];
+    for(u8 i = 0; i < OUTPUT_COUNT; i++){
+        for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
+            qDebug() << QString("output[%1][%2] :").arg(i).arg(j) << calculated_output_neuron[i][j];
+        }
     }
 }
 
@@ -647,168 +690,6 @@ void MainWindow::_64_128_5_tryout(void){
 
     //_64_128_5_ann_test(&multiply_image[0][0],_64_128_5_input_to_hidden_weight,_64_128_5_hidden_to_output_weight);
 
-}
-
-void MainWindow::_2_4_2_tryout(void){
-    input_2_4_2[0][0] = 3;
-    input_2_4_2[1][0] = 6;
-    desired_output_2_4_2[0][0] = 0.3;
-    desired_output_2_4_2[1][0] = 0.6;
-
-    input_2_4_2[0][1] = 3;
-    input_2_4_2[1][1] = 6;
-    desired_output_2_4_2[0][1] = 0.3;
-    desired_output_2_4_2[1][1] = 0.6;
-
-    for(u8 i = 0; i < 2; i++){
-        for(u8 j = 0; j < 4; j++){
-            _2_4_2_input_to_hidden_weight[i][j] = 0.1;
-        }
-    }
-    for(u8 i = 0; i < 4; i++){
-        for(u8 j = 0; j < 2; j++){
-            _2_4_2_hidden_to_output_weight[i][j] = 0.1;
-        }
-    }
-
-    //_2_4_2_ann_train(input_2_4_2,desired_output_2_4_2,100000, _2_4_2_input_to_hidden_weight, _2_4_2_hidden_to_output_weight);
-
-    //double denemeci[2] = {3,6};
-    //_2_4_2_ann_test(denemeci, _2_4_2_input_to_hidden_weight, _2_4_2_hidden_to_output_weight);
-}
-void MainWindow::_2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]){
-#define INPUT_COUNT 2
-#define HIDDEN_COUNT 4
-#define OUTPUT_COUNT 2
-
-    double Y_in[OUTPUT_COUNT];
-    double Y_out[OUTPUT_COUNT];
-    double hidden_in[HIDDEN_COUNT];
-    double hidden_out[HIDDEN_COUNT];
-
-    for(u8 i = 0; i < HIDDEN_COUNT; i++){
-        hidden_in[i] = 0;
-        for(u8 j = 0; j < INPUT_COUNT; j++){
-            hidden_in[i] += input[j]*input_to_hidden_weight[j][i];
-        }
-        hidden_out[i] = sigmoid_func(hidden_in[i]);
-    }
-
-    for(u8 i = 0; i < OUTPUT_COUNT; i++){
-        Y_in[i] = 0;
-        for(u8 j = 0; j < HIDDEN_COUNT; j++){
-            Y_in[i] += hidden_out[j]*hidden_to_output_weight[j][i];
-        }
-        Y_out[i] = sigmoid_func(Y_in[i]);
-    }
-
-    qDebug() << "************test result*********************";
-    for(u8 i = 0; i < OUTPUT_COUNT; i++){
-        qDebug() << QString("output[%1] : ").arg(i) << Y_out[i];
-    }
-}
-
-void MainWindow::_2_4_2_ann_train(double input[2][2], double desired_output[2][2], u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]){
-#define INPUT_COUNT 2
-#define HIDDEN_COUNT 4
-#define OUTPUT_COUNT 2
-#define IO_ARRAY_LENGTH 2
-
-    double calculated_output[OUTPUT_COUNT][IO_ARRAY_LENGTH];
-    double Y_in[OUTPUT_COUNT];
-    double Y_out[OUTPUT_COUNT];
-    double delta_Y[OUTPUT_COUNT];
-    double error[OUTPUT_COUNT];
-
-    double hidden_in[HIDDEN_COUNT];
-    double hidden_out[HIDDEN_COUNT];
-    double delta_hidden[HIDDEN_COUNT];
-
-    double delta_input_to_hidden_weight[2][4];
-    double delta_hidden_to_output_weight[4][2];
-
-    for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
-        for(u8 i = 0; i < INPUT_COUNT; i++){
-            qDebug() << QString("input[%1][%2] : ").arg(i).arg(j) << input[i][j];
-        }
-    }
-    for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
-        for(u8 i = 0; i < OUTPUT_COUNT; i++){
-            qDebug() << QString("desired_output[%1][%2] : ").arg(i).arg(j) << desired_output[i][j];
-        }
-    }
-
-    for(u32 era = 0; era < epoch; era++){
-        for(u8 io_no = 0; io_no < IO_ARRAY_LENGTH; io_no++){
-            for(u8 i = 0; i < HIDDEN_COUNT; i++){
-                hidden_in[i] = 0;
-                for(u8 j = 0; j < INPUT_COUNT; j++){
-                    hidden_in[i] += input[j][io_no]*input_to_hidden_weight[j][i];
-                }
-                hidden_out[i] = sigmoid_func(hidden_in[i]);
-            }
-
-            for(u8 i = 0; i < OUTPUT_COUNT; i++){
-                Y_in[i] = 0;
-                for(u8 j = 0; j < HIDDEN_COUNT; j++){
-                    Y_in[i] += hidden_out[j]*hidden_to_output_weight[j][i];
-                }
-                Y_out[i] = sigmoid_func(Y_in[i]);
-                error[i] = desired_output[i][io_no] - Y_out[i];
-                calculated_output[i][io_no] = Y_out[i];
-                delta_Y[i] = derivative_of_sigmoid_func(Y_in[i]) * error[i];
-            }
-
-            for(u8 i = 0; i < HIDDEN_COUNT; i++){
-                delta_hidden[i] = 0;
-                for(u8 j = 0; j < OUTPUT_COUNT; j++){
-                    delta_hidden[i] +=   (delta_Y[j]/hidden_to_output_weight[i][j] * derivative_of_sigmoid_func(hidden_in[i]));
-                }
-            }
-
-            for(u8 i = 0; i < HIDDEN_COUNT; i++){
-                if(hidden_out[i] == 0){
-                    for(u8 j = 0; j < OUTPUT_COUNT; j++){
-                        delta_hidden_to_output_weight[i][j] = 0;
-                    }
-                }
-                else{
-                    for(u8 j = 0; j < OUTPUT_COUNT; j++){
-                        delta_hidden_to_output_weight[i][j] = delta_Y[j] / hidden_out[i];
-                    }
-                }
-            }
-
-            for(u8 i = 0; i < INPUT_COUNT; i++){
-                if (input[i][io_no] == 0){
-                    for(u8 j = 0; j < HIDDEN_COUNT; j++){
-                        delta_input_to_hidden_weight[i][j] = 0;
-                    }
-                }
-                else{
-                    for(u8 j = 0; j < HIDDEN_COUNT; j++){
-                        delta_input_to_hidden_weight[i][j] = delta_hidden[j]/input[i][io_no];
-                    }
-                }
-            }
-
-            for(u8 i = 0; i < INPUT_COUNT; i++){
-                for(u8 j = 0; j < HIDDEN_COUNT; j++){
-                    input_to_hidden_weight[i][j] = input_to_hidden_weight[i][j] + delta_input_to_hidden_weight[i][j];
-                }
-            }
-            for(u8 i = 0; i < HIDDEN_COUNT; i++){
-                for(u8 j = 0; j < OUTPUT_COUNT; j++){
-                    hidden_to_output_weight[i][j] = hidden_to_output_weight[i][j] + delta_hidden_to_output_weight[i][j];
-                }
-            }
-        }
-    }
-    for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
-        for(u8 i = 0; i < OUTPUT_COUNT; i++){
-            qDebug() << QString("output[%1][%2] : ").arg(i).arg(j) << calculated_output[i][j];
-        }
-    }
 }
 
 MainWindow::~MainWindow()
