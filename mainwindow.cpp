@@ -250,7 +250,6 @@ void MainWindow::_2_4_2_tryout(void){
     //double denemeci[2] = {3,6};
     //_2_4_2_ann_test(denemeci, _2_4_2_input_to_hidden_weight, _2_4_2_hidden_to_output_weight);
 }
-/*
 void MainWindow::_2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]){
 #define INPUT_COUNT 2
 #define HIDDEN_COUNT 4
@@ -385,7 +384,6 @@ void MainWindow::_2_4_2_ann_train(double input[2][2], double desired_output[2][2
         }
     }
 }
-*/
 void MainWindow::xor_ann(void){
     double input1[4] = {0,0,1,1};
     double input2[4] = {0,1,0,1};

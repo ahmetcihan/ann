@@ -39,8 +39,8 @@ private:
     double derivative_of_sigmoid_func(double val);
 
     void xor_ann(void);
-    //void _2_4_2_ann_train(double input[2][2], double desired_output[2][2], u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
-    //void _2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
+    void _2_4_2_ann_train(double input[2][2], double desired_output[2][2], u32 epoch, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
+    void _2_4_2_ann_test(double *input, double input_to_hidden_weight[2][4], double hidden_to_output_weight[4][2]);
 
     void _2_4_2_tryout(void);
     void _64_128_5_tryout(void);
