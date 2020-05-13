@@ -17,36 +17,33 @@ void MainWindow::advanced_2_5_2_ann_train(void){
     double desired_output_1[4] = {0,1,1,0};
     double desired_output_2[4] = {1,0,0,1};
 
-    double calculated_output_1[4] = {0,0,0,0};
-    double calculated_output_2[4] = {0,0,0,0};
-    double Y_in_1,Y_out_1;
-    double Y_in_2,Y_out_2;
+    double calculated_output_neuron[2][4];
+    double output_neuron_in[2];
+    double output_neuron_out[2];
     double w_input_to_hidden[2][5];
     double w_hidden_to_output[5][2];
 
-    double A_in,B_in,C_in,D_in,E_in;
-    double A_out,B_out,C_out,D_out,E_out;
-    double output_error_1;
-    double output_error_2;
-
-    double bias1 = 0.1;
-    double bias2 = 0.2;
-    double bias3 = 0.3;
-    double bias4 = 0.4;
-    double bias5 = 0.5;
-    double bias_output_1 = 0.6;
-    double bias_output_2 = 0.6;
+    double hidden_neuron_in[5];
+    double hidden_neuron_out[5];
+    double output_error[2];
+    double hidden_bias[5];
     double output_bias[2];
 
-    output_bias[0] = 0.6;
-    output_bias[1] = 0.6;
+    hidden_bias[0] = 0.1;
+    hidden_bias[1] = 0.2;
+    hidden_bias[2] = 0.3;
+    hidden_bias[3] = 0.4;
+    hidden_bias[4] = 0.5;
+
+    output_bias[0] = 10;
+    output_bias[1] = 10;
 
     double error1,error2,error3,error4,error5;
 
     u32 epoch = 400000;
     double learning_rate = 1;
 
-    double global_error_1,global_error_2;
+    double global_error[2];
 
     for(u8 i = 0; i < 4; i++){
         qDebug() << " input1 : " << input1[i] << " input2 : " << input2[i] << "output1 : " << desired_output_1[i] << "output2 : " << desired_output_2[i];
@@ -79,63 +76,65 @@ void MainWindow::advanced_2_5_2_ann_train(void){
     for(u32 era = 0; era < epoch; era++){
         for(u8 k = 0; k < 4; k++){
 
-            A_in = input1[k]*w_input_to_hidden[0][0] + input2[k]*w_input_to_hidden[1][0] + bias1;
-            B_in = input1[k]*w_input_to_hidden[0][1] + input2[k]*w_input_to_hidden[1][1] + bias2;
-            C_in = input1[k]*w_input_to_hidden[0][2] + input2[k]*w_input_to_hidden[1][2] + bias3;
-            D_in = input1[k]*w_input_to_hidden[0][3] + input2[k]*w_input_to_hidden[1][3] + bias4;
-            E_in = input1[k]*w_input_to_hidden[0][4] + input2[k]*w_input_to_hidden[1][4] + bias5;
+            hidden_neuron_in[0] = input1[k]*w_input_to_hidden[0][0] + input2[k]*w_input_to_hidden[1][0] + hidden_bias[0];
+            hidden_neuron_in[1] = input1[k]*w_input_to_hidden[0][1] + input2[k]*w_input_to_hidden[1][1] + hidden_bias[1];
+            hidden_neuron_in[2] = input1[k]*w_input_to_hidden[0][2] + input2[k]*w_input_to_hidden[1][2] + hidden_bias[2];
+            hidden_neuron_in[3] = input1[k]*w_input_to_hidden[0][3] + input2[k]*w_input_to_hidden[1][3] + hidden_bias[3];
+            hidden_neuron_in[4] = input1[k]*w_input_to_hidden[0][4] + input2[k]*w_input_to_hidden[1][4] + hidden_bias[4];
 
-            A_out = sigmoid_func(A_in);
-            B_out = sigmoid_func(B_in);
-            C_out = sigmoid_func(C_in);
-            D_out = sigmoid_func(D_in);
-            E_out = sigmoid_func(E_in);
+            hidden_neuron_out[0] = sigmoid_func(hidden_neuron_in[0]);
+            hidden_neuron_out[1] = sigmoid_func(hidden_neuron_in[1]);
+            hidden_neuron_out[2] = sigmoid_func(hidden_neuron_in[2]);
+            hidden_neuron_out[3] = sigmoid_func(hidden_neuron_in[3]);
+            hidden_neuron_out[4] = sigmoid_func(hidden_neuron_in[4]);
 
-            Y_in_1 = A_out*w_hidden_to_output[0][0] + B_out*w_hidden_to_output[1][0] + C_out*w_hidden_to_output[2][0] +
-                   D_out*w_hidden_to_output[3][0] + E_out*w_hidden_to_output[4][0] +bias_output_1;
+            output_neuron_in[0] = hidden_neuron_out[0]*w_hidden_to_output[0][0] + hidden_neuron_out[1]*w_hidden_to_output[1][0] +
+                    hidden_neuron_out[2]*w_hidden_to_output[2][0] +
+                   hidden_neuron_out[3]*w_hidden_to_output[3][0] + hidden_neuron_out[4]*w_hidden_to_output[4][0] + output_bias[0];
 
-            Y_out_1 = sigmoid_func(Y_in_1);
-            output_error_1 = desired_output_1[k] - Y_out_1;
+            output_neuron_out[0] = sigmoid_func(output_neuron_in[0]);
+            output_error[0] = desired_output_1[k] - output_neuron_out[0];
 
-            calculated_output_1[k] = Y_out_1;
+            calculated_output_neuron[0][k] = output_neuron_out[0];
 
-            Y_in_2 = A_out*w_hidden_to_output[0][1] + B_out*w_hidden_to_output[1][1] + C_out*w_hidden_to_output[2][1] +
-                   D_out*w_hidden_to_output[3][1] + E_out*w_hidden_to_output[4][1] +bias_output_2;
+            output_neuron_in[1] = hidden_neuron_out[0]*w_hidden_to_output[0][1] + hidden_neuron_out[1]*w_hidden_to_output[1][1] +
+                    hidden_neuron_out[2]*w_hidden_to_output[2][1] +
+                   hidden_neuron_out[3]*w_hidden_to_output[3][1] + hidden_neuron_out[4]*w_hidden_to_output[4][1] + output_bias[1];
 
-            Y_out_2 = sigmoid_func(Y_in_2);
-            output_error_2 = desired_output_2[k] - Y_out_2;
+            output_neuron_out[1] = sigmoid_func(output_neuron_in[1]);
+            output_error[1] = desired_output_2[k] - output_neuron_out[1];
 
-            calculated_output_2[k] = Y_out_2;
-
-
-            global_error_1 = derivative_of_sigmoid_func(Y_in_1) * output_error_1;
-            global_error_2 = derivative_of_sigmoid_func(Y_in_2) * output_error_2;
-
-            w_hidden_to_output[0][0] += global_error_1 * A_out * learning_rate;
-            w_hidden_to_output[1][0] += global_error_1 * B_out * learning_rate;
-            w_hidden_to_output[2][0] += global_error_1 * C_out * learning_rate;
-            w_hidden_to_output[3][0] += global_error_1 * D_out * learning_rate;
-            w_hidden_to_output[4][0] += global_error_1 * E_out * learning_rate;
-            bias_output_1 += global_error_1 * learning_rate;
-
-            w_hidden_to_output[0][1] += global_error_2 * A_out * learning_rate;
-            w_hidden_to_output[1][1] += global_error_2 * B_out * learning_rate;
-            w_hidden_to_output[2][1] += global_error_2 * C_out * learning_rate;
-            w_hidden_to_output[3][1] += global_error_2 * D_out * learning_rate;
-            w_hidden_to_output[4][1] += global_error_2 * E_out * learning_rate;
-            bias_output_2 += global_error_2 * learning_rate;
+            calculated_output_neuron[1][k] = output_neuron_out[1];
 
 
-            error1 = derivative_of_sigmoid_func(A_in) * global_error_1 * w_hidden_to_output[0][0] +
-                    derivative_of_sigmoid_func(A_in) * global_error_2 * w_hidden_to_output[0][1];
-            error2 = derivative_of_sigmoid_func(B_in) * global_error_1 * w_hidden_to_output[1][0] +
-                    derivative_of_sigmoid_func(B_in) * global_error_2 * w_hidden_to_output[1][1];
-            error3 = derivative_of_sigmoid_func(C_in) * global_error_1 * w_hidden_to_output[2][0] +
-                    derivative_of_sigmoid_func(C_in) * global_error_2 * w_hidden_to_output[2][1];
-            error4 = derivative_of_sigmoid_func(D_in) * global_error_1 * w_hidden_to_output[3][0] +
-                    derivative_of_sigmoid_func(D_in) * global_error_2 * w_hidden_to_output[3][1];
-            error5 = derivative_of_sigmoid_func(E_in) * global_error_1 * w_hidden_to_output[4][0] +
-                    derivative_of_sigmoid_func(E_in) * global_error_2 * w_hidden_to_output[4][1];
+            global_error[0] = derivative_of_sigmoid_func(output_neuron_in[0]) * output_error[0];
+            global_error[1] = derivative_of_sigmoid_func(output_neuron_in[1]) * output_error[1];
+
+            w_hidden_to_output[0][0] += global_error[0] * hidden_neuron_out[0] * learning_rate;
+            w_hidden_to_output[1][0] += global_error[0] * hidden_neuron_out[1] * learning_rate;
+            w_hidden_to_output[2][0] += global_error[0] * hidden_neuron_out[2] * learning_rate;
+            w_hidden_to_output[3][0] += global_error[0] * hidden_neuron_out[3] * learning_rate;
+            w_hidden_to_output[4][0] += global_error[0] * hidden_neuron_out[4] * learning_rate;
+            output_bias[0] += global_error[0] * learning_rate;
+
+            w_hidden_to_output[0][1] += global_error[1] * hidden_neuron_out[0] * learning_rate;
+            w_hidden_to_output[1][1] += global_error[1] * hidden_neuron_out[1] * learning_rate;
+            w_hidden_to_output[2][1] += global_error[1] * hidden_neuron_out[2] * learning_rate;
+            w_hidden_to_output[3][1] += global_error[1] * hidden_neuron_out[3] * learning_rate;
+            w_hidden_to_output[4][1] += global_error[1] * hidden_neuron_out[4] * learning_rate;
+            output_bias[1] += global_error[1] * learning_rate;
+
+
+            error1 = derivative_of_sigmoid_func(hidden_neuron_in[0]) * global_error[0] * w_hidden_to_output[0][0] +
+                    derivative_of_sigmoid_func(hidden_neuron_in[0]) * global_error[1] * w_hidden_to_output[0][1];
+            error2 = derivative_of_sigmoid_func(hidden_neuron_in[1]) * global_error[0] * w_hidden_to_output[1][0] +
+                    derivative_of_sigmoid_func(hidden_neuron_in[1]) * global_error[1] * w_hidden_to_output[1][1];
+            error3 = derivative_of_sigmoid_func(hidden_neuron_in[2]) * global_error[0] * w_hidden_to_output[2][0] +
+                    derivative_of_sigmoid_func(hidden_neuron_in[2]) * global_error[1] * w_hidden_to_output[2][1];
+            error4 = derivative_of_sigmoid_func(hidden_neuron_in[3]) * global_error[0] * w_hidden_to_output[3][0] +
+                    derivative_of_sigmoid_func(hidden_neuron_in[3]) * global_error[1] * w_hidden_to_output[3][1];
+            error5 = derivative_of_sigmoid_func(hidden_neuron_in[4]) * global_error[0] * w_hidden_to_output[4][0] +
+                    derivative_of_sigmoid_func(hidden_neuron_in[4]) * global_error[1] * w_hidden_to_output[4][1];
 
             w_input_to_hidden[0][0] += error1 * input1[k] * learning_rate;
             w_input_to_hidden[0][1] += error2 * input1[k] * learning_rate;
@@ -148,11 +147,11 @@ void MainWindow::advanced_2_5_2_ann_train(void){
             w_input_to_hidden[1][2] += error3 * input2[k] * learning_rate;
             w_input_to_hidden[1][3] += error4 * input2[k] * learning_rate;
             w_input_to_hidden[1][4] += error5 * input2[k] * learning_rate;
-            bias1 +=error1 * learning_rate;
-            bias2 +=error2 * learning_rate;
-            bias3 +=error3 * learning_rate;
-            bias4 +=error4 * learning_rate;
-            bias5 +=error5 * learning_rate;
+            hidden_bias[0] +=error1 * learning_rate;
+            hidden_bias[1] +=error2 * learning_rate;
+            hidden_bias[2] +=error3 * learning_rate;
+            hidden_bias[3] +=error4 * learning_rate;
+            hidden_bias[4] +=error5 * learning_rate;
         }
     }
 
@@ -166,15 +165,15 @@ void MainWindow::advanced_2_5_2_ann_train(void){
             qDebug() << "h_to_o_w[i][j] : " << w_hidden_to_output[i][j];
         }
     }
-    qDebug() << "bias1" << bias1;
-    qDebug() << "bias2" << bias2;
-    qDebug() << "bias3" << bias3;
-    qDebug() << "bias4" << bias4;
-    qDebug() << "bias5" << bias5;
-    qDebug() << "bias_output_1" << bias_output_1;
-    qDebug() << "bias_output_2" << bias_output_2;
+    qDebug() << "bias1" << hidden_bias[0];
+    qDebug() << "bias2" << hidden_bias[1];
+    qDebug() << "bias3" << hidden_bias[2];
+    qDebug() << "bias4" << hidden_bias[3];
+    qDebug() << "bias5" << hidden_bias[4];
+    qDebug() << "bias_output_1" << output_bias[0];
+    qDebug() << "bias_output_2" << output_bias[1];
     for(u8 k = 0; k < 4; k++){
-        qDebug() << "output1 : " << calculated_output_1[k] << "output2 : " << calculated_output_2[k];
+        qDebug() << "output1 : " << calculated_output_neuron[0][k] << "output2 : " << calculated_output_neuron[1][k];
     }
 }
 
