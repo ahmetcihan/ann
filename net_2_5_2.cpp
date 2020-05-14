@@ -179,6 +179,7 @@ void MainWindow::advanced_2_5_2_ann_train(  double input[2][4], double desired_o
                 hidden_bias[i] +=hidden_error[i] * learning_rate;
             }
         }
+        qDebug() << "training status % " << (era*100)/epoch;
     }
 
     for(u8 i = 0; i < OUTPUT_COUNT; i++){

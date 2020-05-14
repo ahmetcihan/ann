@@ -91,6 +91,7 @@ void MainWindow::advanced_64_128_5_ann_train(  double input[64][5], double desir
                 hidden_bias[i] +=hidden_error[i] * learning_rate;
             }
         }
+        qDebug() << "training status % " << (era*100)/epoch;
     }
 
     for(u8 i = 0; i < OUTPUT_COUNT; i++){
@@ -145,20 +146,20 @@ void MainWindow::advanced_64_128_5_tryout(void){
     net_64_128_5.desired_output[4][4] = 1;
 
     for(u8 i = 0; i < 128; i++){
-        net_64_128_5.hidden_bias[i] = 10.1 + 0.01*i;
+        net_64_128_5.hidden_bias[i] = 0.1 + 0.01*i;
     }
     for(u8 i = 0; i < 5; i++){
-        net_64_128_5.output_bias[i] = 10;
+        net_64_128_5.output_bias[i] = 0.2;
     }
 
     for(u8 i = 0; i < 64; i++){
         for(u8 j = 0; j < 128; j++){
-            net_64_128_5.w_input_to_hidden[i][j] = 10.1;
+            net_64_128_5.w_input_to_hidden[i][j] = 0.1;
         }
     }
     for(u8 i = 0; i < 128; i++){
         for(u8 j = 0; j < 5; j++){
-            net_64_128_5.w_hidden_to_output[i][j] = 10.1;
+            net_64_128_5.w_hidden_to_output[i][j] = 0.1;
         }
     }
 
@@ -169,24 +170,24 @@ void MainWindow::advanced_64_128_5_tryout(void){
     }
     for(u8 i = 0; i < 5; i++){
         for(u8 j = 0; j < 5; j++){
-            qDebug() << QString(" output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.desired_output[i][j];
+            qDebug() << QString(" desired output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.desired_output[i][j];
         }
     }
 
     advanced_64_128_5_ann_train(net_64_128_5.input, net_64_128_5.desired_output,
                              net_64_128_5.hidden_bias,net_64_128_5.output_bias,
                              net_64_128_5.w_input_to_hidden,net_64_128_5.w_hidden_to_output,
-                             4000, 1);
+                             100000, 0.1);
 
-    for(u8 i = 0; i < 128; i++){
-        qDebug() << QString("hidden bias-%1").arg(i) << net_64_128_5.hidden_bias[i];
-    }
+//    for(u8 i = 0; i < 128; i++){
+//        qDebug() << QString("hidden bias-%1").arg(i) << net_64_128_5.hidden_bias[i];
+//    }
 
-    for(u8 i = 0; i < 64; i++){
-        for(u8 j = 0; j < 128; j++){
-            qDebug() << QString("w-%1-%2").arg(i).arg(j) << net_64_128_5.w_input_to_hidden[i][j];
-        }
-    }
+//    for(u8 i = 0; i < 64; i++){
+//        for(u8 j = 0; j < 128; j++){
+//            qDebug() << QString("w-%1-%2").arg(i).arg(j) << net_64_128_5.w_input_to_hidden[i][j];
+//        }
+//    }
 
 }
 
