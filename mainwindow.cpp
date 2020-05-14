@@ -8,16 +8,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     advanced_64_128_5_tryout();
 }
-void MainWindow::advanced_64_128_5_ann_train(  double input[64][5], double desired_output[5][5],
+void MainWindow::advanced_64_128_5_ann_train(double input[64][5], double desired_output[5][5], double calculated_output[5][5],
                                             double hidden_bias[128], double output_bias[5],
-                                            double w_input_to_hidden[64][128],double w_hidden_to_output[128][5],
-                                            u32 epoch,double learning_rate){
+                                            double w_input_to_hidden[64][128], double w_hidden_to_output[128][5],
+                                            u32 epoch, double learning_rate){
 #define INPUT_COUNT 64
 #define HIDDEN_COUNT 128
 #define OUTPUT_COUNT 5
 #define IO_ARRAY_LENGTH 5
 
-    double calculated_output_neuron[OUTPUT_COUNT][IO_ARRAY_LENGTH];
     double output_neuron_in[OUTPUT_COUNT];
     double output_neuron_out[OUTPUT_COUNT];
     double output_error[OUTPUT_COUNT];
@@ -54,7 +53,7 @@ void MainWindow::advanced_64_128_5_ann_train(  double input[64][5], double desir
                 }
                 output_neuron_out[j] = sigmoid_func(output_neuron_in[j]);
                 output_error[j] = desired_output[j][k] - output_neuron_out[j];
-                calculated_output_neuron[j][k] = output_neuron_out[j];
+                calculated_output[j][k] = output_neuron_out[j];
             }
 
             for(u8 i = 0; i < OUTPUT_COUNT; i++){
@@ -93,12 +92,8 @@ void MainWindow::advanced_64_128_5_ann_train(  double input[64][5], double desir
         }
         qDebug() << "training status % " << (era*100)/epoch;
     }
+    qDebug() << "training is FINISHED!!";
 
-    for(u8 i = 0; i < OUTPUT_COUNT; i++){
-        for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
-            qDebug() << QString("calculated output[%1][%2] :").arg(i).arg(j) << calculated_output_neuron[i][j];
-        }
-    }
 }
 
 void MainWindow::advanced_64_128_5_tryout(void){
@@ -168,26 +163,19 @@ void MainWindow::advanced_64_128_5_tryout(void){
             qDebug() << QString(" input[%1][%2] : ").arg(i).arg(j) << net_64_128_5.input[i][j];
         }
     }
-    for(u8 i = 0; i < 5; i++){
-        for(u8 j = 0; j < 5; j++){
-            qDebug() << QString(" desired output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.desired_output[i][j];
-        }
-    }
 
-    advanced_64_128_5_ann_train(net_64_128_5.input, net_64_128_5.desired_output,
+    advanced_64_128_5_ann_train(net_64_128_5.input, net_64_128_5.desired_output, net_64_128_5.calculated_output,
                              net_64_128_5.hidden_bias,net_64_128_5.output_bias,
                              net_64_128_5.w_input_to_hidden,net_64_128_5.w_hidden_to_output,
                              100000, 0.1);
 
-//    for(u8 i = 0; i < 128; i++){
-//        qDebug() << QString("hidden bias-%1").arg(i) << net_64_128_5.hidden_bias[i];
-//    }
+    for(u8 i = 0; i < 5; i++){
+        for(u8 j = 0; j < 5; j++){
+            qDebug() << QString("desired output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.desired_output[i][j] <<
+                        QString("calculated output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.calculated_output[i][j];
+        }
+    }
 
-//    for(u8 i = 0; i < 64; i++){
-//        for(u8 j = 0; j < 128; j++){
-//            qDebug() << QString("w-%1-%2").arg(i).arg(j) << net_64_128_5.w_input_to_hidden[i][j];
-//        }
-//    }
 
 }
 

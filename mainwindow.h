@@ -37,6 +37,7 @@ private:
     struct _64_128_5_str{
         double input[64][5];
         double desired_output[5][5];
+        double calculated_output[5][5];
         double hidden_bias[128];
         double output_bias[5];
         double w_input_to_hidden[64][128];
@@ -71,7 +72,7 @@ private:
                                     double w_input_to_hidden[2][5], double w_hidden_to_output[5][2]);
     void advanced_2_5_2_tryout(void);
 
-    void advanced_64_128_5_ann_train(  double input[64][5], double desired_output[5][5],
+    void advanced_64_128_5_ann_train(  double input[64][5], double desired_output[5][5], double calculated_output[5][5],
                                     double hidden_bias[128], double output_bias[5],
                                     double w_input_to_hidden[64][128],double w_hidden_to_output[128][5],
                                     u32 epoch,double learning_rate);
