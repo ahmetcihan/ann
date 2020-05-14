@@ -230,7 +230,7 @@ void MainWindow::advanced_64_128_5_tryout(void){
 
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_5.test_input[8*i + j] = addition_image[i][j];
+            net_64_128_5.test_input[8*i + j] = test_image[i][j];
         }
     }
 
