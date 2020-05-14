@@ -217,7 +217,7 @@ void MainWindow::advanced_64_128_5_tryout(void){
     advanced_64_128_5_ann_train(net_64_128_5.input, net_64_128_5.desired_output, net_64_128_5.calculated_output,
                              net_64_128_5.hidden_bias,net_64_128_5.output_bias,
                              net_64_128_5.w_input_to_hidden,net_64_128_5.w_hidden_to_output,
-                             100000, 0.00013);
+                             100000, 0.000132);
 
     for(u8 i = 0; i < 5; i++){
         for(u8 j = 0; j < 5; j++){
