@@ -6,9 +6,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    advanced_64_128_5_tryout();
+    _2_3_1_ann_train();
+    //advanced_2_5_4_2_tryout();
+    //advanced_2_5_2_tryout();
+    //advanced_64_128_5_tryout();
 }
-
 
 void MainWindow::image_to_array(QString location,double image_array[8][8]){
     QImage read_image;
@@ -25,7 +27,6 @@ void MainWindow::image_to_array(QString location,double image_array[8][8]){
         }
     }
 }
-
 
 MainWindow::~MainWindow()
 {

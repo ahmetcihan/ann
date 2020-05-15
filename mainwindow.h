@@ -24,6 +24,18 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    struct _2_5_4_2_str{
+        double input[2][4];
+        double desired_output[2][4];
+        double hidden_bias_1[5];
+        double hidden_bias_2[4];
+        double output_bias[2];
+        double w_input_to_hidden[2][5];
+        double w_hidden_to_hidden[5][4];
+        double w_hidden_to_output[4][2];
+    };
+    struct _2_5_4_2_str net_2_5_4_2;
+
     struct _2_5_2_str{
         double input[2][4];
         double desired_output[2][4];
@@ -53,17 +65,21 @@ private:
     double multiply_image[8][8];
     double divide_image[8][8];
 
-    double input_2_4_2[2][2];
-    double desired_output_2_4_2[2][2];
-
-    double _2_4_2_input_to_hidden_weight[2][4];
-    double _2_4_2_hidden_to_output_weight[4][2];
-
     double sigmoid_func(double val);
     double derivative_of_sigmoid_func(double val);
 
+    void _2_3_1_ann_train(void);
     void _2_5_1_ann_train(void);
     void _2_5_2_ann_train(void);
+
+    void advanced_2_5_4_2_ann_train(double input[2][4], double desired_output[2][4],
+                                    double hidden_bias_1[5],double hidden_bias_2[4], double output_bias[2],
+                                    double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][4], double w_hidden_to_output[4][2],
+                                    u32 epoch, double learning_rate);
+    void advanced_2_5_4_2_ann_test(   double input[2],
+                                    double hidden_bias_1[5],double hidden_bias_2[4], double output_bias[2],
+                                    double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][4], double w_hidden_to_output[4][2]);
+    void advanced_2_5_4_2_tryout(void);
 
     void advanced_2_5_2_ann_train(  double input[2][4], double desired_output[2][4],
                                     double hidden_bias[5], double output_bias[2],

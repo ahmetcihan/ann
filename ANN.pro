@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     activation_function.cpp \
     net_2_5_2.cpp \
     net_easy.cpp \
-    net_64_128_5.cpp
+    net_64_128_5.cpp \
+    net_2_5_4_2.cpp
 
 HEADERS  += mainwindow.h
 
