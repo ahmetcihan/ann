@@ -68,6 +68,7 @@ private:
     double sigmoid_func(double val);
     double derivative_of_sigmoid_func(double val);
 
+    void _2_5_2_1_ann_train(void);
     void _2_3_2_1_ann_train(void);
     void _2_3_1_ann_train(void);
     void _2_5_1_ann_train(void);
