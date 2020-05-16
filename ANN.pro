@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     net_2_5_2.cpp \
     net_easy.cpp \
     net_64_128_5.cpp \
-    net_2_5_3_2.cpp
+    net_2_5_3_2.cpp \
+    net_64_128_32_5.cpp
 
 HEADERS  += mainwindow.h
 

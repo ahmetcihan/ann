@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    _2_5_3_2_ann_tryout();
+    _64_128_32_5_ann_tryout();
     //_2_3_1_ann_train();
     //advanced_2_5_4_2_tryout();
     //advanced_2_5_2_tryout();

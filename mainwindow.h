@@ -24,6 +24,20 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    struct _64_128_32_5_str{
+        double input[64][5];
+        double desired_output[5][5];
+        double calculated_output[5][5];
+        double hidden_neuron_bias_1[128];
+        double hidden_neuron_bias_2[32];
+        double output_bias[5];
+        double w_input_to_hidden[64][128];
+        double w_hidden_to_hidden[128][32];
+        double w_hidden_to_output[32][5];
+        double test_input[64];
+    };
+    struct _64_128_32_5_str net_64_128_32_5;
+
     struct _2_5_3_2_str{
         double input[2][4];
         double desired_output[2][4];
@@ -67,6 +81,17 @@ private:
 
     double sigmoid_func(double val);
     double derivative_of_sigmoid_func(double val);
+
+    void _64_128_32_5_ann_test( double input[64],
+                            double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
+                            double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]);
+    void _64_128_32_5_ann_train(double input[64][5], double desired_output[5][5], double calculated_output[5][5],
+                            double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
+                            double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5],
+                            u32 epoch, double learning_rate);
+    void _64_128_32_5_ann_tryout(void);
+    void _64_128_32_5_ann_show_weights( double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
+                                    double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]);
 
     void _2_5_3_2_ann_test( double input[2],
                             double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],
