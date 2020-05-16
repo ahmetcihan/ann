@@ -36,18 +36,6 @@ private:
     };
     struct _2_5_3_2_str net_2_5_3_2;
 
-    struct _2_5_4_2_str{
-        double input[2][4];
-        double desired_output[2][4];
-        double hidden_bias_1[5];
-        double hidden_bias_2[4];
-        double output_bias[2];
-        double w_input_to_hidden[2][5];
-        double w_hidden_to_hidden[5][4];
-        double w_hidden_to_output[4][2];
-    };
-    struct _2_5_4_2_str net_2_5_4_2;
-
     struct _2_5_2_str{
         double input[2][4];
         double desired_output[2][4];
@@ -93,15 +81,6 @@ private:
     void _2_3_1_ann_train(void);
     void _2_5_1_ann_train(void);
     void _2_5_2_ann_train(void);
-
-    void advanced_2_5_4_2_ann_train(double input[2][4], double desired_output[2][4],
-                                    double hidden_bias_1[5],double hidden_bias_2[4], double output_bias[2],
-                                    double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][4], double w_hidden_to_output[4][2],
-                                    u32 epoch, double learning_rate);
-    void advanced_2_5_4_2_ann_test(   double input[2],
-                                    double hidden_bias_1[5],double hidden_bias_2[4], double output_bias[2],
-                                    double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][4], double w_hidden_to_output[4][2]);
-    void advanced_2_5_4_2_tryout(void);
 
     void advanced_2_5_2_ann_train(  double input[2][4], double desired_output[2][4],
                                     double hidden_bias[5], double output_bias[2],
