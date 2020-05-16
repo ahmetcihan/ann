@@ -26,7 +26,7 @@ void MainWindow::_2_5_3_2_ann_train(void){
     double output_error;
     double global_error;
 
-    u32 epoch = 900000;
+    u32 epoch = 1000000;
 
     for(u8 i = 0; i < 4; i++){
         qDebug() << " input1 : " << input1[i] << " input2 : " << input2[i] << "output : " << desired_output[i];
@@ -181,26 +181,25 @@ void MainWindow::_2_5_3_2_ann_train(void){
 
     for(u8 i = 0; i < 2; i++){
         for(u8 j = 0; j < 5; j++){
-            qDebug() << "in_to_h_w[i][j] : " << w_input_to_hidden[i][j];
+            qDebug() << QString("in_to_h_w[%1][%2] : ").arg(i).arg(j) << w_input_to_hidden[i][j];
         }
     }
     for(u8 i = 0; i < 5; i++){
         for(u8 j = 0; j < 3; j++){
-            qDebug() << "h_to_h_w[i][j] : " << w_hidden_to_hidden[i][j];
+            qDebug() << QString("h_to_h_w[%1][%2] : ").arg(i).arg(j) << w_hidden_to_hidden[i][j];
         }
     }
-    for(u8 j = 0; j < 3; j++){
-        qDebug() << "h_to_o_w[i] : " << w_hidden_to_output[j];
+    for(u8 i = 0; i < 3; i++){
+        qDebug() << QString("h_to_o_w[%1] : ").arg(i) << w_hidden_to_output[i];
     }
-    qDebug() << "hidden_neuron_bias_1[0]" << hidden_neuron_bias_1[0];
-    qDebug() << "hidden_neuron_bias_1[1]" << hidden_neuron_bias_1[1];
-    qDebug() << "hidden_neuron_bias_1[2]" << hidden_neuron_bias_1[2];
-    qDebug() << "hidden_neuron_bias_1[3]" << hidden_neuron_bias_1[3];
-    qDebug() << "hidden_neuron_bias_1[4]" << hidden_neuron_bias_1[4];
 
-    qDebug() << "hidden_neuron_bias_2[0]" << hidden_neuron_bias_2[0];
-    qDebug() << "hidden_neuron_bias_2[1]" << hidden_neuron_bias_2[1];
-    qDebug() << "hidden_neuron_bias_2[2]" << hidden_neuron_bias_2[2];
+    for(u8 i = 0; i < 5; i++){
+        qDebug() << QString("hidden_neuron_bias_1[%1] : ").arg(i) << hidden_neuron_bias_1[i];
+    }
+    for(u8 i = 0; i < 3; i++){
+        qDebug() << QString("hidden_neuron_bias_2[%1] : ").arg(i) << hidden_neuron_bias_2[i];
+    }
+
 
     qDebug() << "bias_output" << bias_output;
 
