@@ -139,37 +139,20 @@ void MainWindow::_2_5_3_2_ann_train(    double input[2][4], double desired_outpu
                 hidden_neuron_bias_2[i] += hidden_neuron_error_2[i] * learning_rate;
             }
 
-            hidden_neuron_error_1[0] =  derivative_of_sigmoid_func(hidden_neuron_in_1[0]) * hidden_neuron_error_2[0] * w_hidden_to_hidden[0][0] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[0]) * hidden_neuron_error_2[1] * w_hidden_to_hidden[0][1] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[0]) * hidden_neuron_error_2[2] * w_hidden_to_hidden[0][2];
+            for(u8 i = 0; i < 5; i++){
+                hidden_neuron_error_1[i] = 0;
+            }
 
-            hidden_neuron_error_1[1] =  derivative_of_sigmoid_func(hidden_neuron_in_1[1]) * hidden_neuron_error_2[0] * w_hidden_to_hidden[1][0] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[1]) * hidden_neuron_error_2[1] * w_hidden_to_hidden[1][1] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[1]) * hidden_neuron_error_2[2] * w_hidden_to_hidden[1][2];
-
-            hidden_neuron_error_1[2] =  derivative_of_sigmoid_func(hidden_neuron_in_1[2]) * hidden_neuron_error_2[0] * w_hidden_to_hidden[2][0] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[2]) * hidden_neuron_error_2[1] * w_hidden_to_hidden[2][1] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[2]) * hidden_neuron_error_2[2] * w_hidden_to_hidden[2][2];
-
-            hidden_neuron_error_1[3] =  derivative_of_sigmoid_func(hidden_neuron_in_1[3]) * hidden_neuron_error_2[0] * w_hidden_to_hidden[3][0] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[3]) * hidden_neuron_error_2[1] * w_hidden_to_hidden[3][1] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[3]) * hidden_neuron_error_2[2] * w_hidden_to_hidden[3][2];
-
-            hidden_neuron_error_1[4] =  derivative_of_sigmoid_func(hidden_neuron_in_1[4]) * hidden_neuron_error_2[0] * w_hidden_to_hidden[4][0] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[4]) * hidden_neuron_error_2[1] * w_hidden_to_hidden[4][1] +
-                                        derivative_of_sigmoid_func(hidden_neuron_in_1[4]) * hidden_neuron_error_2[2] * w_hidden_to_hidden[4][2];
-
-            w_input_to_hidden[0][0] += hidden_neuron_error_1[0] * input[0][k] * learning_rate;
-            w_input_to_hidden[0][1] += hidden_neuron_error_1[1] * input[0][k] * learning_rate;
-            w_input_to_hidden[0][2] += hidden_neuron_error_1[2] * input[0][k] * learning_rate;
-            w_input_to_hidden[0][3] += hidden_neuron_error_1[3] * input[0][k] * learning_rate;
-            w_input_to_hidden[0][4] += hidden_neuron_error_1[4] * input[0][k] * learning_rate;
-
-            w_input_to_hidden[1][0] += hidden_neuron_error_1[0] * input[1][k] * learning_rate;
-            w_input_to_hidden[1][1] += hidden_neuron_error_1[1] * input[1][k] * learning_rate;
-            w_input_to_hidden[1][2] += hidden_neuron_error_1[2] * input[1][k] * learning_rate;
-            w_input_to_hidden[1][3] += hidden_neuron_error_1[3] * input[1][k] * learning_rate;
-            w_input_to_hidden[1][4] += hidden_neuron_error_1[4] * input[1][k] * learning_rate;
+            for(u8 i = 0; i < 5; i++){
+                for(u8 j = 0; j < 3; j++){
+                    hidden_neuron_error_1[i] +=  derivative_of_sigmoid_func(hidden_neuron_in_1[i]) * hidden_neuron_error_2[j] * w_hidden_to_hidden[i][j];
+                }
+            }
+            for(u8 i = 0; i < 2; i++){
+                for(u8 j = 0; j < 5; j++){
+                    w_input_to_hidden[i][j] += hidden_neuron_error_1[j] * input[i][k] * learning_rate;
+                }
+            }
 
             for(u8 i = 0; i < 5; i++){
                 hidden_neuron_bias_1[i] +=hidden_neuron_error_1[i] * learning_rate;
