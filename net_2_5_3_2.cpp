@@ -57,6 +57,64 @@ void MainWindow::_2_5_3_2_ann_tryout(void){
                         net_2_5_3_2.w_input_to_hidden,net_2_5_3_2.w_hidden_to_hidden,net_2_5_3_2.w_hidden_to_output,
                         200000, 0.1);
 
+    double my_inputs[2] = {0,0};
+    _2_5_3_2_ann_test( my_inputs,
+                        net_2_5_3_2.hidden_neuron_bias_1,net_2_5_3_2.hidden_neuron_bias_2,net_2_5_3_2.output_bias,
+                        net_2_5_3_2.w_input_to_hidden,net_2_5_3_2.w_hidden_to_hidden,net_2_5_3_2.w_hidden_to_output);
+
+}
+void MainWindow::_2_5_3_2_ann_test( double input[2],
+                        double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],
+                        double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][3], double w_hidden_to_output[3][2]){
+    double hidden_neuron_in_1[5];
+    double hidden_neuron_out_1[5];
+
+    double hidden_neuron_in_2[3];
+    double hidden_neuron_out_2[3];
+
+    double output_in[2];
+    double calculated_output[2];
+
+    qDebug() << "*************TESTING***********************************";
+    for(u8 i = 0; i < 2; i++){
+        qDebug() << QString("input[%1] :").arg(i) << input[i];
+    }
+
+
+    for(u8 i = 0; i < 5; i++){
+        hidden_neuron_in_1[i] = hidden_neuron_bias_1[i];
+    }
+    for(u8 i = 0; i < 5; i++){
+        for(u8 j = 0; j < 2; j++){
+            hidden_neuron_in_1[i] += input[j]*w_input_to_hidden[j][i];
+        }
+    }
+    for(u8 i = 0; i < 5; i++){
+        hidden_neuron_out_1[i] = sigmoid_func(hidden_neuron_in_1[i]);
+    }
+    for(u8 i = 0; i < 3; i++){
+        hidden_neuron_in_2[i] = hidden_neuron_bias_2[i];
+    }
+    for(u8 i = 0; i < 3; i++){
+        for(u8 j = 0; j < 5; j++){
+            hidden_neuron_in_2[i] += hidden_neuron_out_1[j]*w_hidden_to_hidden[j][i];
+        }
+    }
+    for(u8 i = 0; i < 3; i++){
+        hidden_neuron_out_2[i] = sigmoid_func(hidden_neuron_in_2[i]);
+    }
+
+    for(u8 j = 0; j < 2; j++){
+        output_in[j] =  output_bias[j];
+        for(u8 i = 0; i < 3; i++){
+            output_in[j] += hidden_neuron_out_2[i]*w_hidden_to_output[i][j];
+        }
+        calculated_output[j]   = sigmoid_func(output_in[j]);
+    }
+
+    for(u8 i = 0; i < 2; i++){
+        qDebug() << QString("output[%1] :").arg(i) << calculated_output[i];
+    }
 }
 
 void MainWindow::_2_5_3_2_ann_train(    double input[2][4], double desired_output[2][4],

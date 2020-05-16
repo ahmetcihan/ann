@@ -68,11 +68,13 @@ private:
     double sigmoid_func(double val);
     double derivative_of_sigmoid_func(double val);
 
+    void _2_5_3_2_ann_test( double input[2],
+                            double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],
+                            double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][3], double w_hidden_to_output[3][2]);
     void _2_5_3_2_ann_train(double input[2][4], double desired_output[2][4],
-                                double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],
-                                double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][3], double w_hidden_to_output[3][2],
-                                u32 epoch, double learning_rate);
-
+                            double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],
+                            double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][3], double w_hidden_to_output[3][2],
+                            u32 epoch, double learning_rate);
     void _2_5_3_2_ann_tryout(void);
 
     void _2_5_3_1_ann_train(void);
