@@ -6,6 +6,8 @@
 #include <math.h>
 #include <QTimer>
 #include "ann.h"
+#include <QThread>
+#include <QtConcurrentRun>
 
 typedef unsigned char   u8;
 typedef unsigned int    u32;

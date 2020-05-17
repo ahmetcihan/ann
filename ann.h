@@ -19,6 +19,8 @@ public:
     explicit ann(MainWindow *master, QWidget *parent = 0);
     ~ann();
 
+    QThread *thread_1;
+
     u8 train_status;
     u8 epoch_status;
 
@@ -81,6 +83,7 @@ public:
 private:
     Ui::ann *ui;
     MainWindow *mainwindow;
+    QTimer* thread_timer;
 
     double sigmoid_func(double val);
     double derivative_of_sigmoid_func(double val);
@@ -91,8 +94,6 @@ private:
     void _2_3_1_ann_train(void);
     void _2_5_1_ann_train(void);
     void _2_5_2_ann_train(void);
-
-
 
 
     void _64_128_32_5_ann_test( double input[64],
@@ -127,6 +128,8 @@ private:
                                     double w_input_to_hidden[2][5], double w_hidden_to_output[5][2]);
     void advanced_2_5_2_tryout(void);
 
+private slots:
+    void thread_handler(void);
 
 };
 
