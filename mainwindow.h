@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QDebug>
 #include <math.h>
-//#include <qmath.h>
+#include <QTimer>
 
 typedef unsigned char   u8;
 typedef unsigned int    u32;
@@ -23,6 +23,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    QTimer *_100_msec_timer;
+    u8 train_status;
+    u8 epoch_status;
 
     struct _64_128_32_5_str{
         double input[64][5];
@@ -127,9 +131,16 @@ private:
     void advanced_64_128_5_ann_test(    double input[64],
                                         double hidden_bias[128], double output_bias[5],
                                         double w_input_to_hidden[64][128], double w_hidden_to_output[128][5]);
-    void advanced_64_128_5_tryout(void);
 
     void image_to_array(QString location, double image_array[8][8]);
+
+private slots:
+    void _100_msec_timer_handle(void);
+
+    void _64_128_5_random_initilize_handler(void);
+    void _64_128_5_train_handler(void);
+    void _64_128_5_test_handler(void);
+    void _64_128_5_show_weights_handler(void);
 
 };
 
