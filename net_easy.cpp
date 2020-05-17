@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 
-void MainWindow::_2_5_3_1_ann_train(void){
+void ann::_2_5_3_1_ann_train(void){
     double input1[4] = {0,0,1,1};
     double input2[4] = {0,1,0,1};
     double desired_output[4] = {0,1,1,0};
@@ -208,7 +208,7 @@ void MainWindow::_2_5_3_1_ann_train(void){
         qDebug() << "output : " << calculated_output[k];
     }
 }
-void MainWindow::_2_5_2_1_ann_train(void){
+void ann::_2_5_2_1_ann_train(void){
     double input1[4] = {0,0,1,1};
     double input2[4] = {0,1,0,1};
     double desired_output[4] = {0,1,1,0};
@@ -392,7 +392,7 @@ void MainWindow::_2_5_2_1_ann_train(void){
         qDebug() << "output : " << calculated_output[k];
     }
 }
-void MainWindow::_2_3_2_1_ann_train(void){
+void ann::_2_3_2_1_ann_train(void){
     double input1[4] = {0,0,1,1};
     double input2[4] = {0,1,0,1};
     double desired_output[4] = {0,1,1,0};
@@ -526,7 +526,7 @@ void MainWindow::_2_3_2_1_ann_train(void){
         qDebug() << "output : " << calculated_output[k];
     }
 }
-void MainWindow::_2_3_1_ann_train(void){
+void ann::_2_3_1_ann_train(void){
     double input1[4] = {0,0,1,1};
     double input2[4] = {0,1,0,1};
     double desired_output[4] = {0,1,1,0};
@@ -622,7 +622,7 @@ void MainWindow::_2_3_1_ann_train(void){
         qDebug() << "output : " << calculated_output[k];
     }
 }
-void MainWindow::_2_5_2_ann_train(void){
+void ann::_2_5_2_ann_train(void){
     double input1[4] = {0,0,1,1};
     double input2[4] = {0,1,0,1};
     double desired_output_1[4] = {0,1,1,0};
@@ -783,7 +783,7 @@ void MainWindow::_2_5_2_ann_train(void){
         qDebug() << "output1 : " << calculated_output_1[k] << "output2 : " << calculated_output_2[k];
     }
 }
-void MainWindow::_2_5_1_ann_train(void){
+void ann::_2_5_1_ann_train(void){
     double input1[4] = {0,0,1,1};
     double input2[4] = {0,1,0,1};
     double desired_output[4] = {0,1,1,0};

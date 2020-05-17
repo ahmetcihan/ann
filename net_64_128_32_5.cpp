@@ -6,36 +6,36 @@
 #define OUTPUT_COUNT    5
 #define IO_ARRAY_LENGTH 5
 
-void MainWindow::_64_128_32_5_ann_tryout(void){
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/zero.png",zero_image);
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/add.png",addition_image);
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/divide.png",divide_image);
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/minus.png",minus_image);
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/multiply.png",multiply_image);
+void ann::_64_128_32_5_ann_tryout(void){
+    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/zero.png",mainwindow->zero_image);
+    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/add.png",mainwindow->addition_image);
+    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/divide.png",mainwindow->divide_image);
+    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/minus.png",mainwindow->minus_image);
+    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/multiply.png",mainwindow->multiply_image);
 
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][0] = zero_image[i][j];
+            net_64_128_32_5.input[8*i + j][0] = mainwindow->zero_image[i][j];
         }
     }
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][1] = addition_image[i][j];
+            net_64_128_32_5.input[8*i + j][1] = mainwindow->addition_image[i][j];
         }
     }
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][2] = divide_image[i][j];
+            net_64_128_32_5.input[8*i + j][2] = mainwindow->divide_image[i][j];
         }
     }
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][3] = minus_image[i][j];
+            net_64_128_32_5.input[8*i + j][3] = mainwindow->minus_image[i][j];
         }
     }
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][4] = multiply_image[i][j];
+            net_64_128_32_5.input[8*i + j][4] = mainwindow->multiply_image[i][j];
         }
     }
 
@@ -113,7 +113,7 @@ void MainWindow::_64_128_32_5_ann_tryout(void){
 //                        net_64_128_32_5.w_input_to_hidden,net_64_128_32_5.w_hidden_to_hidden,net_64_128_32_5.w_hidden_to_output);
 
 }
-void MainWindow::_64_128_32_5_ann_test( double input[64],
+void ann::_64_128_32_5_ann_test( double input[64],
                                         double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
                                         double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]){
     double hidden_neuron_in_1[HIDDEN_COUNT_1];
@@ -167,7 +167,7 @@ void MainWindow::_64_128_32_5_ann_test( double input[64],
     }
 }
 
-void MainWindow::_64_128_32_5_ann_train(double input[64][5], double desired_output[5][5], double calculated_output[5][5],
+void ann::_64_128_32_5_ann_train(double input[64][5], double desired_output[5][5], double calculated_output[5][5],
                                         double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[64], double output_bias[5],
                                         double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5],
                                         u32 epoch, double learning_rate){
@@ -272,7 +272,7 @@ void MainWindow::_64_128_32_5_ann_train(double input[64][5], double desired_outp
         qDebug() << "training status % " << (era*100)/epoch;
     }
 }
-void MainWindow::_64_128_32_5_ann_show_weights( double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
+void ann::_64_128_32_5_ann_show_weights( double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
                                             double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]){
     for(u8 i = 0; i < INPUT_COUNT; i++){
         for(u8 j = 0; j < HIDDEN_COUNT_1; j++){

@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 
-void MainWindow::advanced_2_5_2_tryout(void){
+void ann::advanced_2_5_2_tryout(void){
     net_2_5_2.input[0][0] = 0;    net_2_5_2.input[1][0] = 0;
     net_2_5_2.input[0][1] = 0;    net_2_5_2.input[1][1] = 1;
     net_2_5_2.input[0][2] = 1;    net_2_5_2.input[1][2] = 0;
@@ -50,7 +50,7 @@ void MainWindow::advanced_2_5_2_tryout(void){
                              net_2_5_2.w_input_to_hidden,net_2_5_2.w_hidden_to_output);
 }
 
-void MainWindow::advanced_2_5_2_ann_test(double input[2],
+void ann::advanced_2_5_2_ann_test(double input[2],
                                 double hidden_bias[5], double output_bias[2],
                                 double w_input_to_hidden[2][5],double w_hidden_to_output[5][2]){
 
@@ -96,7 +96,7 @@ void MainWindow::advanced_2_5_2_ann_test(double input[2],
 
 }
 
-void MainWindow::advanced_2_5_2_ann_train(  double input[2][4], double desired_output[2][4],
+void ann::advanced_2_5_2_ann_train(  double input[2][4], double desired_output[2][4],
                                             double hidden_bias[5], double output_bias[2],
                                             double w_input_to_hidden[2][5],double w_hidden_to_output[5][2],
                                             u32 epoch,double learning_rate){

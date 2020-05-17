@@ -6,7 +6,7 @@
 #define OUTPUT_COUNT    2
 #define IO_ARRAY_LENGTH 4
 
-void MainWindow::_2_5_3_2_ann_tryout(void){
+void ann::_2_5_3_2_ann_tryout(void){
     net_2_5_3_2.input[0][0] = 0;            net_2_5_3_2.input[1][0] = 0;
     net_2_5_3_2.input[0][1] = 0;            net_2_5_3_2.input[1][1] = 1;
     net_2_5_3_2.input[0][2] = 1;            net_2_5_3_2.input[1][2] = 0;
@@ -65,7 +65,7 @@ void MainWindow::_2_5_3_2_ann_tryout(void){
                         net_2_5_3_2.w_input_to_hidden,net_2_5_3_2.w_hidden_to_hidden,net_2_5_3_2.w_hidden_to_output);
 
 }
-void MainWindow::_2_5_3_2_ann_test( double input[2],
+void ann::_2_5_3_2_ann_test( double input[2],
                         double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],
                         double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][3], double w_hidden_to_output[3][2]){
     double hidden_neuron_in_1[HIDDEN_COUNT_1];
@@ -119,7 +119,7 @@ void MainWindow::_2_5_3_2_ann_test( double input[2],
     }
 }
 
-void MainWindow::_2_5_3_2_ann_train(    double input[2][4], double desired_output[2][4],
+void ann::_2_5_3_2_ann_train(    double input[2][4], double desired_output[2][4],
                                         double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],
                                         double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][3], double w_hidden_to_output[3][2],
                                         u32 epoch, double learning_rate){
@@ -233,7 +233,7 @@ void MainWindow::_2_5_3_2_ann_train(    double input[2][4], double desired_outpu
         }
     }
 }
-void MainWindow::_2_5_3_2_ann_show_weights( double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],
+void ann::_2_5_3_2_ann_show_weights( double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],
                                             double w_input_to_hidden[2][5], double w_hidden_to_hidden[5][3], double w_hidden_to_output[3][2]){
     for(u8 i = 0; i < INPUT_COUNT; i++){
         for(u8 j = 0; j < HIDDEN_COUNT_1; j++){

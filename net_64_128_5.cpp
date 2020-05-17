@@ -10,82 +10,82 @@ void MainWindow::_64_128_5_random_initilize_handler(void){
 
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_5.input[8*i + j][0] = zero_image[i][j];
+            ann_class->net_64_128_5.input[8*i + j][0] = zero_image[i][j];
         }
     }
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_5.input[8*i + j][1] = addition_image[i][j];
+            ann_class->net_64_128_5.input[8*i + j][1] = addition_image[i][j];
         }
     }
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_5.input[8*i + j][2] = divide_image[i][j];
+            ann_class->net_64_128_5.input[8*i + j][2] = divide_image[i][j];
         }
     }
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_5.input[8*i + j][3] = minus_image[i][j];
+            ann_class->net_64_128_5.input[8*i + j][3] = minus_image[i][j];
         }
     }
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_5.input[8*i + j][4] = multiply_image[i][j];
+            ann_class->net_64_128_5.input[8*i + j][4] = multiply_image[i][j];
         }
     }
 
     for(u8 i = 0; i < 5; i++){
         for(u8 j = 0; j < 5; j++){
-            net_64_128_5.desired_output[i][j] = 0;
+            ann_class->net_64_128_5.desired_output[i][j] = 0;
         }
     }
-    net_64_128_5.desired_output[0][0] = 1;
-    net_64_128_5.desired_output[1][1] = 1;
-    net_64_128_5.desired_output[2][2] = 1;
-    net_64_128_5.desired_output[3][3] = 1;
-    net_64_128_5.desired_output[4][4] = 1;
+    ann_class->net_64_128_5.desired_output[0][0] = 1;
+    ann_class->net_64_128_5.desired_output[1][1] = 1;
+    ann_class->net_64_128_5.desired_output[2][2] = 1;
+    ann_class->net_64_128_5.desired_output[3][3] = 1;
+    ann_class->net_64_128_5.desired_output[4][4] = 1;
 
     for(u8 i = 0; i < 128; i++){
-        net_64_128_5.hidden_bias[i] = 0.1 + 0.01*i;
+        ann_class->net_64_128_5.hidden_bias[i] = 0.1 + 0.01*i;
     }
     for(u8 i = 0; i < 5; i++){
-        net_64_128_5.output_bias[i] = 0.2;
+        ann_class->net_64_128_5.output_bias[i] = 0.2;
     }
 
     for(u8 i = 0; i < 64; i++){
         for(u8 j = 0; j < 128; j++){
-            net_64_128_5.w_input_to_hidden[i][j] = 0.1;
+            ann_class->net_64_128_5.w_input_to_hidden[i][j] = 0.1;
         }
     }
     for(u8 i = 0; i < 128; i++){
         for(u8 j = 0; j < 5; j++){
-            net_64_128_5.w_hidden_to_output[i][j] = 0.1;
+            ann_class->net_64_128_5.w_hidden_to_output[i][j] = 0.1;
         }
     }
 
     ui->label_64_128_5_random_initilize->setText("Initilized randomly");
 }
 void MainWindow::_64_128_5_train_handler(void){
-    train_status = 0;
-    advanced_64_128_5_ann_train(net_64_128_5.input, net_64_128_5.desired_output, net_64_128_5.calculated_output,
-                             net_64_128_5.hidden_bias,net_64_128_5.output_bias,
-                             net_64_128_5.w_input_to_hidden,net_64_128_5.w_hidden_to_output,
+    ann_class->train_status = 0;
+    ann_class->advanced_64_128_5_ann_train(ann_class->net_64_128_5.input, ann_class->net_64_128_5.desired_output, ann_class->net_64_128_5.calculated_output,
+                             ann_class->net_64_128_5.hidden_bias,ann_class->net_64_128_5.output_bias,
+                             ann_class->net_64_128_5.w_input_to_hidden,ann_class->net_64_128_5.w_hidden_to_output,
                              100000, 0.000132);
 
     for(u8 i = 0; i < 5; i++){
         for(u8 j = 0; j < 5; j++){
-            qDebug() << QString("desired output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.desired_output[i][j] <<
-                        QString("calculated output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.calculated_output[i][j];
+            qDebug() << QString("desired output[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_5.desired_output[i][j] <<
+                        QString("calculated output[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_5.calculated_output[i][j];
         }
     }
-    train_status = 0;
+    ann_class->train_status = 0;
 
     double total_error = 0;
     double aux;
 
     for(u8 i = 0; i < 5; i++){
         for(u8 j = 0; j < 5; j++){
-            aux = net_64_128_5.desired_output[i][j] - net_64_128_5.calculated_output[i][j];
+            aux = ann_class->net_64_128_5.desired_output[i][j] - ann_class->net_64_128_5.calculated_output[i][j];
             aux = aux * aux;
             total_error += aux;
         }
@@ -99,36 +99,36 @@ void MainWindow::_64_128_5_test_handler(void){
 
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
-            net_64_128_5.test_input[8*i + j] = test_image[i][j];
+            ann_class->net_64_128_5.test_input[8*i + j] = test_image[i][j];
         }
     }
 
-    advanced_64_128_5_ann_test(net_64_128_5.test_input,
-                             net_64_128_5.hidden_bias,net_64_128_5.output_bias,
-                             net_64_128_5.w_input_to_hidden,net_64_128_5.w_hidden_to_output);
+    ann_class->advanced_64_128_5_ann_test(ann_class->net_64_128_5.test_input,
+                             ann_class->net_64_128_5.hidden_bias,ann_class->net_64_128_5.output_bias,
+                             ann_class->net_64_128_5.w_input_to_hidden,ann_class->net_64_128_5.w_hidden_to_output);
 
 }
 void MainWindow::_64_128_5_show_weights_handler(void){
     for(u8 i = 0; i < 128; i++){
-        qDebug() << QString("hidden_bias[%1] : ").arg(i) << net_64_128_5.hidden_bias[i];
+        qDebug() << QString("hidden_bias[%1] : ").arg(i) << ann_class->net_64_128_5.hidden_bias[i];
     }
     for(u8 i = 0; i < 5; i++){
-        qDebug() << QString("output_bias[%1] : ").arg(i) << net_64_128_5.output_bias[i];
+        qDebug() << QString("output_bias[%1] : ").arg(i) << ann_class->net_64_128_5.output_bias[i];
     }
 
     for(u8 i = 0; i < 64; i++){
         for(u8 j = 0; j < 128; j++){
-            qDebug() << QString("w_input_to_hidden[%1][%2] : ").arg(i).arg(j) << net_64_128_5.w_input_to_hidden[i][j];
+            qDebug() << QString("w_input_to_hidden[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_5.w_input_to_hidden[i][j];
         }
     }
     for(u8 i = 0; i < 128; i++){
         for(u8 j = 0; j < 5; j++){
-            qDebug() << QString("w_hidden_to_output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.w_hidden_to_output[i][j];
+            qDebug() << QString("w_hidden_to_output[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_5.w_hidden_to_output[i][j];
         }
     }
 }
 
-void MainWindow::advanced_64_128_5_ann_train(double input[64][5], double desired_output[5][5], double calculated_output[5][5],
+void ann::advanced_64_128_5_ann_train(double input[64][5], double desired_output[5][5], double calculated_output[5][5],
                                             double hidden_bias[128], double output_bias[5],
                                             double w_input_to_hidden[64][128], double w_hidden_to_output[128][5],
                                             u32 epoch, double learning_rate){
@@ -217,7 +217,7 @@ void MainWindow::advanced_64_128_5_ann_train(double input[64][5], double desired
     qDebug() << "training is FINISHED!!";
 
 }
-void MainWindow::advanced_64_128_5_ann_test(double input[64],
+void ann::advanced_64_128_5_ann_test(double input[64],
                                 double hidden_bias[128], double output_bias[5],
                                 double w_input_to_hidden[64][128],double w_hidden_to_output[128][5]){
 
@@ -282,7 +282,7 @@ void MainWindow::advanced_64_128_5_ann_test(double input[64],
     if(max_value_index == 3)    str = QString("Yuzde %1 ihtimalle cikarma isareti").arg((u32)(100*output_neuron_out[3]));
     if(max_value_index == 4)    str = QString("Yuzde %1 ihtimalle carpma isareti").arg((u32)(100*output_neuron_out[4]));
 
-    ui->label_64_128_5_test->setText(str);
+    mainwindow->ui->label_64_128_5_test->setText(str);
 
 }
 

@@ -19,8 +19,11 @@ SOURCES += main.cpp\
     net_easy.cpp \
     net_64_128_5.cpp \
     net_2_5_3_2.cpp \
-    net_64_128_32_5.cpp
+    net_64_128_32_5.cpp \
+    ann.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    ann.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    ann.ui

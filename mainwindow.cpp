@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ann_class = new ann(this);
 
     _100_msec_timer = new QTimer(this);
     _100_msec_timer->setInterval(100);
@@ -18,11 +19,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_64_128_5_test,SIGNAL(clicked(bool)),this,SLOT(_64_128_5_test_handler()));
     connect(ui->pushButton_64_128_5_show_weights,SIGNAL(clicked(bool)),this,SLOT(_64_128_5_show_weights_handler()));
 
-    train_status = 0;
 }
 void MainWindow::_100_msec_timer_handle(void){
-    if(train_status == 1){
-        ui->label_64_128_5_train->setText(QString("training status %  %1").arg(epoch_status));
+    if(ann_class->train_status == 1){
+        ui->label_64_128_5_train->setText(QString("training status %  %1").arg(ann_class->epoch_status));
     }
 }
 void MainWindow::image_to_array(QString location,double image_array[8][8]){

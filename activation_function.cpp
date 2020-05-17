@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 
-double MainWindow::sigmoid_func(double val){
+double ann::sigmoid_func(double val){
     //return (1 / (1 + exp(-val)));     //sigmoid   - good
     //return tanh(val);                 //tanh      - not worked
     //return val;                       //identity  - not properly worked
@@ -13,7 +13,7 @@ double MainWindow::sigmoid_func(double val){
     //return (val / (1 + exp(-val)));   //swish     - not bad but not good
     //return exp(-1*val*val);           //gaussien  - not worked
 }
-double MainWindow::derivative_of_sigmoid_func(double val){
+double ann::derivative_of_sigmoid_func(double val){
     //return (sigmoid_func(val) * (1 - sigmoid_func(val)));                     //sigmoid   - good - u:0.8 is the best
     //return (1 - tanh(val)*tanh(val));                                         //tanh      - not worked
     //return 1;                                                                 //identity  - not properly worked
