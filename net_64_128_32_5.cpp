@@ -19,7 +19,6 @@ void ann::_64_128_32_5_ann_test( double input[64],
     double output_in[OUTPUT_COUNT];
     double calculated_output[OUTPUT_COUNT];
 
-    qDebug() << "*************TESTING***********************************";
     for(u8 i = 0; i < INPUT_COUNT; i++){
         qDebug() << QString("input[%1] :").arg(i) << input[i];
     }
@@ -56,9 +55,45 @@ void ann::_64_128_32_5_ann_test( double input[64],
         calculated_output[j]   = sigmoid_func(output_in[j]);
     }
 
+    qDebug() << "**********testing***************";
     for(u8 i = 0; i < OUTPUT_COUNT; i++){
         qDebug() << QString("output[%1] :").arg(i) << calculated_output[i];
     }
+
+    qDebug() << "% " << 100*calculated_output[0] << "\t" << "ihtimal sifir isareti";
+    qDebug() << "% " << 100*calculated_output[1] << "\t" << "ihtimal toplama isareti";
+    qDebug() << "% " << 100*calculated_output[2] << "\t" << "ihtimal bolme isareti";
+    qDebug() << "% " << 100*calculated_output[3] << "\t" << "ihtimal cikarma isareti";
+    qDebug() << "% " << 100*calculated_output[4] << "\t" << "ihtimal carpma isareti";
+
+    u8 max_value_index = 0;
+    double max_value = 0;
+    QString str = "";
+
+    for(u8 i = 0; i < 5; i++){
+        if(calculated_output[i] > max_value){
+            max_value = calculated_output[i];
+            max_value_index = i;
+        }
+    }
+    double out_strict[5] = {0};
+
+    for(u8 i = 0; i < 5; i++){
+        if(calculated_output[i] > 1.0){
+            out_strict[i] = calculated_output[i] - 1.0;
+            calculated_output[i] = calculated_output[i] - 2*out_strict[i];
+        }
+    }
+
+    if(max_value_index == 0)    str = QString("% %1 ihtimal sifir isareti").arg((u32)(100*calculated_output[0]));
+    if(max_value_index == 1)    str = QString("% %1 ihtimal toplama isareti").arg((u32)(100*calculated_output[1]));
+    if(max_value_index == 2)    str = QString("% %1 ihtimal bolme isareti").arg((u32)(100*calculated_output[2]));
+    if(max_value_index == 3)    str = QString("% %1 ihtimal cikarma isareti").arg((u32)(100*calculated_output[3]));
+    if(max_value_index == 4)    str = QString("% %1 ihtimal carpma isareti").arg((u32)(100*calculated_output[4]));
+
+    mainwindow->ui->label_64_128_32_5_test->setText(str);
+
+
 }
 
 void ann::_64_128_32_5_ann_train(double input[64][5], double desired_output[5][5], double calculated_output[5][5],

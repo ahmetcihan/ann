@@ -149,6 +149,15 @@ void ann::advanced_64_128_5_ann_test(double input[64],
             max_value_index = i;
         }
     }
+    double out_strict[5] = {0};
+
+    for(u8 i = 0; i < 5; i++){
+        if(output_neuron_out[i] > 1.0){
+            out_strict[i] = output_neuron_out[i] - 1.0;
+            output_neuron_out[i] = output_neuron_out[i] - 2*out_strict[i];
+        }
+    }
+
     if(max_value_index == 0)    str = QString("% %1 ihtimal sifir isareti").arg((u32)(100*output_neuron_out[0]));
     if(max_value_index == 1)    str = QString("% %1 ihtimal toplama isareti").arg((u32)(100*output_neuron_out[1]));
     if(max_value_index == 2)    str = QString("% %1 ihtimal bolme isareti").arg((u32)(100*output_neuron_out[2]));
