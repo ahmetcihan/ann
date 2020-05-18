@@ -133,11 +133,11 @@ void ann::advanced_64_128_5_ann_test(double input[64],
         qDebug() << QString("output[%1] :").arg(i) << output_neuron_out[i];
     }
 
-    qDebug() << "% " << 100*output_neuron_out[0] << "\t" << "ihtimalle sifir isareti";
-    qDebug() << "% " << 100*output_neuron_out[1] << "\t" << "ihtimalle toplama isareti";
-    qDebug() << "% " << 100*output_neuron_out[2] << "\t" << "ihtimalle bolme isareti";
-    qDebug() << "% " << 100*output_neuron_out[3] << "\t" << "ihtimalle cikarma isareti";
-    qDebug() << "% " << 100*output_neuron_out[4] << "\t" << "ihtimalle carpma isareti";
+    qDebug() << "% " << 100*output_neuron_out[0] << "\t" << "ihtimal sifir isareti";
+    qDebug() << "% " << 100*output_neuron_out[1] << "\t" << "ihtimal toplama isareti";
+    qDebug() << "% " << 100*output_neuron_out[2] << "\t" << "ihtimal bolme isareti";
+    qDebug() << "% " << 100*output_neuron_out[3] << "\t" << "ihtimal cikarma isareti";
+    qDebug() << "% " << 100*output_neuron_out[4] << "\t" << "ihtimal carpma isareti";
 
     u8 max_value_index = 0;
     double max_value = 0;
@@ -149,13 +149,164 @@ void ann::advanced_64_128_5_ann_test(double input[64],
             max_value_index = i;
         }
     }
-    if(max_value_index == 0)    str = QString("% %1 ihtimalle sifir isareti").arg((u32)(100*output_neuron_out[0]));
-    if(max_value_index == 1)    str = QString("% %1 ihtimalle toplama isareti").arg((u32)(100*output_neuron_out[1]));
-    if(max_value_index == 2)    str = QString("% %1 ihtimalle bolme isareti").arg((u32)(100*output_neuron_out[2]));
-    if(max_value_index == 3)    str = QString("% %1 ihtimalle cikarma isareti").arg((u32)(100*output_neuron_out[3]));
-    if(max_value_index == 4)    str = QString("% %1 ihtimalle carpma isareti").arg((u32)(100*output_neuron_out[4]));
+    if(max_value_index == 0)    str = QString("% %1 ihtimal sifir isareti").arg((u32)(100*output_neuron_out[0]));
+    if(max_value_index == 1)    str = QString("% %1 ihtimal toplama isareti").arg((u32)(100*output_neuron_out[1]));
+    if(max_value_index == 2)    str = QString("% %1 ihtimal bolme isareti").arg((u32)(100*output_neuron_out[2]));
+    if(max_value_index == 3)    str = QString("% %1 ihtimal cikarma isareti").arg((u32)(100*output_neuron_out[3]));
+    if(max_value_index == 4)    str = QString("% %1 ihtimal carpma isareti").arg((u32)(100*output_neuron_out[4]));
 
     mainwindow->ui->label_64_128_5_test->setText(str);
 
 }
 
+void MainWindow::_64_128_5_random_initilize_handler(void){
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/zero.png",zero_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/add.png",addition_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/divide.png",divide_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/minus.png",minus_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/multiply.png",multiply_image);
+
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_5.input[8*i + j][0] = zero_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_5.input[8*i + j][1] = addition_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_5.input[8*i + j][2] = divide_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_5.input[8*i + j][3] = minus_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_5.input[8*i + j][4] = multiply_image[i][j];
+        }
+    }
+
+    for(u8 i = 0; i < 5; i++){
+        for(u8 j = 0; j < 5; j++){
+            ann_class->net_64_128_5.desired_output[i][j] = 0;
+        }
+    }
+    ann_class->net_64_128_5.desired_output[0][0] = 1;
+    ann_class->net_64_128_5.desired_output[1][1] = 1;
+    ann_class->net_64_128_5.desired_output[2][2] = 1;
+    ann_class->net_64_128_5.desired_output[3][3] = 1;
+    ann_class->net_64_128_5.desired_output[4][4] = 1;
+
+    for(u8 i = 0; i < 128; i++){
+        ann_class->net_64_128_5.hidden_bias[i] = 0.1 + 0.01*i;
+    }
+    for(u8 i = 0; i < 5; i++){
+        ann_class->net_64_128_5.output_bias[i] = 0.2;
+    }
+
+    for(u8 i = 0; i < 64; i++){
+        for(u8 j = 0; j < 128; j++){
+            ann_class->net_64_128_5.w_input_to_hidden[i][j] = 0.1;
+        }
+    }
+    for(u8 i = 0; i < 128; i++){
+        for(u8 j = 0; j < 5; j++){
+            ann_class->net_64_128_5.w_hidden_to_output[i][j] = 0.1;
+        }
+    }
+
+    ui->label_64_128_5_random_initilize->setText("Initilized randomly");
+}
+void MainWindow::_64_128_5_train_handler(void){
+    ann_class->train_status = 1;
+}
+void MainWindow::_64_128_5_test_handler(void){
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/tester.png",test_image);
+
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_5.test_input[8*i + j] = test_image[i][j];
+        }
+    }
+
+    ann_class->advanced_64_128_5_ann_test(ann_class->net_64_128_5.test_input,
+                             ann_class->net_64_128_5.hidden_bias,ann_class->net_64_128_5.output_bias,
+                             ann_class->net_64_128_5.w_input_to_hidden,ann_class->net_64_128_5.w_hidden_to_output);
+
+}
+void MainWindow::_64_128_5_show_weights_handler(void){
+    for(u8 i = 0; i < 128; i++){
+        qDebug() << QString("hidden_bias[%1] : ").arg(i) << ann_class->net_64_128_5.hidden_bias[i];
+    }
+    for(u8 i = 0; i < 5; i++){
+        qDebug() << QString("output_bias[%1] : ").arg(i) << ann_class->net_64_128_5.output_bias[i];
+    }
+
+    for(u8 i = 0; i < 64; i++){
+        for(u8 j = 0; j < 128; j++){
+            qDebug() << QString("w_input_to_hidden[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_5.w_input_to_hidden[i][j];
+        }
+    }
+    for(u8 i = 0; i < 128; i++){
+        for(u8 j = 0; j < 5; j++){
+            qDebug() << QString("w_hidden_to_output[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_5.w_hidden_to_output[i][j];
+        }
+    }
+    ui->label_64_128_5_show_weights->setText("Showed..");
+}
+void MainWindow::_64_128_5_save_weights_handler(void){
+    QSettings settings("weights_64_128_5.ini",QSettings::IniFormat);
+
+    settings.beginGroup("w");
+
+    for(u8 i = 0; i < 128; i++){
+        settings.setValue(QString("hb-%1").arg(i),ann_class->net_64_128_5.hidden_bias[i]);
+    }
+    for(u8 i = 0; i < 5; i++){
+        settings.setValue(QString("ob-%1").arg(i),ann_class->net_64_128_5.output_bias[i]);
+    }
+
+    for(u8 i = 0; i < 64; i++){
+        for(u8 j = 0; j < 128; j++){
+            settings.setValue(QString("i2h-%1-%2").arg(i).arg(j),ann_class->net_64_128_5.w_input_to_hidden[i][j]);
+        }
+    }
+    for(u8 i = 0; i < 128; i++){
+        for(u8 j = 0; j < 5; j++){
+            settings.setValue(QString("h2o-%1-%2").arg(i).arg(j),ann_class->net_64_128_5.w_hidden_to_output[i][j]);
+        }
+    }
+    settings.endGroup();
+    settings.sync();
+    QProcess::execute("sync");
+
+    ui->label_64_128_5_save_weights->setText("Saved..");
+}
+void MainWindow::_64_128_5_load_saved_weights_handler(void){
+    QSettings settings("weights_64_128_5.ini",QSettings::IniFormat);
+
+    for(u8 i = 0; i < 128; i++){
+        ann_class->net_64_128_5.hidden_bias[i] = settings.value(QString("w/hb-%1").arg(i)).toDouble();
+    }
+    for(u8 i = 0; i < 5; i++){
+        ann_class->net_64_128_5.output_bias[i] = settings.value(QString("w/ob-%1").arg(i)).toDouble();
+    }
+
+    for(u8 i = 0; i < 64; i++){
+        for(u8 j = 0; j < 128; j++){
+            ann_class->net_64_128_5.w_input_to_hidden[i][j] = settings.value(QString("w/i2h-%1-%2").arg(i).arg(j)).toDouble();
+        }
+    }
+    for(u8 i = 0; i < 128; i++){
+        for(u8 j = 0; j < 5; j++){
+            ann_class->net_64_128_5.w_hidden_to_output[i][j] = settings.value(QString("w/h2o-%1-%2").arg(i).arg(j)).toDouble();
+        }
+    }
+    ui->label_64_128_5_load_saved_weights->setText("Loaded..");
+}

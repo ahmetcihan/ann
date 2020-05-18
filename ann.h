@@ -80,6 +80,14 @@ public:
                                         double hidden_bias[128], double output_bias[5],
                                         double w_input_to_hidden[64][128], double w_hidden_to_output[128][5]);
 
+    void _64_128_32_5_ann_train(double input[64][5], double desired_output[5][5], double calculated_output[5][5],
+                                double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
+                                double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5],
+                                u32 epoch, double learning_rate);
+    void _64_128_32_5_ann_test( double input[64],
+                                double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
+                                double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]);
+
 private:
     Ui::ann *ui;
     MainWindow *mainwindow;
@@ -94,18 +102,6 @@ private:
     void _2_3_1_ann_train(void);
     void _2_5_1_ann_train(void);
     void _2_5_2_ann_train(void);
-
-
-    void _64_128_32_5_ann_test( double input[64],
-                            double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
-                            double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]);
-    void _64_128_32_5_ann_train(double input[64][5], double desired_output[5][5], double calculated_output[5][5],
-                            double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
-                            double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5],
-                            u32 epoch, double learning_rate);
-    void _64_128_32_5_ann_tryout(void);
-    void _64_128_32_5_ann_show_weights( double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
-                                    double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]);
 
     void _2_5_3_2_ann_test( double input[2],
                             double hidden_neuron_bias_1[5], double hidden_neuron_bias_2[3], double output_bias[2],

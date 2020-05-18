@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 #define INPUT_COUNT     64
 #define HIDDEN_COUNT_1  32
@@ -6,113 +7,6 @@
 #define OUTPUT_COUNT    5
 #define IO_ARRAY_LENGTH 5
 
-void ann::_64_128_32_5_ann_tryout(void){
-    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/zero.png",mainwindow->zero_image);
-    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/add.png",mainwindow->addition_image);
-    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/divide.png",mainwindow->divide_image);
-    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/minus.png",mainwindow->minus_image);
-    mainwindow->image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/multiply.png",mainwindow->multiply_image);
-
-    for(u8 i = 0; i < 8; i++){
-        for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][0] = mainwindow->zero_image[i][j];
-        }
-    }
-    for(u8 i = 0; i < 8; i++){
-        for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][1] = mainwindow->addition_image[i][j];
-        }
-    }
-    for(u8 i = 0; i < 8; i++){
-        for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][2] = mainwindow->divide_image[i][j];
-        }
-    }
-    for(u8 i = 0; i < 8; i++){
-        for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][3] = mainwindow->minus_image[i][j];
-        }
-    }
-    for(u8 i = 0; i < 8; i++){
-        for(u8 j = 0; j < 8; j++){
-            net_64_128_32_5.input[8*i + j][4] = mainwindow->multiply_image[i][j];
-        }
-    }
-
-    for(u8 i = 0; i < 5; i++){
-        for(u8 j = 0; j < 5; j++){
-            net_64_128_32_5.desired_output[i][j] = 0;
-        }
-    }
-    net_64_128_32_5.desired_output[0][0] = 1;
-    net_64_128_32_5.desired_output[1][1] = 1;
-    net_64_128_32_5.desired_output[2][2] = 1;
-    net_64_128_32_5.desired_output[3][3] = 1;
-    net_64_128_32_5.desired_output[4][4] = 1;
-
-//    for(u8 i = 0; i < INPUT_COUNT; i++){
-//        for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
-//            qDebug() << QString(" input[%1][%2] : ").arg(i).arg(j) << net_64_128_32_5.input[i][j];
-//        }
-//    }
-//    for(u8 i = 0; i < OUTPUT_COUNT; i++){
-//        for(u8 j = 0; j < IO_ARRAY_LENGTH; j++){
-//            qDebug() << QString(" output[%1][%2] : ").arg(i).arg(j) << net_64_128_32_5.desired_output[i][j];
-//        }
-//    }
-
-    for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
-        net_64_128_32_5.hidden_neuron_bias_1[i] = 0.1 + i*0.01;
-    }
-    for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
-        net_64_128_32_5.hidden_neuron_bias_2[i] = 0.4 + i*0.01;
-    }
-    for(u8 i = 0; i < OUTPUT_COUNT; i++){
-        net_64_128_32_5.output_bias[i] = 0.2;
-    }
-
-    for(u8 i = 0; i < INPUT_COUNT; i++){
-        for(u8 j = 0; j < HIDDEN_COUNT_1; j++){
-            net_64_128_32_5.w_input_to_hidden[i][j] = 0.1;
-        }
-    }
-    for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
-        for(u8 j = 0; j < HIDDEN_COUNT_2; j++){
-            net_64_128_32_5.w_hidden_to_hidden[i][j] = 0.1;
-        }
-    }
-    for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
-        for(u8 j = 0; j < OUTPUT_COUNT; j++){
-            net_64_128_32_5.w_hidden_to_output[i][j] = 0.1;
-        }
-    }
-    _64_128_32_5_ann_train( net_64_128_32_5.input, net_64_128_32_5.desired_output, net_64_128_32_5.calculated_output,
-                        net_64_128_32_5.hidden_neuron_bias_1,net_64_128_32_5.hidden_neuron_bias_2,net_64_128_32_5.output_bias,
-                        net_64_128_32_5.w_input_to_hidden,net_64_128_32_5.w_hidden_to_hidden,net_64_128_32_5.w_hidden_to_output,
-                        10000000, 0.00001);
-
-    for(u8 i = 0; i < 5; i++){
-        for(u8 j = 0; j < 5; j++){
-            qDebug() << QString("desired output[%1][%2] : ").arg(i).arg(j) << net_64_128_32_5.desired_output[i][j] <<
-                        QString("calculated output[%1][%2] : ").arg(i).arg(j) << net_64_128_32_5.calculated_output[i][j];
-        }
-    }
-
-//    _64_128_32_5_ann_show_weights(net_64_128_32_5.hidden_neuron_bias_1,net_64_128_32_5.hidden_neuron_bias_2,net_64_128_32_5.output_bias,
-//                              net_64_128_32_5.w_input_to_hidden,net_64_128_32_5.w_hidden_to_hidden,net_64_128_32_5.w_hidden_to_output);
-
-//    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/tester.png",test_image);
-
-//    for(u8 i = 0; i < 8; i++){
-//        for(u8 j = 0; j < 8; j++){
-//            net_64_128_32_5.test_input[8*i + j] = test_image[i][j];
-//        }
-//    }
-//    _64_128_32_5_ann_test(net_64_128_32_5.test_input,
-//                        net_64_128_32_5.hidden_neuron_bias_1,net_64_128_32_5.hidden_neuron_bias_2,net_64_128_32_5.output_bias,
-//                        net_64_128_32_5.w_input_to_hidden,net_64_128_32_5.w_hidden_to_hidden,net_64_128_32_5.w_hidden_to_output);
-
-}
 void ann::_64_128_32_5_ann_test( double input[64],
                                         double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
                                         double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]){
@@ -269,36 +163,189 @@ void ann::_64_128_32_5_ann_train(double input[64][5], double desired_output[5][5
                 hidden_neuron_bias_1[i] +=hidden_neuron_error_1[i] * learning_rate;
             }
         }
-        qDebug() << "training status % " << (era*100)/epoch;
+        epoch_status = (era*100)/epoch;
     }
 }
-void ann::_64_128_32_5_ann_show_weights( double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
-                                            double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]){
+void MainWindow::_64_128_32_5_random_initilize_handler(void){
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/zero.png",zero_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/add.png",addition_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/divide.png",divide_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/minus.png",minus_image);
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/multiply.png",multiply_image);
+
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_32_5.input[8*i + j][0] = zero_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_32_5.input[8*i + j][1] = addition_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_32_5.input[8*i + j][2] = divide_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_32_5.input[8*i + j][3] = minus_image[i][j];
+        }
+    }
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_32_5.input[8*i + j][4] = multiply_image[i][j];
+        }
+    }
+
+    for(u8 i = 0; i < 5; i++){
+        for(u8 j = 0; j < 5; j++){
+            ann_class->net_64_128_32_5.desired_output[i][j] = 0;
+        }
+    }
+    ann_class->net_64_128_32_5.desired_output[0][0] = 1;
+    ann_class->net_64_128_32_5.desired_output[1][1] = 1;
+    ann_class->net_64_128_32_5.desired_output[2][2] = 1;
+    ann_class->net_64_128_32_5.desired_output[3][3] = 1;
+    ann_class->net_64_128_32_5.desired_output[4][4] = 1;
+
+    for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
+        ann_class->net_64_128_32_5.hidden_neuron_bias_1[i] = 0.1 + 0.01*i;
+    }
+    for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
+        ann_class->net_64_128_32_5.hidden_neuron_bias_2[i] = 0.1 + 0.01*i;
+    }
+    for(u8 i = 0; i < OUTPUT_COUNT; i++){
+        ann_class->net_64_128_32_5.output_bias[i] = 0.2;
+    }
+
     for(u8 i = 0; i < INPUT_COUNT; i++){
         for(u8 j = 0; j < HIDDEN_COUNT_1; j++){
-            qDebug() << QString("in_to_h_w[%1][%2] : ").arg(i).arg(j) << w_input_to_hidden[i][j];
+            ann_class->net_64_128_32_5.w_input_to_hidden[i][j] = 0.1;
         }
     }
     for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
         for(u8 j = 0; j < HIDDEN_COUNT_2; j++){
-            qDebug() << QString("h_to_h_w[%1][%2] : ").arg(i).arg(j) << w_hidden_to_hidden[i][j];
+            ann_class->net_64_128_32_5.w_hidden_to_hidden[i][j] = 0.1;
         }
     }
     for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
         for(u8 j = 0; j < OUTPUT_COUNT; j++){
-            qDebug() << QString("h_to_0_w[%1][%2] : ").arg(i).arg(j) << w_hidden_to_output[i][j];
+            ann_class->net_64_128_32_5.w_hidden_to_output[i][j] = 0.1;
         }
     }
 
+    ui->label_64_128_32_5_random_initilize->setText("Initilized randomly");
+}
+void MainWindow::_64_128_32_5_train_handler(void){
+    ann_class->train_status = 2;
+}
+void MainWindow::_64_128_32_5_test_handler(void){
+    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/tester.png",test_image);
+
+    for(u8 i = 0; i < 8; i++){
+        for(u8 j = 0; j < 8; j++){
+            ann_class->net_64_128_32_5.test_input[8*i + j] = test_image[i][j];
+        }
+    }
+
+    ann_class->_64_128_32_5_ann_test(ann_class->net_64_128_32_5.test_input,
+                ann_class->net_64_128_32_5.hidden_neuron_bias_1,ann_class->net_64_128_32_5.hidden_neuron_bias_2,ann_class->net_64_128_32_5.output_bias,
+                ann_class->net_64_128_32_5.w_input_to_hidden,ann_class->net_64_128_32_5.w_hidden_to_hidden,ann_class->net_64_128_32_5.w_hidden_to_output);
+
+}
+void MainWindow::_64_128_32_5_show_weights_handler(void){
     for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
-        qDebug() << QString("hidden_neuron_bias_1[%1] : ").arg(i) << hidden_neuron_bias_1[i];
+        qDebug() << QString("hidden_bias_1[%1] : ").arg(i) << ann_class->net_64_128_32_5.hidden_neuron_bias_1[i];
     }
     for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
-        qDebug() << QString("hidden_neuron_bias_2[%1] : ").arg(i) << hidden_neuron_bias_2[i];
+        qDebug() << QString("hidden_bias_2[%1] : ").arg(i) << ann_class->net_64_128_32_5.hidden_neuron_bias_2[i];
     }
-
     for(u8 i = 0; i < OUTPUT_COUNT; i++){
-        qDebug() << QString("output_bias[%1]").arg(i) << output_bias[i];
+        qDebug() << QString("output_bias[%1] : ").arg(i) << ann_class->net_64_128_32_5.output_bias[i];
     }
 
+    for(u8 i = 0; i < INPUT_COUNT; i++){
+        for(u8 j = 0; j < HIDDEN_COUNT_1; j++){
+            qDebug() << QString("w_input_to_hidden[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_32_5.w_input_to_hidden[i][j];
+        }
+    }
+    for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
+        for(u8 j = 0; j < HIDDEN_COUNT_2; j++){
+            qDebug() << QString("w_hidden_to_hidden[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_32_5.w_hidden_to_hidden[i][j];
+        }
+    }
+    for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
+        for(u8 j = 0; j < OUTPUT_COUNT; j++){
+            qDebug() << QString("w_hidden_to_output[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_32_5.w_hidden_to_output[i][j];
+        }
+    }
+    ui->label_64_128_32_5_show_weights->setText("Showed..");
+}
+void MainWindow::_64_128_32_5_save_weights_handler(void){
+    QSettings settings("weights_64_128_32_5.ini",QSettings::IniFormat);
+
+    settings.beginGroup("w");
+
+    for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
+        settings.setValue(QString("hb1-%1").arg(i),ann_class->net_64_128_32_5.hidden_neuron_bias_1[i]);
+    }
+    for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
+        settings.setValue(QString("hb1-%2").arg(i),ann_class->net_64_128_32_5.hidden_neuron_bias_2[i]);
+    }
+    for(u8 i = 0; i < OUTPUT_COUNT; i++){
+        settings.setValue(QString("ob-%1").arg(i),ann_class->net_64_128_32_5.output_bias[i]);
+    }
+
+    for(u8 i = 0; i < INPUT_COUNT; i++){
+        for(u8 j = 0; j < HIDDEN_COUNT_1; j++){
+            settings.setValue(QString("i2h-%1-%2").arg(i).arg(j),ann_class->net_64_128_32_5.w_input_to_hidden[i][j]);
+        }
+    }
+    for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
+        for(u8 j = 0; j < HIDDEN_COUNT_2; j++){
+            settings.setValue(QString("h2h-%1-%2").arg(i).arg(j),ann_class->net_64_128_32_5.w_hidden_to_hidden[i][j]);
+        }
+    }
+    for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
+        for(u8 j = 0; j < OUTPUT_COUNT; j++){
+            settings.setValue(QString("h2o-%1-%2").arg(i).arg(j),ann_class->net_64_128_32_5.w_hidden_to_output[i][j]);
+        }
+    }
+    settings.endGroup();
+    settings.sync();
+    QProcess::execute("sync");
+
+    ui->label_64_128_32_5_save_weights->setText("Saved..");
+}
+void MainWindow::_64_128_32_5_load_saved_weights_handler(void){
+    QSettings settings("weights_64_128_32_5.ini",QSettings::IniFormat);
+
+    for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
+        ann_class->net_64_128_32_5.hidden_neuron_bias_1[i] = settings.value(QString("w/hb1-%1").arg(i)).toDouble();
+    }
+    for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
+        ann_class->net_64_128_32_5.hidden_neuron_bias_2[i] = settings.value(QString("w/hb2-%1").arg(i)).toDouble();
+    }
+    for(u8 i = 0; i < OUTPUT_COUNT; i++){
+        ann_class->net_64_128_32_5.output_bias[i] = settings.value(QString("w/ob-%1").arg(i)).toDouble();
+    }
+
+    for(u8 i = 0; i < INPUT_COUNT; i++){
+        for(u8 j = 0; j < HIDDEN_COUNT_1; j++){
+            ann_class->net_64_128_32_5.w_input_to_hidden[i][j] = settings.value(QString("w/i2h-%1-%2").arg(i).arg(j)).toDouble();
+        }
+    }
+    for(u8 i = 0; i < HIDDEN_COUNT_1; i++){
+        for(u8 j = 0; j < HIDDEN_COUNT_2; j++){
+            ann_class->net_64_128_32_5.w_hidden_to_hidden[i][j] = settings.value(QString("w/h2h-%1-%2").arg(i).arg(j)).toDouble();
+        }
+    }
+    for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
+        for(u8 j = 0; j < OUTPUT_COUNT; j++){
+            ann_class->net_64_128_32_5.w_hidden_to_output[i][j] = settings.value(QString("w/h2o-%1-%2").arg(i).arg(j)).toDouble();
+        }
+    }
+    ui->label_64_128_32_5_load_saved_weights->setText("Loaded..");
 }

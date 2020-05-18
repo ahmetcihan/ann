@@ -48,6 +48,33 @@ void ann::thread_handler(void){
         mainwindow->ui->label_64_128_5_train->setText(QString("Trained. Total error is %1").arg(total_error));
         train_status = 0;
     }
+    else if(train_status == 2){
+        _64_128_32_5_ann_train(net_64_128_32_5.input, net_64_128_32_5.desired_output, net_64_128_32_5.calculated_output,
+                                 net_64_128_32_5.hidden_neuron_bias_1,net_64_128_32_5.hidden_neuron_bias_2,net_64_128_32_5.output_bias,
+                                 net_64_128_32_5.w_input_to_hidden,net_64_128_32_5.w_hidden_to_hidden,net_64_128_32_5.w_hidden_to_output,
+                                 10000000, 0.00001);
+
+        for(u8 i = 0; i < 5; i++){
+            for(u8 j = 0; j < 5; j++){
+                qDebug() << QString("desired output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.desired_output[i][j] <<
+                            QString("calculated output[%1][%2] : ").arg(i).arg(j) << net_64_128_5.calculated_output[i][j];
+            }
+        }
+
+        double total_error = 0;
+        double aux;
+
+        for(u8 i = 0; i < 5; i++){
+            for(u8 j = 0; j < 5; j++){
+                aux = net_64_128_5.desired_output[i][j] - net_64_128_5.calculated_output[i][j];
+                aux = aux * aux;
+                total_error += aux;
+            }
+        }
+
+        mainwindow->ui->label_64_128_32_5_train->setText(QString("Trained. Total error is %1").arg(total_error));
+        train_status = 0;
+    }
 }
 
 ann::~ann()
