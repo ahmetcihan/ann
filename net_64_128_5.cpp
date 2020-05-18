@@ -133,11 +133,11 @@ void ann::advanced_64_128_5_ann_test(double input[64],
         qDebug() << QString("output[%1] :").arg(i) << output_neuron_out[i];
     }
 
-    qDebug() << "Yuzde " << 100*output_neuron_out[0] << "\t" << "ihtimalle sifir isareti";
-    qDebug() << "Yuzde " << 100*output_neuron_out[1] << "\t" << "ihtimalle toplama isareti";
-    qDebug() << "Yuzde " << 100*output_neuron_out[2] << "\t" << "ihtimalle bolme isareti";
-    qDebug() << "Yuzde " << 100*output_neuron_out[3] << "\t" << "ihtimalle cikarma isareti";
-    qDebug() << "Yuzde " << 100*output_neuron_out[4] << "\t" << "ihtimalle carpma isareti";
+    qDebug() << "% " << 100*output_neuron_out[0] << "\t" << "ihtimalle sifir isareti";
+    qDebug() << "% " << 100*output_neuron_out[1] << "\t" << "ihtimalle toplama isareti";
+    qDebug() << "% " << 100*output_neuron_out[2] << "\t" << "ihtimalle bolme isareti";
+    qDebug() << "% " << 100*output_neuron_out[3] << "\t" << "ihtimalle cikarma isareti";
+    qDebug() << "% " << 100*output_neuron_out[4] << "\t" << "ihtimalle carpma isareti";
 
     u8 max_value_index = 0;
     double max_value = 0;
@@ -149,11 +149,11 @@ void ann::advanced_64_128_5_ann_test(double input[64],
             max_value_index = i;
         }
     }
-    if(max_value_index == 0)    str = QString("Yuzde %1 ihtimalle sifir isareti").arg((u32)(100*output_neuron_out[0]));
-    if(max_value_index == 1)    str = QString("Yuzde %1 ihtimalle toplama isareti").arg((u32)(100*output_neuron_out[1]));
-    if(max_value_index == 2)    str = QString("Yuzde %1 ihtimalle bolme isareti").arg((u32)(100*output_neuron_out[2]));
-    if(max_value_index == 3)    str = QString("Yuzde %1 ihtimalle cikarma isareti").arg((u32)(100*output_neuron_out[3]));
-    if(max_value_index == 4)    str = QString("Yuzde %1 ihtimalle carpma isareti").arg((u32)(100*output_neuron_out[4]));
+    if(max_value_index == 0)    str = QString("% %1 ihtimalle sifir isareti").arg((u32)(100*output_neuron_out[0]));
+    if(max_value_index == 1)    str = QString("% %1 ihtimalle toplama isareti").arg((u32)(100*output_neuron_out[1]));
+    if(max_value_index == 2)    str = QString("% %1 ihtimalle bolme isareti").arg((u32)(100*output_neuron_out[2]));
+    if(max_value_index == 3)    str = QString("% %1 ihtimalle cikarma isareti").arg((u32)(100*output_neuron_out[3]));
+    if(max_value_index == 4)    str = QString("% %1 ihtimalle carpma isareti").arg((u32)(100*output_neuron_out[4]));
 
     mainwindow->ui->label_64_128_5_test->setText(str);
 

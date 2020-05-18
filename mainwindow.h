@@ -8,6 +8,8 @@
 #include "ann.h"
 #include <QThread>
 #include <QtConcurrentRun>
+#include <QSettings>
+#include <QProcess>
 
 typedef unsigned char   u8;
 typedef unsigned int    u32;
@@ -42,9 +44,11 @@ private slots:
     void _100_msec_timer_handle(void);
 
     void _64_128_5_random_initilize_handler(void);
+    void _64_128_5_load_saved_weights_handler(void);
     void _64_128_5_train_handler(void);
     void _64_128_5_test_handler(void);
     void _64_128_5_show_weights_handler(void);
+    void _64_128_5_save_weights_handler(void);
 
 };
 

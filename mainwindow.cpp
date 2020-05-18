@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_64_128_5_train,SIGNAL(clicked(bool)),this,SLOT(_64_128_5_train_handler()));
     connect(ui->pushButton_64_128_5_test,SIGNAL(clicked(bool)),this,SLOT(_64_128_5_test_handler()));
     connect(ui->pushButton_64_128_5_show_weights,SIGNAL(clicked(bool)),this,SLOT(_64_128_5_show_weights_handler()));
+    connect(ui->pushButton_64_128_5_save_weights,SIGNAL(clicked(bool)),this,SLOT(_64_128_5_save_weights_handler()));
+    connect(ui->pushButton_64_128_5_load_saved_weights,SIGNAL(clicked(bool)),this,SLOT(_64_128_5_load_saved_weights_handler()));
 
 }
 
@@ -125,6 +127,57 @@ void MainWindow::_64_128_5_show_weights_handler(void){
             qDebug() << QString("w_hidden_to_output[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_5.w_hidden_to_output[i][j];
         }
     }
+    ui->label_64_128_5_show_weights->setText("Showed..");
+}
+void MainWindow::_64_128_5_save_weights_handler(void){
+    QSettings settings("weights_64_128_5.ini",QSettings::IniFormat);
+
+    settings.beginGroup("w");
+
+    for(u8 i = 0; i < 128; i++){
+        settings.setValue(QString("hb-%1").arg(i),ann_class->net_64_128_5.hidden_bias[i]);
+    }
+    for(u8 i = 0; i < 5; i++){
+        settings.setValue(QString("ob-%1").arg(i),ann_class->net_64_128_5.output_bias[i]);
+    }
+
+    for(u8 i = 0; i < 64; i++){
+        for(u8 j = 0; j < 128; j++){
+            settings.setValue(QString("i2h-%1-%2").arg(i).arg(j),ann_class->net_64_128_5.w_input_to_hidden[i][j]);
+        }
+    }
+    for(u8 i = 0; i < 128; i++){
+        for(u8 j = 0; j < 5; j++){
+            settings.setValue(QString("h2o-%1-%2").arg(i).arg(j),ann_class->net_64_128_5.w_hidden_to_output[i][j]);
+        }
+    }
+    settings.endGroup();
+    settings.sync();
+    QProcess::execute("sync");
+
+    ui->label_64_128_5_save_weights->setText("Saved..");
+}
+void MainWindow::_64_128_5_load_saved_weights_handler(void){
+    QSettings settings("weights_64_128_5.ini",QSettings::IniFormat);
+
+    for(u8 i = 0; i < 128; i++){
+        ann_class->net_64_128_5.hidden_bias[i] = settings.value(QString("w/hb-%1").arg(i)).toDouble();
+    }
+    for(u8 i = 0; i < 5; i++){
+        ann_class->net_64_128_5.output_bias[i] = settings.value(QString("w/ob-%1").arg(i)).toDouble();
+    }
+
+    for(u8 i = 0; i < 64; i++){
+        for(u8 j = 0; j < 128; j++){
+            ann_class->net_64_128_5.w_input_to_hidden[i][j] = settings.value(QString("w/i2h-%1-%2").arg(i).arg(j)).toDouble();
+        }
+    }
+    for(u8 i = 0; i < 128; i++){
+        for(u8 j = 0; j < 5; j++){
+            ann_class->net_64_128_5.w_hidden_to_output[i][j] = settings.value(QString("w/h2o-%1-%2").arg(i).arg(j)).toDouble();
+        }
+    }
+    ui->label_64_128_5_load_saved_weights->setText("Loaded..");
 }
 
 void MainWindow::image_to_array(QString location,double image_array[8][8]){
