@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     net_64_128_5.cpp \
     net_2_5_3_2.cpp \
     net_64_128_32_5.cpp \
-    ann.cpp
+    ann.cpp \
+    net_256_512_512_26.cpp
 
 HEADERS  += mainwindow.h \
     ann.h

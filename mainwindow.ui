@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -345,6 +345,167 @@
       </property>
       <property name="text">
        <string>Load Saved Weights</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>256x512x512x26</string>
+     </attribute>
+     <widget class="QLabel" name="label_256_512_512_26_test">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>130</y>
+        <width>200</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>-----------------</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_256_512_512_26_save_weights">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>210</y>
+        <width>200</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>-----------------</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_256_512_512_26_train">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Train</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_256_512_512_26_load_saved_weights">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>50</y>
+        <width>200</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>-----------------</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_256_512_512_26_load_saved_weights">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Load Saved Weights</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_256_512_512_26_random_initilize">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>10</y>
+        <width>200</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>-----------------</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_256_512_512_26_show_weights">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>170</y>
+        <width>200</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>-----------------</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_256_512_512_26_random_initilize">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Random Initilize</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_256_512_512_26_save_weights">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Weights</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_256_512_512_26_test">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Test</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_256_512_512_26_train">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>90</y>
+        <width>200</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>-----------------</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_256_512_512_26_show_weights">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>170</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Show Weights</string>
       </property>
      </widget>
     </widget>

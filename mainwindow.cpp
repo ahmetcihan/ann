@@ -38,7 +38,22 @@ void MainWindow::_100_msec_timer_handle(void){
     }
 }
 
-void MainWindow::image_to_array(QString location, u8 image_array[8][8]){
+void MainWindow::image_to_array_8x8(QString location, u8 image_array[8][8]){
+    QImage read_image;
+
+    read_image.load(location);
+
+    for(u8 i = 0; i < read_image.height();i++){
+        for(u8 j = 0; j < read_image.width();j++){
+            image_array[i][j] = 0;
+            if((read_image.pixel(i,j) & 0xFF) == 0xFF){
+                image_array[i][j] = 1;
+            }
+            //qDebug() << QString("array[%1][%2] :").arg(i).arg(j) << QString("%1").arg(image_array[i][j],0,16);
+        }
+    }
+}
+void MainWindow::image_to_array_16x16(QString location, u8 image_array[16][16]){
     QImage read_image;
 
     read_image.load(location);

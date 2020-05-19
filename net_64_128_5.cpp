@@ -169,11 +169,11 @@ void ann::advanced_64_128_5_ann_test(double input[64],
 }
 
 void MainWindow::_64_128_5_random_initilize_handler(void){
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/zero.png",zero_image);
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/add.png",addition_image);
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/divide.png",divide_image);
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/minus.png",minus_image);
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/multiply.png",multiply_image);
+    image_to_array_8x8("/home/ahmet/Desktop/QT-Projects/ANN/zero.png",zero_image);
+    image_to_array_8x8("/home/ahmet/Desktop/QT-Projects/ANN/add.png",addition_image);
+    image_to_array_8x8("/home/ahmet/Desktop/QT-Projects/ANN/divide.png",divide_image);
+    image_to_array_8x8("/home/ahmet/Desktop/QT-Projects/ANN/minus.png",minus_image);
+    image_to_array_8x8("/home/ahmet/Desktop/QT-Projects/ANN/multiply.png",multiply_image);
 
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
@@ -236,7 +236,7 @@ void MainWindow::_64_128_5_train_handler(void){
     ann_class->train_status = 1;
 }
 void MainWindow::_64_128_5_test_handler(void){
-    image_to_array("/home/ahmet/Desktop/QT-Projects/ANN/tester.png",test_image);
+    image_to_array_8x8("/home/ahmet/Desktop/QT-Projects/ANN/tester.png",test_image);
 
     for(u8 i = 0; i < 8; i++){
         for(u8 j = 0; j < 8; j++){
