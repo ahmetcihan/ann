@@ -38,7 +38,7 @@ void MainWindow::_100_msec_timer_handle(void){
     }
 }
 
-void MainWindow::image_to_array(QString location,double image_array[8][8]){
+void MainWindow::image_to_array(QString location, u8 image_array[8][8]){
     QImage read_image;
 
     read_image.load(location);

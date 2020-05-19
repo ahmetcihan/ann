@@ -27,14 +27,14 @@ public:
     ~MainWindow();
     Ui::MainWindow *ui;
 
-    double test_image[8][8];
-    double zero_image[8][8];
-    double minus_image[8][8];
-    double addition_image[8][8];
-    double multiply_image[8][8];
-    double divide_image[8][8];
+    u8 test_image[8][8];
+    u8 zero_image[8][8];
+    u8 minus_image[8][8];
+    u8 addition_image[8][8];
+    u8 multiply_image[8][8];
+    u8 divide_image[8][8];
 
-    void image_to_array(QString location, double image_array[8][8]);
+    void image_to_array(QString location, u8 image_array[8][8]);
 
 private:
     ann *ann_class;
