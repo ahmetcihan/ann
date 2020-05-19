@@ -52,7 +52,7 @@ void ann::thread_handler(void){
         _64_128_32_5_ann_train(net_64_128_32_5.input, net_64_128_32_5.desired_output, net_64_128_32_5.calculated_output,
                                  net_64_128_32_5.hidden_neuron_bias_1,net_64_128_32_5.hidden_neuron_bias_2,net_64_128_32_5.output_bias,
                                  net_64_128_32_5.w_input_to_hidden,net_64_128_32_5.w_hidden_to_hidden,net_64_128_32_5.w_hidden_to_output,
-                                 1000000, 0.00001);
+                                 1000000, 0.01);
 
         for(u8 i = 0; i < 5; i++){
             for(u8 j = 0; j < 5; j++){

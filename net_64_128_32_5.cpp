@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 #define INPUT_COUNT     64
-#define HIDDEN_COUNT_1  32
+#define HIDDEN_COUNT_1  128
 #define HIDDEN_COUNT_2  32
 #define OUTPUT_COUNT    5
 #define IO_ARRAY_LENGTH 5
