@@ -132,7 +132,7 @@ void ann::_256_512_512_26_ann_test( double input[256],
     if(max_value_index == 24)    str = QString("% %1 ihtimal Y").arg((u32)(100*calculated_output[24]));
     if(max_value_index == 25)    str = QString("% %1 ihtimal Z").arg((u32)(100*calculated_output[25]));
 
-    mainwindow->ui->label_64_128_32_5_test->setText(str);
+    mainwindow->ui->label_256_512_512_26_test->setText(str);
 
 
 }
@@ -272,68 +272,171 @@ void MainWindow::_256_512_512_26_random_initilize_handler(void){
 
     for(u16 i = 0; i < 8; i++){
         for(u16 j = 0; j < 8; j++){
-            ann_class->net_64_128_32_5.input[8*i + j][0] = zero_image[i][j];
+            ann_class->net_256_512_512_26.input[8*i + j][0] = alphabet.A[i][j];
         }
     }
     for(u16 i = 0; i < 8; i++){
         for(u16 j = 0; j < 8; j++){
-            ann_class->net_64_128_32_5.input[8*i + j][1] = addition_image[i][j];
+            ann_class->net_256_512_512_26.input[8*i + j][1] = alphabet.B[i][j];
         }
     }
     for(u16 i = 0; i < 8; i++){
         for(u16 j = 0; j < 8; j++){
-            ann_class->net_64_128_32_5.input[8*i + j][2] = divide_image[i][j];
+            ann_class->net_256_512_512_26.input[8*i + j][2] = alphabet.C[i][j];
         }
     }
     for(u16 i = 0; i < 8; i++){
         for(u16 j = 0; j < 8; j++){
-            ann_class->net_64_128_32_5.input[8*i + j][3] = minus_image[i][j];
+            ann_class->net_256_512_512_26.input[8*i + j][3] = alphabet.D[i][j];
         }
     }
     for(u16 i = 0; i < 8; i++){
         for(u16 j = 0; j < 8; j++){
-            ann_class->net_64_128_32_5.input[8*i + j][4] = multiply_image[i][j];
+            ann_class->net_256_512_512_26.input[8*i + j][4] = alphabet.E[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][5] = alphabet.F[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][6] = alphabet.G[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][7] = alphabet.H[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][8] = alphabet.I[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][9] = alphabet.J[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][10] = alphabet.K[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][11] = alphabet.L[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][12] = alphabet.M[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][13] = alphabet.N[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][14] = alphabet.O[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][15] = alphabet.P[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][16] = alphabet.Q[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][17] = alphabet.R[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][18] = alphabet.S[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][19] = alphabet.T[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][20] = alphabet.U[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][21] = alphabet.V[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][22] = alphabet.W[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][23] = alphabet.X[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][24] = alphabet.Y[i][j];
+        }
+    }
+    for(u16 i = 0; i < 8; i++){
+        for(u16 j = 0; j < 8; j++){
+            ann_class->net_256_512_512_26.input[8*i + j][25] = alphabet.Z[i][j];
         }
     }
 
     for(u16 i = 0; i < 5; i++){
         for(u16 j = 0; j < 5; j++){
-            ann_class->net_64_128_32_5.desired_output[i][j] = 0;
+            ann_class->net_256_512_512_26.desired_output[i][j] = 0;
+            if(i == j){
+                ann_class->net_256_512_512_26.desired_output[i][j] = 1;
+            }
         }
     }
-    ann_class->net_64_128_32_5.desired_output[0][0] = 1;
-    ann_class->net_64_128_32_5.desired_output[1][1] = 1;
-    ann_class->net_64_128_32_5.desired_output[2][2] = 1;
-    ann_class->net_64_128_32_5.desired_output[3][3] = 1;
-    ann_class->net_64_128_32_5.desired_output[4][4] = 1;
 
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-        ann_class->net_64_128_32_5.hidden_neuron_bias_1[i] = 0.1 + 0.01*i;
+        ann_class->net_256_512_512_26.hidden_neuron_bias_1[i] = 0.1 + 0.01*i;
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-        ann_class->net_64_128_32_5.hidden_neuron_bias_2[i] = 0.1 + 0.01*i;
+        ann_class->net_256_512_512_26.hidden_neuron_bias_2[i] = 0.1 + 0.01*i;
     }
     for(u16 i = 0; i < OUTPUT_COUNT; i++){
-        ann_class->net_64_128_32_5.output_bias[i] = 0.2;
+        ann_class->net_256_512_512_26.output_bias[i] = 0.2;
     }
 
     for(u16 i = 0; i < INPUT_COUNT; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-            ann_class->net_64_128_32_5.w_input_to_hidden[i][j] = 0.1;
+            ann_class->net_256_512_512_26.w_input_to_hidden[i][j] = 0.1;
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
-            ann_class->net_64_128_32_5.w_hidden_to_hidden[i][j] = 0.1;
+            ann_class->net_256_512_512_26.w_hidden_to_hidden[i][j] = 0.1;
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
         for(u16 j = 0; j < OUTPUT_COUNT; j++){
-            ann_class->net_64_128_32_5.w_hidden_to_output[i][j] = 0.1;
+            ann_class->net_256_512_512_26.w_hidden_to_output[i][j] = 0.1;
         }
     }
 
-    ui->label_64_128_32_5_random_initilize->setText("Initilized randomly");
+    ui->label_256_512_512_26_random_initilize->setText("Initilized randomly");
 }
 void MainWindow::_256_512_512_26_train_handler(void){
     ann_class->train_status = 2;
@@ -343,106 +446,106 @@ void MainWindow::_256_512_512_26_test_handler(void){
 
     for(u16 i = 0; i < 8; i++){
         for(u16 j = 0; j < 8; j++){
-            ann_class->net_64_128_32_5.test_input[8*i + j] = test_image[i][j];
+            ann_class->net_256_512_512_26.test_input[8*i + j] = test_image[i][j];
         }
     }
 
-    ann_class->_64_128_32_5_ann_test(ann_class->net_64_128_32_5.test_input,
-                ann_class->net_64_128_32_5.hidden_neuron_bias_1,ann_class->net_64_128_32_5.hidden_neuron_bias_2,ann_class->net_64_128_32_5.output_bias,
-                ann_class->net_64_128_32_5.w_input_to_hidden,ann_class->net_64_128_32_5.w_hidden_to_hidden,ann_class->net_64_128_32_5.w_hidden_to_output);
+    ann_class->_256_512_512_26_ann_test(ann_class->net_256_512_512_26.test_input,
+                ann_class->net_256_512_512_26.hidden_neuron_bias_1,ann_class->net_256_512_512_26.hidden_neuron_bias_2,ann_class->net_256_512_512_26.output_bias,
+                ann_class->net_256_512_512_26.w_input_to_hidden,ann_class->net_256_512_512_26.w_hidden_to_hidden,ann_class->net_256_512_512_26.w_hidden_to_output);
 
 }
 void MainWindow::_256_512_512_26_show_weights_handler(void){
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-        qDebug() << QString("hidden_bias_1[%1] : ").arg(i) << ann_class->net_64_128_32_5.hidden_neuron_bias_1[i];
+        qDebug() << QString("hidden_bias_1[%1] : ").arg(i) << ann_class->net_256_512_512_26.hidden_neuron_bias_1[i];
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-        qDebug() << QString("hidden_bias_2[%1] : ").arg(i) << ann_class->net_64_128_32_5.hidden_neuron_bias_2[i];
+        qDebug() << QString("hidden_bias_2[%1] : ").arg(i) << ann_class->net_256_512_512_26.hidden_neuron_bias_2[i];
     }
     for(u16 i = 0; i < OUTPUT_COUNT; i++){
-        qDebug() << QString("output_bias[%1] : ").arg(i) << ann_class->net_64_128_32_5.output_bias[i];
+        qDebug() << QString("output_bias[%1] : ").arg(i) << ann_class->net_256_512_512_26.output_bias[i];
     }
 
     for(u16 i = 0; i < INPUT_COUNT; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-            qDebug() << QString("w_input_to_hidden[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_32_5.w_input_to_hidden[i][j];
+            qDebug() << QString("w_input_to_hidden[%1][%2] : ").arg(i).arg(j) << ann_class->net_256_512_512_26.w_input_to_hidden[i][j];
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
-            qDebug() << QString("w_hidden_to_hidden[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_32_5.w_hidden_to_hidden[i][j];
+            qDebug() << QString("w_hidden_to_hidden[%1][%2] : ").arg(i).arg(j) << ann_class->net_256_512_512_26.w_hidden_to_hidden[i][j];
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
         for(u16 j = 0; j < OUTPUT_COUNT; j++){
-            qDebug() << QString("w_hidden_to_output[%1][%2] : ").arg(i).arg(j) << ann_class->net_64_128_32_5.w_hidden_to_output[i][j];
+            qDebug() << QString("w_hidden_to_output[%1][%2] : ").arg(i).arg(j) << ann_class->net_256_512_512_26.w_hidden_to_output[i][j];
         }
     }
-    ui->label_64_128_32_5_show_weights->setText("Showed..");
+    ui->label_256_512_512_26_show_weights->setText("Showed..");
 }
 void MainWindow::_256_512_512_26_save_weights_handler(void){
-    QSettings settings("weights_64_128_32_5.ini",QSettings::IniFormat);
+    QSettings settings("weights_256_512_512_26.ini",QSettings::IniFormat);
 
     settings.beginGroup("w");
 
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-        settings.setValue(QString("hb1-%1").arg(i),ann_class->net_64_128_32_5.hidden_neuron_bias_1[i]);
+        settings.setValue(QString("hb1-%1").arg(i),ann_class->net_256_512_512_26.hidden_neuron_bias_1[i]);
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-        settings.setValue(QString("hb1-%2").arg(i),ann_class->net_64_128_32_5.hidden_neuron_bias_2[i]);
+        settings.setValue(QString("hb1-%2").arg(i),ann_class->net_256_512_512_26.hidden_neuron_bias_2[i]);
     }
     for(u16 i = 0; i < OUTPUT_COUNT; i++){
-        settings.setValue(QString("ob-%1").arg(i),ann_class->net_64_128_32_5.output_bias[i]);
+        settings.setValue(QString("ob-%1").arg(i),ann_class->net_256_512_512_26.output_bias[i]);
     }
 
     for(u16 i = 0; i < INPUT_COUNT; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-            settings.setValue(QString("i2h-%1-%2").arg(i).arg(j),ann_class->net_64_128_32_5.w_input_to_hidden[i][j]);
+            settings.setValue(QString("i2h-%1-%2").arg(i).arg(j),ann_class->net_256_512_512_26.w_input_to_hidden[i][j]);
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
-            settings.setValue(QString("h2h-%1-%2").arg(i).arg(j),ann_class->net_64_128_32_5.w_hidden_to_hidden[i][j]);
+            settings.setValue(QString("h2h-%1-%2").arg(i).arg(j),ann_class->net_256_512_512_26.w_hidden_to_hidden[i][j]);
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
         for(u16 j = 0; j < OUTPUT_COUNT; j++){
-            settings.setValue(QString("h2o-%1-%2").arg(i).arg(j),ann_class->net_64_128_32_5.w_hidden_to_output[i][j]);
+            settings.setValue(QString("h2o-%1-%2").arg(i).arg(j),ann_class->net_256_512_512_26.w_hidden_to_output[i][j]);
         }
     }
     settings.endGroup();
     settings.sync();
     QProcess::execute("sync");
 
-    ui->label_64_128_32_5_save_weights->setText("Saved..");
+    ui->label_256_512_512_26_save_weights->setText("Saved..");
 }
 void MainWindow::_256_512_512_26_load_saved_weights_handler(void){
-    QSettings settings("weights_64_128_32_5.ini",QSettings::IniFormat);
+    QSettings settings("weights_256_512_512_26.ini",QSettings::IniFormat);
 
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-        ann_class->net_64_128_32_5.hidden_neuron_bias_1[i] = settings.value(QString("w/hb1-%1").arg(i)).toDouble();
+        ann_class->net_256_512_512_26.hidden_neuron_bias_1[i] = settings.value(QString("w/hb1-%1").arg(i)).toDouble();
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-        ann_class->net_64_128_32_5.hidden_neuron_bias_2[i] = settings.value(QString("w/hb2-%1").arg(i)).toDouble();
+        ann_class->net_256_512_512_26.hidden_neuron_bias_2[i] = settings.value(QString("w/hb2-%1").arg(i)).toDouble();
     }
     for(u16 i = 0; i < OUTPUT_COUNT; i++){
-        ann_class->net_64_128_32_5.output_bias[i] = settings.value(QString("w/ob-%1").arg(i)).toDouble();
+        ann_class->net_256_512_512_26.output_bias[i] = settings.value(QString("w/ob-%1").arg(i)).toDouble();
     }
 
     for(u16 i = 0; i < INPUT_COUNT; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-            ann_class->net_64_128_32_5.w_input_to_hidden[i][j] = settings.value(QString("w/i2h-%1-%2").arg(i).arg(j)).toDouble();
+            ann_class->net_256_512_512_26.w_input_to_hidden[i][j] = settings.value(QString("w/i2h-%1-%2").arg(i).arg(j)).toDouble();
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
-            ann_class->net_64_128_32_5.w_hidden_to_hidden[i][j] = settings.value(QString("w/h2h-%1-%2").arg(i).arg(j)).toDouble();
+            ann_class->net_256_512_512_26.w_hidden_to_hidden[i][j] = settings.value(QString("w/h2h-%1-%2").arg(i).arg(j)).toDouble();
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
         for(u16 j = 0; j < OUTPUT_COUNT; j++){
-            ann_class->net_64_128_32_5.w_hidden_to_output[i][j] = settings.value(QString("w/h2o-%1-%2").arg(i).arg(j)).toDouble();
+            ann_class->net_256_512_512_26.w_hidden_to_output[i][j] = settings.value(QString("w/h2o-%1-%2").arg(i).arg(j)).toDouble();
         }
     }
-    ui->label_64_128_32_5_load_saved_weights->setText("Loaded..");
+    ui->label_256_512_512_26_load_saved_weights->setText("Loaded..");
 }
