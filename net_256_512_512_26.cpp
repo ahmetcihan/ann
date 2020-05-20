@@ -270,143 +270,149 @@ void MainWindow::_256_512_512_26_random_initilize_handler(void){
     image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/Y.png",alphabet.Y);
     image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/Z.png",alphabet.Z);
 
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][0] = alphabet.A[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][0] = alphabet.A[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][1] = alphabet.B[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][1] = alphabet.B[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][2] = alphabet.C[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][2] = alphabet.C[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][3] = alphabet.D[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][3] = alphabet.D[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][4] = alphabet.E[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][4] = alphabet.E[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][5] = alphabet.F[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][5] = alphabet.F[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][6] = alphabet.G[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][6] = alphabet.G[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][7] = alphabet.H[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][7] = alphabet.H[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][8] = alphabet.I[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][8] = alphabet.I[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][9] = alphabet.J[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][9] = alphabet.J[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][10] = alphabet.K[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][10] = alphabet.K[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][11] = alphabet.L[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][11] = alphabet.L[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][12] = alphabet.M[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][12] = alphabet.M[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][13] = alphabet.N[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][13] = alphabet.N[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][14] = alphabet.O[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][14] = alphabet.O[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][15] = alphabet.P[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][15] = alphabet.P[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][16] = alphabet.Q[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][16] = alphabet.Q[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][17] = alphabet.R[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][17] = alphabet.R[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][18] = alphabet.S[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][18] = alphabet.S[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][19] = alphabet.T[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][19] = alphabet.T[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][20] = alphabet.U[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][20] = alphabet.U[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][21] = alphabet.V[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][21] = alphabet.V[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][22] = alphabet.W[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][22] = alphabet.W[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][23] = alphabet.X[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][23] = alphabet.X[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][24] = alphabet.Y[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][24] = alphabet.Y[i][j];
         }
     }
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.input[8*i + j][25] = alphabet.Z[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.input[16*i + j][25] = alphabet.Z[i][j];
         }
     }
 
-    for(u16 i = 0; i < 5; i++){
-        for(u16 j = 0; j < 5; j++){
+    for(u16 i = 0; i < 26; i++){
+        for(u16 j = 0; j < 26; j++){
             ann_class->net_256_512_512_26.desired_output[i][j] = 0;
             if(i == j){
                 ann_class->net_256_512_512_26.desired_output[i][j] = 1;
             }
+        }
+    }
+
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            qDebug() << QString("input[%1][%2] : ").arg(i).arg(j) << alphabet.Y[i][j];
         }
     }
 
@@ -439,14 +445,14 @@ void MainWindow::_256_512_512_26_random_initilize_handler(void){
     ui->label_256_512_512_26_random_initilize->setText("Initilized randomly");
 }
 void MainWindow::_256_512_512_26_train_handler(void){
-    ann_class->train_status = 2;
+    ann_class->train_status = 3;
 }
 void MainWindow::_256_512_512_26_test_handler(void){
     image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/tester.png",alphabet.tester);
 
-    for(u16 i = 0; i < 8; i++){
-        for(u16 j = 0; j < 8; j++){
-            ann_class->net_256_512_512_26.test_input[8*i + j] = test_image[i][j];
+    for(u16 i = 0; i < 16; i++){
+        for(u16 j = 0; j < 16; j++){
+            ann_class->net_256_512_512_26.test_input[16*i + j] = test_image[i][j];
         }
     }
 

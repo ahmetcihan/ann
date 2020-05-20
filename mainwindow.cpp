@@ -27,6 +27,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_64_128_32_5_save_weights,SIGNAL(clicked(bool)),this,SLOT(_64_128_32_5_save_weights_handler()));
     connect(ui->pushButton_64_128_32_5_load_saved_weights,SIGNAL(clicked(bool)),this,SLOT(_64_128_32_5_load_saved_weights_handler()));
 
+    connect(ui->pushButton_256_512_512_26_random_initilize,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_random_initilize_handler()));
+    connect(ui->pushButton_256_512_512_26_train,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_train_handler()));
+    connect(ui->pushButton_256_512_512_26_test,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_test_handler()));
+    connect(ui->pushButton_256_512_512_26_show_weights,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_show_weights_handler()));
+    connect(ui->pushButton_256_512_512_26_save_weights,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_save_weights_handler()));
+    connect(ui->pushButton_256_512_512_26_load_saved_weights,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_load_saved_weights_handler()));
 }
 
 void MainWindow::_100_msec_timer_handle(void){
@@ -35,6 +41,9 @@ void MainWindow::_100_msec_timer_handle(void){
     }
     else if(ann_class->train_status == 2){
         ui->label_64_128_32_5_train->setText(QString("training status %  %1").arg(ann_class->epoch_status));
+    }
+    else if(ann_class->train_status == 3){
+        ui->label_256_512_512_26_train->setText(QString("training status %  %1").arg(ann_class->epoch_status));
     }
 }
 
