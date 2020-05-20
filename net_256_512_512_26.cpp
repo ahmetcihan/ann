@@ -23,7 +23,6 @@ void ann::_256_512_512_26_ann_test( double input[256],
         qDebug() << QString("input[%1] :").arg(i) << input[i];
     }
 
-
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
         hidden_neuron_in_1[i] = hidden_neuron_bias_1[i];
     }
@@ -60,36 +59,78 @@ void ann::_256_512_512_26_ann_test( double input[256],
         qDebug() << QString("output[%1] :").arg(i) << calculated_output[i];
     }
 
-    qDebug() << "% " << 100*calculated_output[0] << "\t" << "ihtimal sifir isareti";
-    qDebug() << "% " << 100*calculated_output[1] << "\t" << "ihtimal toplama isareti";
-    qDebug() << "% " << 100*calculated_output[2] << "\t" << "ihtimal bolme isareti";
-    qDebug() << "% " << 100*calculated_output[3] << "\t" << "ihtimal cikarma isareti";
-    qDebug() << "% " << 100*calculated_output[4] << "\t" << "ihtimal carpma isareti";
+    qDebug() << "% " << 100*calculated_output[0] << "\t" << "ihtimal A";
+    qDebug() << "% " << 100*calculated_output[1] << "\t" << "ihtimal B";
+    qDebug() << "% " << 100*calculated_output[2] << "\t" << "ihtimal C";
+    qDebug() << "% " << 100*calculated_output[3] << "\t" << "ihtimal D";
+    qDebug() << "% " << 100*calculated_output[4] << "\t" << "ihtimal E";
+    qDebug() << "% " << 100*calculated_output[5] << "\t" << "ihtimal F";
+    qDebug() << "% " << 100*calculated_output[6] << "\t" << "ihtimal G";
+    qDebug() << "% " << 100*calculated_output[7] << "\t" << "ihtimal H";
+    qDebug() << "% " << 100*calculated_output[8] << "\t" << "ihtimal I";
+    qDebug() << "% " << 100*calculated_output[9] << "\t" << "ihtimal J";
+    qDebug() << "% " << 100*calculated_output[10] << "\t" << "ihtimal K";
+    qDebug() << "% " << 100*calculated_output[11] << "\t" << "ihtimal L";
+    qDebug() << "% " << 100*calculated_output[12] << "\t" << "ihtimal M";
+    qDebug() << "% " << 100*calculated_output[13] << "\t" << "ihtimal N";
+    qDebug() << "% " << 100*calculated_output[14] << "\t" << "ihtimal O";
+    qDebug() << "% " << 100*calculated_output[15] << "\t" << "ihtimal P";
+    qDebug() << "% " << 100*calculated_output[16] << "\t" << "ihtimal Q";
+    qDebug() << "% " << 100*calculated_output[17] << "\t" << "ihtimal R";
+    qDebug() << "% " << 100*calculated_output[18] << "\t" << "ihtimal S";
+    qDebug() << "% " << 100*calculated_output[19] << "\t" << "ihtimal T";
+    qDebug() << "% " << 100*calculated_output[20] << "\t" << "ihtimal U";
+    qDebug() << "% " << 100*calculated_output[21] << "\t" << "ihtimal V";
+    qDebug() << "% " << 100*calculated_output[22] << "\t" << "ihtimal W";
+    qDebug() << "% " << 100*calculated_output[23] << "\t" << "ihtimal X";
+    qDebug() << "% " << 100*calculated_output[24] << "\t" << "ihtimal Y";
+    qDebug() << "% " << 100*calculated_output[25] << "\t" << "ihtimal Z";
 
     u16 max_value_index = 0;
     double max_value = 0;
     QString str = "";
 
-    for(u16 i = 0; i < 5; i++){
+    for(u16 i = 0; i < 26; i++){
         if(calculated_output[i] > max_value){
             max_value = calculated_output[i];
             max_value_index = i;
         }
     }
-    double out_strict[5] = {0};
+    double out_strict[26] = {0};
 
-    for(u16 i = 0; i < 5; i++){
+    for(u16 i = 0; i < 26; i++){
         if(calculated_output[i] > 1.0){
             out_strict[i] = calculated_output[i] - 1.0;
             calculated_output[i] = calculated_output[i] - 2*out_strict[i];
         }
     }
 
-    if(max_value_index == 0)    str = QString("% %1 ihtimal sifir isareti").arg((u32)(100*calculated_output[0]));
-    if(max_value_index == 1)    str = QString("% %1 ihtimal toplama isareti").arg((u32)(100*calculated_output[1]));
-    if(max_value_index == 2)    str = QString("% %1 ihtimal bolme isareti").arg((u32)(100*calculated_output[2]));
-    if(max_value_index == 3)    str = QString("% %1 ihtimal cikarma isareti").arg((u32)(100*calculated_output[3]));
-    if(max_value_index == 4)    str = QString("% %1 ihtimal carpma isareti").arg((u32)(100*calculated_output[4]));
+    if(max_value_index == 0)    str = QString("% %1 ihtimal A").arg((u32)(100*calculated_output[0]));
+    if(max_value_index == 1)    str = QString("% %1 ihtimal B").arg((u32)(100*calculated_output[1]));
+    if(max_value_index == 2)    str = QString("% %1 ihtimal C").arg((u32)(100*calculated_output[2]));
+    if(max_value_index == 3)    str = QString("% %1 ihtimal D").arg((u32)(100*calculated_output[3]));
+    if(max_value_index == 4)    str = QString("% %1 ihtimal E").arg((u32)(100*calculated_output[4]));
+    if(max_value_index == 5)    str = QString("% %1 ihtimal F").arg((u32)(100*calculated_output[5]));
+    if(max_value_index == 6)    str = QString("% %1 ihtimal G").arg((u32)(100*calculated_output[6]));
+    if(max_value_index == 7)    str = QString("% %1 ihtimal H").arg((u32)(100*calculated_output[7]));
+    if(max_value_index == 8)    str = QString("% %1 ihtimal I").arg((u32)(100*calculated_output[8]));
+    if(max_value_index == 9)    str = QString("% %1 ihtimal J").arg((u32)(100*calculated_output[9]));
+    if(max_value_index == 10)    str = QString("% %1 ihtimal K").arg((u32)(100*calculated_output[10]));
+    if(max_value_index == 11)    str = QString("% %1 ihtimal L").arg((u32)(100*calculated_output[11]));
+    if(max_value_index == 12)    str = QString("% %1 ihtimal M").arg((u32)(100*calculated_output[12]));
+    if(max_value_index == 13)    str = QString("% %1 ihtimal N").arg((u32)(100*calculated_output[13]));
+    if(max_value_index == 14)    str = QString("% %1 ihtimal O").arg((u32)(100*calculated_output[14]));
+    if(max_value_index == 15)    str = QString("% %1 ihtimal P").arg((u32)(100*calculated_output[15]));
+    if(max_value_index == 16)    str = QString("% %1 ihtimal Q").arg((u32)(100*calculated_output[16]));
+    if(max_value_index == 17)    str = QString("% %1 ihtimal R").arg((u32)(100*calculated_output[17]));
+    if(max_value_index == 18)    str = QString("% %1 ihtimal S").arg((u32)(100*calculated_output[18]));
+    if(max_value_index == 19)    str = QString("% %1 ihtimal T").arg((u32)(100*calculated_output[19]));
+    if(max_value_index == 20)    str = QString("% %1 ihtimal U").arg((u32)(100*calculated_output[20]));
+    if(max_value_index == 21)    str = QString("% %1 ihtimal V").arg((u32)(100*calculated_output[21]));
+    if(max_value_index == 22)    str = QString("% %1 ihtimal W").arg((u32)(100*calculated_output[22]));
+    if(max_value_index == 23)    str = QString("% %1 ihtimal X").arg((u32)(100*calculated_output[23]));
+    if(max_value_index == 24)    str = QString("% %1 ihtimal Y").arg((u32)(100*calculated_output[24]));
+    if(max_value_index == 25)    str = QString("% %1 ihtimal Z").arg((u32)(100*calculated_output[25]));
 
     mainwindow->ui->label_64_128_32_5_test->setText(str);
 
