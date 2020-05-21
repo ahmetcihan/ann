@@ -28,7 +28,7 @@ public:
     u8 stop_the_training;
 
     struct _256_512_512_26_str{
-        double input[256][26];
+        double input[256][26*4];
         double desired_output[26][26];
         double calculated_output[26][26];
         double hidden_neuron_bias_1[512];
@@ -105,7 +105,7 @@ public:
                                 double hidden_neuron_bias_1[128], double hidden_neuron_bias_2[32], double output_bias[5],
                                 double w_input_to_hidden[64][128], double w_hidden_to_hidden[128][32], double w_hidden_to_output[32][5]);
 
-    void _256_512_512_26_ann_train(double input[256][26], double desired_output[26][26], double calculated_output[26][26],
+    void _256_512_512_26_ann_train(double input[256][26*4], double desired_output[26][26], double calculated_output[26][26],
                                 double hidden_neuron_bias_1[512], double hidden_neuron_bias_2[512], double output_bias[26],
                                 double w_input_to_hidden[256][512], double w_hidden_to_hidden[512][512], double w_hidden_to_output[512][26],
                                 u32 epoch, double learning_rate);

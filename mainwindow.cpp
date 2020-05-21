@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ann_class = new ann(this);
 
     _100_msec_timer = new QTimer(this);
-    _100_msec_timer->setInterval(100);
+    _100_msec_timer->setInterval(1000);
     _100_msec_timer->start();
     connect(this->_100_msec_timer,SIGNAL(timeout()),this,SLOT(_100_msec_timer_handle()));
 

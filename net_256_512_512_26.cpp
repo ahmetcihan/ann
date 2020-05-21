@@ -3,9 +3,10 @@
 
 #define INPUT_COUNT     256
 #define HIDDEN_COUNT_1  256
-#define HIDDEN_COUNT_2  128
+#define HIDDEN_COUNT_2  512
 #define OUTPUT_COUNT    26
 #define IO_ARRAY_LENGTH 26
+#define INPUT_SET       4
 
 double ann::_256_512_512_26_ann_calculate_total_error(void){
     double total_error = 0;
@@ -150,7 +151,7 @@ void ann::_256_512_512_26_ann_test( double input[256],
 
 }
 
-void ann::_256_512_512_26_ann_train(double input[256][26], double desired_output[26][26], double calculated_output[26][26],
+void ann::_256_512_512_26_ann_train(double input[256][26*4], double desired_output[26][26], double calculated_output[26][26],
                                     double hidden_neuron_bias_1[512], double hidden_neuron_bias_2[512], double output_bias[26],
                                     double w_input_to_hidden[256][512], double w_hidden_to_hidden[512][512], double w_hidden_to_output[512][26],
                                     u32 epoch, double learning_rate){
@@ -169,87 +170,89 @@ void ann::_256_512_512_26_ann_train(double input[256][26], double desired_output
     double output_out[OUTPUT_COUNT];
 
     for(u32 era = 0; era < epoch; era++){
-        for(u16 k = 0; k < IO_ARRAY_LENGTH; k++){
+        for(u16 inset = 0; inset < INPUT_SET; inset++){
+            for(u16 k = 0; k < IO_ARRAY_LENGTH; k++){
 
-            for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-                hidden_neuron_in_1[i] = hidden_neuron_bias_1[i];
-            }
-            for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-                for(u16 j = 0; j < INPUT_COUNT; j++){
-                    hidden_neuron_in_1[i] += input[j][k]*w_input_to_hidden[j][i];
+                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
+                    hidden_neuron_in_1[i] = hidden_neuron_bias_1[i];
                 }
-            }
-            for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-                hidden_neuron_out_1[i] = sigmoid_func(hidden_neuron_in_1[i]);
-            }
-            for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-                hidden_neuron_in_2[i] = hidden_neuron_bias_2[i];
-            }
-            for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-                for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-                    hidden_neuron_in_2[i] += hidden_neuron_out_1[j]*w_hidden_to_hidden[j][i];
+                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
+                    for(u16 j = 0; j < INPUT_COUNT; j++){
+                        hidden_neuron_in_1[i] += input[j][k*inset]*w_input_to_hidden[j][i];
+                    }
                 }
-            }
-            for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-                hidden_neuron_out_2[i] = sigmoid_func(hidden_neuron_in_2[i]);
-            }
-
-            for(u16 j = 0; j < OUTPUT_COUNT; j++){
-                output_in[j] =  output_bias[j];
+                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
+                    hidden_neuron_out_1[i] = sigmoid_func(hidden_neuron_in_1[i]);
+                }
                 for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-                    output_in[j] += hidden_neuron_out_2[i]*w_hidden_to_output[i][j];
+                    hidden_neuron_in_2[i] = hidden_neuron_bias_2[i];
                 }
-                output_out[j]   = sigmoid_func(output_in[j]);
-                output_error[j] = desired_output[j][k] - output_out[j];
-                calculated_output[j][k] = output_out[j];
-                global_error[j] = derivative_of_sigmoid_func(output_in[j]) * output_error[j];
-            }
-
-            for(u16 j = 0; j < OUTPUT_COUNT; j++){
                 for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-                    w_hidden_to_output[i][j] += global_error[j] * hidden_neuron_out_2[i] * learning_rate;
+                    for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
+                        hidden_neuron_in_2[i] += hidden_neuron_out_1[j]*w_hidden_to_hidden[j][i];
+                    }
                 }
-            }
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
+                    hidden_neuron_out_2[i] = sigmoid_func(hidden_neuron_in_2[i]);
+                }
 
-            for(u16 i = 0; i < OUTPUT_COUNT; i++){
-                output_bias[i] += global_error[i] * learning_rate;
-            }
-            for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-                hidden_neuron_error_2[i] = 0;
-            }
-
-            for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                 for(u16 j = 0; j < OUTPUT_COUNT; j++){
-                    hidden_neuron_error_2[i] += derivative_of_sigmoid_func(hidden_neuron_in_2[i]) * global_error[j] * w_hidden_to_output[i][j];
+                    output_in[j] =  output_bias[j];
+                    for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
+                        output_in[j] += hidden_neuron_out_2[i]*w_hidden_to_output[i][j];
+                    }
+                    output_out[j]   = sigmoid_func(output_in[j]);
+                    output_error[j] = desired_output[j][k] - output_out[j];
+                    calculated_output[j][k] = output_out[j];
+                    global_error[j] = derivative_of_sigmoid_func(output_in[j]) * output_error[j];
                 }
-            }
-            for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-                for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-                    w_hidden_to_hidden[j][i] += hidden_neuron_error_2[i] * hidden_neuron_out_1[j] * learning_rate;
+
+                for(u16 j = 0; j < OUTPUT_COUNT; j++){
+                    for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
+                        w_hidden_to_output[i][j] += global_error[j] * hidden_neuron_out_2[i] * learning_rate;
+                    }
                 }
-            }
 
-            for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-                hidden_neuron_bias_2[i] += hidden_neuron_error_2[i] * learning_rate;
-            }
-
-            for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-                hidden_neuron_error_1[i] = 0;
-            }
-
-            for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-                for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
-                    hidden_neuron_error_1[i] +=  derivative_of_sigmoid_func(hidden_neuron_in_1[i]) * hidden_neuron_error_2[j] * w_hidden_to_hidden[i][j];
+                for(u16 i = 0; i < OUTPUT_COUNT; i++){
+                    output_bias[i] += global_error[i] * learning_rate;
                 }
-            }
-            for(u16 i = 0; i < INPUT_COUNT; i++){
-                for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-                    w_input_to_hidden[i][j] += hidden_neuron_error_1[j] * input[i][k] * learning_rate;
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
+                    hidden_neuron_error_2[i] = 0;
                 }
-            }
 
-            for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-                hidden_neuron_bias_1[i] +=hidden_neuron_error_1[i] * learning_rate;
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
+                    for(u16 j = 0; j < OUTPUT_COUNT; j++){
+                        hidden_neuron_error_2[i] += derivative_of_sigmoid_func(hidden_neuron_in_2[i]) * global_error[j] * w_hidden_to_output[i][j];
+                    }
+                }
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
+                    for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
+                        w_hidden_to_hidden[j][i] += hidden_neuron_error_2[i] * hidden_neuron_out_1[j] * learning_rate;
+                    }
+                }
+
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
+                    hidden_neuron_bias_2[i] += hidden_neuron_error_2[i] * learning_rate;
+                }
+
+                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
+                    hidden_neuron_error_1[i] = 0;
+                }
+
+                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
+                    for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
+                        hidden_neuron_error_1[i] +=  derivative_of_sigmoid_func(hidden_neuron_in_1[i]) * hidden_neuron_error_2[j] * w_hidden_to_hidden[i][j];
+                    }
+                }
+                for(u16 i = 0; i < INPUT_COUNT; i++){
+                    for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
+                        w_input_to_hidden[i][j] += hidden_neuron_error_1[j] * input[i][k*inset] * learning_rate;
+                    }
+                }
+
+                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
+                    hidden_neuron_bias_1[i] +=hidden_neuron_error_1[i] * learning_rate;
+                }
             }
         }
         epoch_no = era;
@@ -258,161 +261,34 @@ void ann::_256_512_512_26_ann_train(double input[256][26], double desired_output
     }
 }
 void MainWindow::_256_512_512_26_random_initilize_handler(void){
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/A.png",alphabet.A);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/B.png",alphabet.B);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/C.png",alphabet.C);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/D.png",alphabet.D);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/E.png",alphabet.E);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/F.png",alphabet.F);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/G.png",alphabet.G);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/H.png",alphabet.H);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/I.png",alphabet.I);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/J.png",alphabet.J);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/K.png",alphabet.K);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/L.png",alphabet.L);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/M.png",alphabet.M);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/N.png",alphabet.N);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/O.png",alphabet.O);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/P.png",alphabet.P);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/Q.png",alphabet.Q);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/R.png",alphabet.R);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/S.png",alphabet.S);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/T.png",alphabet.T);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/U.png",alphabet.U);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/V.png",alphabet.V);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/W.png",alphabet.W);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/X.png",alphabet.X);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/Y.png",alphabet.Y);
-    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/Z.png",alphabet.Z);
+    _256_512_512_26_letters_to_arrays();
 
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][0] = alphabet.A[i][j];
+    for(u8 k = 0; k < 26; k++){
+        for(u16 i = 0; i < 16; i++){
+            for(u16 j = 0; j < 16; j++){
+                ann_class->net_256_512_512_26.input[16*i + j][k] = alphabet.letter[k][i][j];
+            }
         }
     }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][1] = alphabet.B[i][j];
+    for(u8 k = 26; k < (26*2); k++){
+        for(u16 i = 0; i < 16; i++){
+            for(u16 j = 0; j < 16; j++){
+                ann_class->net_256_512_512_26.input[16*i + j][k] = alphabet_italic.letter[k - 26][i][j];
+            }
         }
     }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][2] = alphabet.C[i][j];
+    for(u8 k = (26*2); k < (26*3); k++){
+        for(u16 i = 0; i < 16; i++){
+            for(u16 j = 0; j < 16; j++){
+                ann_class->net_256_512_512_26.input[16*i + j][k] = alphabet_bold.letter[k - (26*2)][i][j];
+            }
         }
     }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][3] = alphabet.D[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][4] = alphabet.E[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][5] = alphabet.F[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][6] = alphabet.G[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][7] = alphabet.H[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][8] = alphabet.I[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][9] = alphabet.J[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][10] = alphabet.K[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][11] = alphabet.L[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][12] = alphabet.M[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][13] = alphabet.N[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][14] = alphabet.O[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][15] = alphabet.P[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][16] = alphabet.Q[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][17] = alphabet.R[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][18] = alphabet.S[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][19] = alphabet.T[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][20] = alphabet.U[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][21] = alphabet.V[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][22] = alphabet.W[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][23] = alphabet.X[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][24] = alphabet.Y[i][j];
-        }
-    }
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            ann_class->net_256_512_512_26.input[16*i + j][25] = alphabet.Z[i][j];
+    for(u8 k = (26*3); k < (26*4); k++){
+        for(u16 i = 0; i < 16; i++){
+            for(u16 j = 0; j < 16; j++){
+                ann_class->net_256_512_512_26.input[16*i + j][k] = alphabet_bold_italic.letter[k - (26*3)][i][j];
+            }
         }
     }
 
@@ -425,12 +301,6 @@ void MainWindow::_256_512_512_26_random_initilize_handler(void){
         }
     }
 
-//    for(u16 i = 0; i < 16; i++){
-//        for(u16 j = 0; j < 16; j++){
-//            qDebug() << QString("input[%1][%2] : ").arg(i).arg(j) << alphabet.Y[i][j];
-//        }
-//    }
-    qDebug() << RAND_MAX;
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
         ann_class->net_256_512_512_26.hidden_neuron_bias_1[i] = ((double) qrand()/RAND_MAX) * (-2) + 1;
     }
@@ -577,4 +447,113 @@ void MainWindow::_256_512_512_26_load_saved_weights_handler(void){
 }
 void MainWindow::_256_512_512_26_stop_train_handler(void){
     ann_class->stop_the_training = 1;
+}
+void MainWindow::_256_512_512_26_letters_to_arrays(void){
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/A.png",alphabet.letter[0]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/B.png",alphabet.letter[1]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/C.png",alphabet.letter[2]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/D.png",alphabet.letter[3]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/E.png",alphabet.letter[4]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/F.png",alphabet.letter[5]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/G.png",alphabet.letter[6]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/H.png",alphabet.letter[7]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/I.png",alphabet.letter[8]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/J.png",alphabet.letter[9]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/K.png",alphabet.letter[10]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/L.png",alphabet.letter[11]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/M.png",alphabet.letter[12]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/N.png",alphabet.letter[13]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/O.png",alphabet.letter[14]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/P.png",alphabet.letter[15]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/Q.png",alphabet.letter[16]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/R.png",alphabet.letter[17]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/S.png",alphabet.letter[18]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/T.png",alphabet.letter[19]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/U.png",alphabet.letter[20]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/V.png",alphabet.letter[21]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/W.png",alphabet.letter[22]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/X.png",alphabet.letter[23]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/Y.png",alphabet.letter[24]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/Z.png",alphabet.letter[25]);
+
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/A.png",alphabet_italic.letter[0]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/B.png",alphabet_italic.letter[1]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/C.png",alphabet_italic.letter[2]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/D.png",alphabet_italic.letter[3]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/E.png",alphabet_italic.letter[4]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/F.png",alphabet_italic.letter[5]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/G.png",alphabet_italic.letter[6]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/H.png",alphabet_italic.letter[7]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/I.png",alphabet_italic.letter[8]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/J.png",alphabet_italic.letter[9]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/K.png",alphabet_italic.letter[10]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/L.png",alphabet_italic.letter[11]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/M.png",alphabet_italic.letter[12]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/N.png",alphabet_italic.letter[13]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/O.png",alphabet_italic.letter[14]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/P.png",alphabet_italic.letter[15]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/Q.png",alphabet_italic.letter[16]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/R.png",alphabet_italic.letter[17]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/S.png",alphabet_italic.letter[18]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/T.png",alphabet_italic.letter[19]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/U.png",alphabet_italic.letter[20]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/V.png",alphabet_italic.letter[21]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/W.png",alphabet_italic.letter[22]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/X.png",alphabet_italic.letter[23]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/Y.png",alphabet_italic.letter[24]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_italic_16x16/Z.png",alphabet_italic.letter[25]);
+
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/A.png",alphabet_bold.letter[0]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/B.png",alphabet_bold.letter[1]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/C.png",alphabet_bold.letter[2]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/D.png",alphabet_bold.letter[3]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/E.png",alphabet_bold.letter[4]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/F.png",alphabet_bold.letter[5]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/G.png",alphabet_bold.letter[6]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/H.png",alphabet_bold.letter[7]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/I.png",alphabet_bold.letter[8]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/J.png",alphabet_bold.letter[9]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/K.png",alphabet_bold.letter[10]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/L.png",alphabet_bold.letter[11]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/M.png",alphabet_bold.letter[12]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/N.png",alphabet_bold.letter[13]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/O.png",alphabet_bold.letter[14]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/P.png",alphabet_bold.letter[15]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/Q.png",alphabet_bold.letter[16]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/R.png",alphabet_bold.letter[17]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/S.png",alphabet_bold.letter[18]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/T.png",alphabet_bold.letter[19]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/U.png",alphabet_bold.letter[20]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/V.png",alphabet_bold.letter[21]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/W.png",alphabet_bold.letter[22]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/X.png",alphabet_bold.letter[23]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/Y.png",alphabet_bold.letter[24]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_16x16/Z.png",alphabet_bold.letter[25]);
+
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/A.png",alphabet_bold_italic.letter[0]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/B.png",alphabet_bold_italic.letter[1]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/C.png",alphabet_bold_italic.letter[2]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/D.png",alphabet_bold_italic.letter[3]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/E.png",alphabet_bold_italic.letter[4]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/F.png",alphabet_bold_italic.letter[5]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/G.png",alphabet_bold_italic.letter[6]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/H.png",alphabet_bold_italic.letter[7]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/I.png",alphabet_bold_italic.letter[8]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/J.png",alphabet_bold_italic.letter[9]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/K.png",alphabet_bold_italic.letter[10]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/L.png",alphabet_bold_italic.letter[11]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/M.png",alphabet_bold_italic.letter[12]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/N.png",alphabet_bold_italic.letter[13]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/O.png",alphabet_bold_italic.letter[14]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/P.png",alphabet_bold_italic.letter[15]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/Q.png",alphabet_bold_italic.letter[16]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/R.png",alphabet_bold_italic.letter[17]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/S.png",alphabet_bold_italic.letter[18]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/T.png",alphabet_bold_italic.letter[19]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/U.png",alphabet_bold_italic.letter[20]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/V.png",alphabet_bold_italic.letter[21]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/W.png",alphabet_bold_italic.letter[22]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/X.png",alphabet_bold_italic.letter[23]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/Y.png",alphabet_bold_italic.letter[24]);
+    image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_bold_italic_16x16/Z.png",alphabet_bold_italic.letter[25]);
 }

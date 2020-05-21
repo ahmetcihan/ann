@@ -35,35 +35,10 @@ public:
     u8 divide_image[8][8];
 
     struct _alphabet{
-        u8 A[16][16];
-        u8 B[16][16];
-        u8 C[16][16];
-        u8 D[16][16];
-        u8 E[16][16];
-        u8 F[16][16];
-        u8 G[16][16];
-        u8 H[16][16];
-        u8 I[16][16];
-        u8 J[16][16];
-        u8 K[16][16];
-        u8 L[16][16];
-        u8 M[16][16];
-        u8 N[16][16];
-        u8 O[16][16];
-        u8 P[16][16];
-        u8 Q[16][16];
-        u8 R[16][16];
-        u8 S[16][16];
-        u8 T[16][16];
-        u8 U[16][16];
-        u8 V[16][16];
-        u8 W[16][16];
-        u8 X[16][16];
-        u8 Y[16][16];
-        u8 Z[16][16];
+        u8 letter[26][16][16];
         u8 tester[16][16];
     };
-    struct _alphabet alphabet;
+    struct _alphabet alphabet,alphabet_italic,alphabet_bold,alphabet_bold_italic;
 
     void image_to_array_8x8(QString location, u8 image_array[8][8]);
     void image_to_array_16x16(QString location, u8 image_array[16][16]);
@@ -96,6 +71,7 @@ private slots:
     void _256_512_512_26_show_weights_handler(void);
     void _256_512_512_26_save_weights_handler(void);
     void _256_512_512_26_stop_train_handler(void);
+    void _256_512_512_26_letters_to_arrays(void);
 
 };
 
