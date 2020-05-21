@@ -76,10 +76,16 @@ void ann::thread_handler(void){
         train_status = 0;
     }
     else if(train_status == 3){
-        _256_512_512_26_ann_train(net_256_512_512_26.input, net_256_512_512_26.desired_output, net_256_512_512_26.calculated_output,
-                                 net_256_512_512_26.hidden_neuron_bias_1,net_256_512_512_26.hidden_neuron_bias_2,net_256_512_512_26.output_bias,
-                                 net_256_512_512_26.w_input_to_hidden,net_256_512_512_26.w_hidden_to_hidden,net_256_512_512_26.w_hidden_to_output,
-                                 1, 0.01);
+        _256_512_512_26_ann_train(  net_256_512_512_26.input,
+                                    net_256_512_512_26.desired_output,
+                                    net_256_512_512_26.calculated_output,
+                                    net_256_512_512_26.hidden_neuron_bias_1,
+                                    net_256_512_512_26.hidden_neuron_bias_2,
+                                    net_256_512_512_26.output_bias,
+                                    net_256_512_512_26.w_input_to_hidden,
+                                    net_256_512_512_26.w_hidden_to_hidden,
+                                    net_256_512_512_26.w_hidden_to_output,
+                                    1000000, 0.0001);
 
         for(u8 i = 0; i < 26; i++){
             for(u8 j = 0; j < 26; j++){

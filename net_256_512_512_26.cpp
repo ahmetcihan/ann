@@ -2,8 +2,8 @@
 #include "ui_mainwindow.h"
 
 #define INPUT_COUNT     256
-#define HIDDEN_COUNT_1  512
-#define HIDDEN_COUNT_2  512
+#define HIDDEN_COUNT_1  256
+#define HIDDEN_COUNT_2  64
 #define OUTPUT_COUNT    26
 #define IO_ARRAY_LENGTH 26
 
@@ -410,35 +410,35 @@ void MainWindow::_256_512_512_26_random_initilize_handler(void){
         }
     }
 
-    for(u16 i = 0; i < 16; i++){
-        for(u16 j = 0; j < 16; j++){
-            qDebug() << QString("input[%1][%2] : ").arg(i).arg(j) << alphabet.Y[i][j];
-        }
-    }
+//    for(u16 i = 0; i < 16; i++){
+//        for(u16 j = 0; j < 16; j++){
+//            qDebug() << QString("input[%1][%2] : ").arg(i).arg(j) << alphabet.Y[i][j];
+//        }
+//    }
 
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-        ann_class->net_256_512_512_26.hidden_neuron_bias_1[i] = 0.1 + 0.01*i;
+        ann_class->net_256_512_512_26.hidden_neuron_bias_1[i] = 0.1 + 0.003*i;
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-        ann_class->net_256_512_512_26.hidden_neuron_bias_2[i] = 0.1 + 0.01*i;
+        ann_class->net_256_512_512_26.hidden_neuron_bias_2[i] = 0.2 + 0.005*i;
     }
     for(u16 i = 0; i < OUTPUT_COUNT; i++){
-        ann_class->net_256_512_512_26.output_bias[i] = 0.2;
+        ann_class->net_256_512_512_26.output_bias[i] = 0.3 + 0.007*i;
     }
 
     for(u16 i = 0; i < INPUT_COUNT; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-            ann_class->net_256_512_512_26.w_input_to_hidden[i][j] = 0.1;
+            ann_class->net_256_512_512_26.w_input_to_hidden[i][j] = 0.01 + 0.00013*i;
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
-            ann_class->net_256_512_512_26.w_hidden_to_hidden[i][j] = 0.1;
+            ann_class->net_256_512_512_26.w_hidden_to_hidden[i][j] = 0.02 + 0.0003*i;
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
         for(u16 j = 0; j < OUTPUT_COUNT; j++){
-            ann_class->net_256_512_512_26.w_hidden_to_output[i][j] = 0.1;
+            ann_class->net_256_512_512_26.w_hidden_to_output[i][j] = 0.03 + 0.007*i;
         }
     }
 
@@ -457,8 +457,12 @@ void MainWindow::_256_512_512_26_test_handler(void){
     }
 
     ann_class->_256_512_512_26_ann_test(ann_class->net_256_512_512_26.test_input,
-                ann_class->net_256_512_512_26.hidden_neuron_bias_1,ann_class->net_256_512_512_26.hidden_neuron_bias_2,ann_class->net_256_512_512_26.output_bias,
-                ann_class->net_256_512_512_26.w_input_to_hidden,ann_class->net_256_512_512_26.w_hidden_to_hidden,ann_class->net_256_512_512_26.w_hidden_to_output);
+                                        ann_class->net_256_512_512_26.hidden_neuron_bias_1,
+                                        ann_class->net_256_512_512_26.hidden_neuron_bias_2,
+                                        ann_class->net_256_512_512_26.output_bias,
+                                        ann_class->net_256_512_512_26.w_input_to_hidden,
+                                        ann_class->net_256_512_512_26.w_hidden_to_hidden,
+                                        ann_class->net_256_512_512_26.w_hidden_to_output);
 
 }
 void MainWindow::_256_512_512_26_show_weights_handler(void){
