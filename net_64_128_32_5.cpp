@@ -327,7 +327,7 @@ void MainWindow::_64_128_32_5_save_weights_handler(void){
         settings.setValue(QString("hb1-%1").arg(i),ann_class->net_64_128_32_5.hidden_neuron_bias_1[i]);
     }
     for(u8 i = 0; i < HIDDEN_COUNT_2; i++){
-        settings.setValue(QString("hb1-%2").arg(i),ann_class->net_64_128_32_5.hidden_neuron_bias_2[i]);
+        settings.setValue(QString("hb2-%2").arg(i),ann_class->net_64_128_32_5.hidden_neuron_bias_2[i]);
     }
     for(u8 i = 0; i < OUTPUT_COUNT; i++){
         settings.setValue(QString("ob-%1").arg(i),ann_class->net_64_128_32_5.output_bias[i]);
