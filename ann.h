@@ -38,6 +38,7 @@ public:
         double w_hidden_to_hidden[512][512];
         double w_hidden_to_output[512][26];
         double test_input[256];
+        double total_err;
     };
     struct _256_512_512_26_str net_256_512_512_26;
 

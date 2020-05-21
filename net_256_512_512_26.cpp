@@ -169,30 +169,24 @@ void ann::_256_512_512_26_ann_train(double input[256][26*4], double desired_outp
     double output_in[OUTPUT_COUNT];
     double output_out[OUTPUT_COUNT];
 
+    double inset_error[INPUT_SET];
+
     for(u32 era = 0; era < epoch; era++){
         for(u16 inset = 0; inset < INPUT_SET; inset++){
             for(u16 k = 0; k < IO_ARRAY_LENGTH; k++){
 
                 for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     hidden_neuron_in_1[i] = hidden_neuron_bias_1[i];
-                }
-                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     for(u16 j = 0; j < INPUT_COUNT; j++){
                         hidden_neuron_in_1[i] += input[j][k*inset]*w_input_to_hidden[j][i];
                     }
-                }
-                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     hidden_neuron_out_1[i] = sigmoid_func(hidden_neuron_in_1[i]);
                 }
                 for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     hidden_neuron_in_2[i] = hidden_neuron_bias_2[i];
-                }
-                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
                         hidden_neuron_in_2[i] += hidden_neuron_out_1[j]*w_hidden_to_hidden[j][i];
                     }
-                }
-                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     hidden_neuron_out_2[i] = sigmoid_func(hidden_neuron_in_2[i]);
                 }
 
@@ -211,35 +205,22 @@ void ann::_256_512_512_26_ann_train(double input[256][26*4], double desired_outp
                     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                         w_hidden_to_output[i][j] += global_error[j] * hidden_neuron_out_2[i] * learning_rate;
                     }
+                    output_bias[j] += global_error[j] * learning_rate;
                 }
 
-                for(u16 i = 0; i < OUTPUT_COUNT; i++){
-                    output_bias[i] += global_error[i] * learning_rate;
-                }
                 for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     hidden_neuron_error_2[i] = 0;
-                }
-
-                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     for(u16 j = 0; j < OUTPUT_COUNT; j++){
                         hidden_neuron_error_2[i] += derivative_of_sigmoid_func(hidden_neuron_in_2[i]) * global_error[j] * w_hidden_to_output[i][j];
                     }
-                }
-                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
                         w_hidden_to_hidden[j][i] += hidden_neuron_error_2[i] * hidden_neuron_out_1[j] * learning_rate;
                     }
-                }
-
-                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     hidden_neuron_bias_2[i] += hidden_neuron_error_2[i] * learning_rate;
                 }
 
                 for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     hidden_neuron_error_1[i] = 0;
-                }
-
-                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
                         hidden_neuron_error_1[i] +=  derivative_of_sigmoid_func(hidden_neuron_in_1[i]) * hidden_neuron_error_2[j] * w_hidden_to_hidden[i][j];
                     }
@@ -254,7 +235,9 @@ void ann::_256_512_512_26_ann_train(double input[256][26*4], double desired_outp
                     hidden_neuron_bias_1[i] +=hidden_neuron_error_1[i] * learning_rate;
                 }
             }
+            inset_error[inset] = _256_512_512_26_ann_calculate_total_error();
         }
+        net_256_512_512_26.total_err = (inset_error[0] + inset_error[1] + inset_error[2] + inset_error[3])/4;
         epoch_no = era;
         epoch_status = (era*100)/epoch;
         if(stop_the_training == 1) break;
@@ -300,6 +283,8 @@ void MainWindow::_256_512_512_26_random_initilize_handler(void){
             }
         }
     }
+
+    qsrand(QDateTime::currentMSecsSinceEpoch());
 
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
         ann_class->net_256_512_512_26.hidden_neuron_bias_1[i] = ((double) qrand()/RAND_MAX) * (-2) + 1;

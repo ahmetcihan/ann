@@ -10,6 +10,7 @@
 #include <QtConcurrentRun>
 #include <QSettings>
 #include <QProcess>
+#include <QDateTime>
 
 typedef unsigned char   u8;
 typedef unsigned int    u32;

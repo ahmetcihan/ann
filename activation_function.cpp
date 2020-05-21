@@ -6,10 +6,6 @@ double ann::sigmoid_func(double val){
     //return val;                       //identity  - not properly worked
     //return atan(val);                 //atan      - not bad but slower
     //return (log(1+exp(val)));         //softplus  - good but slower
-    /***************RELU**********/     //ReLU      - very good training but test is bad
-    //if(val < 0) return 0;
-    //else return val;
-    /*****************************/
     /*********Leaky RELU**********/     //ReLU      -
     //if(val <= 0) return (0.01*val);
     //else return val;

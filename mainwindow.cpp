@@ -46,8 +46,12 @@ void MainWindow::_100_msec_timer_handle(void){
     else if(ann_class->train_status == 3){
         ui->label_256_512_512_26_train->setText(QString("training status %  %1").arg(ann_class->epoch_status));
         ui->label_256_512_512_26_train_status->setText(QString("Epoch : %1 , Error : %2 , ob-0 : %3").
-                                                       arg(ann_class->epoch_no).arg(ann_class->_256_512_512_26_ann_calculate_total_error()).
-                                                       arg(ann_class->net_256_512_512_26.output_bias[0]));
+                                                        arg(ann_class->epoch_no).arg(ann_class->net_256_512_512_26.total_err).
+                                                        arg(ann_class->net_256_512_512_26.output_bias[0]));
+        ui->label_256_512_512_26_train_status_2->setText(QString("hb1-0 : %1 , hb2-0 : %2 , wh2h-0 : %3").
+                                                        arg(ann_class->net_256_512_512_26.hidden_neuron_bias_1[0]).
+                                                        arg(ann_class->net_256_512_512_26.hidden_neuron_bias_2[0]).
+                                                        arg(ann_class->net_256_512_512_26.w_hidden_to_hidden[0][0]));
     }
 }
 
