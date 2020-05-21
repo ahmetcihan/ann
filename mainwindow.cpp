@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_256_512_512_26_show_weights,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_show_weights_handler()));
     connect(ui->pushButton_256_512_512_26_save_weights,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_save_weights_handler()));
     connect(ui->pushButton_256_512_512_26_load_saved_weights,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_load_saved_weights_handler()));
+    connect(ui->pushButton_256_512_512_26_stop_train,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_stop_train_handler()));
 }
 
 void MainWindow::_100_msec_timer_handle(void){
@@ -44,6 +45,9 @@ void MainWindow::_100_msec_timer_handle(void){
     }
     else if(ann_class->train_status == 3){
         ui->label_256_512_512_26_train->setText(QString("training status %  %1").arg(ann_class->epoch_status));
+        ui->label_256_512_512_26_train_status->setText(QString("Epoch : %1 , Error : %2 , ob-0 : %3").
+                                                       arg(ann_class->epoch_no).arg(ann_class->_256_512_512_26_ann_calculate_total_error()).
+                                                       arg(ann_class->net_256_512_512_26.output_bias[0]));
     }
 }
 

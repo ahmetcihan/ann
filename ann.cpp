@@ -19,6 +19,8 @@ ann::ann(MainWindow *master, QWidget *parent) :
     QObject::connect(thread_1, SIGNAL(started()), thread_timer, SLOT(start()));
     thread_1->start();
 
+    stop_the_training = 0;
+
 }
 void ann::thread_handler(void){
     if(train_status == 1){
@@ -85,7 +87,7 @@ void ann::thread_handler(void){
                                     net_256_512_512_26.w_input_to_hidden,
                                     net_256_512_512_26.w_hidden_to_hidden,
                                     net_256_512_512_26.w_hidden_to_output,
-                                    1000000, 0.0001);
+                                    100000, 0.1);
 
         for(u8 i = 0; i < 26; i++){
             for(u8 j = 0; j < 26; j++){
@@ -97,8 +99,8 @@ void ann::thread_handler(void){
         double total_error = 0;
         double aux;
 
-        for(u8 i = 0; i < 5; i++){
-            for(u8 j = 0; j < 5; j++){
+        for(u8 i = 0; i < 26; i++){
+            for(u8 j = 0; j < 26; j++){
                 aux = net_256_512_512_26.desired_output[i][j] - net_256_512_512_26.calculated_output[i][j];
                 aux = aux * aux;
                 total_error += aux;

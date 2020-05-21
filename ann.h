@@ -24,6 +24,8 @@ public:
 
     u8 train_status;
     u8 epoch_status;
+    u32 epoch_no;
+    u8 stop_the_training;
 
     struct _256_512_512_26_str{
         double input[256][26];
@@ -110,6 +112,7 @@ public:
     void _256_512_512_26_ann_test(  double input[256],
                                     double hidden_neuron_bias_1[512], double hidden_neuron_bias_2[512], double output_bias[26],
                                     double w_input_to_hidden[256][512], double w_hidden_to_hidden[512][512], double w_hidden_to_output[512][26]);
+    double _256_512_512_26_ann_calculate_total_error(void);
 
 private:
     Ui::ann *ui;

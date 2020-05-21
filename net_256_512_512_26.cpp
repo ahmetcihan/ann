@@ -2,11 +2,24 @@
 #include "ui_mainwindow.h"
 
 #define INPUT_COUNT     256
-#define HIDDEN_COUNT_1  256
+#define HIDDEN_COUNT_1  128
 #define HIDDEN_COUNT_2  64
 #define OUTPUT_COUNT    26
 #define IO_ARRAY_LENGTH 26
 
+double ann::_256_512_512_26_ann_calculate_total_error(void){
+    double total_error = 0;
+    double aux;
+
+    for(u8 i = 0; i < 26; i++){
+        for(u8 j = 0; j < 26; j++){
+            aux = net_256_512_512_26.desired_output[i][j] - net_256_512_512_26.calculated_output[i][j];
+            aux = aux * aux;
+            total_error += aux;
+        }
+    }
+    return total_error;
+}
 void ann::_256_512_512_26_ann_test( double input[256],
                                     double hidden_neuron_bias_1[512], double hidden_neuron_bias_2[512], double output_bias[26],
                                     double w_input_to_hidden[256][512], double w_hidden_to_hidden[512][512], double w_hidden_to_output[512][26]){
@@ -239,7 +252,9 @@ void ann::_256_512_512_26_ann_train(double input[256][26], double desired_output
                 hidden_neuron_bias_1[i] +=hidden_neuron_error_1[i] * learning_rate;
             }
         }
+        epoch_no = era;
         epoch_status = (era*100)/epoch;
+        if(stop_the_training == 1) break;
     }
 }
 void MainWindow::_256_512_512_26_random_initilize_handler(void){
@@ -417,28 +432,28 @@ void MainWindow::_256_512_512_26_random_initilize_handler(void){
 //    }
 
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
-        ann_class->net_256_512_512_26.hidden_neuron_bias_1[i] = 0.1 + 0.003*i;
+        ann_class->net_256_512_512_26.hidden_neuron_bias_1[i] = 0.1 + 0.03*i;
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-        ann_class->net_256_512_512_26.hidden_neuron_bias_2[i] = 0.2 + 0.005*i;
+        ann_class->net_256_512_512_26.hidden_neuron_bias_2[i] = 0.2 + 0.05*i;
     }
     for(u16 i = 0; i < OUTPUT_COUNT; i++){
-        ann_class->net_256_512_512_26.output_bias[i] = 0.3 + 0.007*i;
+        ann_class->net_256_512_512_26.output_bias[i] = 0.3 + 0.07*i;
     }
 
     for(u16 i = 0; i < INPUT_COUNT; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-            ann_class->net_256_512_512_26.w_input_to_hidden[i][j] = 0.01 + 0.00013*i;
+            ann_class->net_256_512_512_26.w_input_to_hidden[i][j] = 0.01 + 0.013*i;
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
         for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
-            ann_class->net_256_512_512_26.w_hidden_to_hidden[i][j] = 0.02 + 0.0003*i;
+            ann_class->net_256_512_512_26.w_hidden_to_hidden[i][j] = 0.02 + 0.03*i;
         }
     }
     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
         for(u16 j = 0; j < OUTPUT_COUNT; j++){
-            ann_class->net_256_512_512_26.w_hidden_to_output[i][j] = 0.03 + 0.007*i;
+            ann_class->net_256_512_512_26.w_hidden_to_output[i][j] = 0.03 + 0.07*i;
         }
     }
 
@@ -446,6 +461,7 @@ void MainWindow::_256_512_512_26_random_initilize_handler(void){
 }
 void MainWindow::_256_512_512_26_train_handler(void){
     ann_class->train_status = 3;
+    ann_class->stop_the_training = 0;
 }
 void MainWindow::_256_512_512_26_test_handler(void){
     image_to_array_16x16("/home/ahmet/Desktop/arial_fonts_16x16/tester.png",alphabet.tester);
@@ -558,4 +574,7 @@ void MainWindow::_256_512_512_26_load_saved_weights_handler(void){
         }
     }
     ui->label_256_512_512_26_load_saved_weights->setText("Loaded..");
+}
+void MainWindow::_256_512_512_26_stop_train_handler(void){
+    ann_class->stop_the_training = 1;
 }

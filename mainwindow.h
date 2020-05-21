@@ -95,6 +95,7 @@ private slots:
     void _256_512_512_26_test_handler(void);
     void _256_512_512_26_show_weights_handler(void);
     void _256_512_512_26_save_weights_handler(void);
+    void _256_512_512_26_stop_train_handler(void);
 
 };
 
