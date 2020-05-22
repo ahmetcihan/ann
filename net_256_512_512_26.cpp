@@ -177,16 +177,24 @@ void ann::_256_512_512_26_ann_train(double input[256][26*4], double desired_outp
 
                 for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     hidden_neuron_in_1[i] = hidden_neuron_bias_1[i];
+                }
+                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     for(u16 j = 0; j < INPUT_COUNT; j++){
-                        hidden_neuron_in_1[i] += input[j][k*inset]*w_input_to_hidden[j][i];
+                        hidden_neuron_in_1[i] += input[j][k + 26*inset]*w_input_to_hidden[j][i];
                     }
+                }
+                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     hidden_neuron_out_1[i] = sigmoid_func(hidden_neuron_in_1[i]);
                 }
                 for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     hidden_neuron_in_2[i] = hidden_neuron_bias_2[i];
+                }
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
                         hidden_neuron_in_2[i] += hidden_neuron_out_1[j]*w_hidden_to_hidden[j][i];
                     }
+                }
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     hidden_neuron_out_2[i] = sigmoid_func(hidden_neuron_in_2[i]);
                 }
 
@@ -205,29 +213,42 @@ void ann::_256_512_512_26_ann_train(double input[256][26*4], double desired_outp
                     for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                         w_hidden_to_output[i][j] += global_error[j] * hidden_neuron_out_2[i] * learning_rate;
                     }
-                    output_bias[j] += global_error[j] * learning_rate;
+                }
+
+                for(u16 i = 0; i < OUTPUT_COUNT; i++){
+                    output_bias[i] += global_error[i] * learning_rate;
+                }
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
+                    hidden_neuron_error_2[i] = 0;
                 }
 
                 for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
-                    hidden_neuron_error_2[i] = 0;
                     for(u16 j = 0; j < OUTPUT_COUNT; j++){
                         hidden_neuron_error_2[i] += derivative_of_sigmoid_func(hidden_neuron_in_2[i]) * global_error[j] * w_hidden_to_output[i][j];
                     }
+                }
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
                         w_hidden_to_hidden[j][i] += hidden_neuron_error_2[i] * hidden_neuron_out_1[j] * learning_rate;
                     }
+                }
+
+                for(u16 i = 0; i < HIDDEN_COUNT_2; i++){
                     hidden_neuron_bias_2[i] += hidden_neuron_error_2[i] * learning_rate;
                 }
 
                 for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     hidden_neuron_error_1[i] = 0;
+                }
+
+                for(u16 i = 0; i < HIDDEN_COUNT_1; i++){
                     for(u16 j = 0; j < HIDDEN_COUNT_2; j++){
                         hidden_neuron_error_1[i] +=  derivative_of_sigmoid_func(hidden_neuron_in_1[i]) * hidden_neuron_error_2[j] * w_hidden_to_hidden[i][j];
                     }
                 }
                 for(u16 i = 0; i < INPUT_COUNT; i++){
                     for(u16 j = 0; j < HIDDEN_COUNT_1; j++){
-                        w_input_to_hidden[i][j] += hidden_neuron_error_1[j] * input[i][k*inset] * learning_rate;
+                        w_input_to_hidden[i][j] += hidden_neuron_error_1[j] * input[i][k + 26*inset] * learning_rate;
                     }
                 }
 
