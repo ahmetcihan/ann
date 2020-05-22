@@ -6,7 +6,7 @@
 #define HIDDEN_COUNT_2  128
 #define OUTPUT_COUNT    26
 #define IO_ARRAY_LENGTH 26
-#define INPUT_SET       2
+#define INPUT_SET       3
 
 double ann::_256_512_512_26_ann_calculate_total_error(void){
     double total_error = 0;
@@ -258,7 +258,7 @@ void ann::_256_512_512_26_ann_train(double input[256][26*4], double desired_outp
             }
             inset_error[inset] = _256_512_512_26_ann_calculate_total_error();
         }
-        net_256_512_512_26.total_err = (inset_error[0] + inset_error[1])/2;
+        net_256_512_512_26.total_err = (inset_error[0] + inset_error[1] + inset_error[2])/3;
         epoch_no = era;
         epoch_status = (era*100)/epoch;
         if(stop_the_training == 1) break;
