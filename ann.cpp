@@ -87,7 +87,7 @@ void ann::thread_handler(void){
                                     net_256_512_512_26.w_input_to_hidden,
                                     net_256_512_512_26.w_hidden_to_hidden,
                                     net_256_512_512_26.w_hidden_to_output,
-                                    100000, 0.0001);
+                                    100000, 1);
 
         for(u8 i = 0; i < 26; i++){
             for(u8 j = 0; j < 26; j++){
