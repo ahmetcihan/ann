@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -545,6 +545,76 @@
       </property>
       <property name="text">
        <string>-----------------</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Text Read</string>
+     </attribute>
+     <widget class="QLabel" name="label_text_read">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>20</y>
+        <width>160</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>----------------------------------</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_scan_picture">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>10</y>
+        <width>121</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Scan Picture</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_text_read_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>70</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Picture</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_text_read_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>240</y>
+        <width>141</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Detected Text</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_detected_text">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>240</y>
+        <width>300</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </widget>

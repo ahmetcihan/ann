@@ -34,8 +34,67 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_256_512_512_26_save_weights,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_save_weights_handler()));
     connect(ui->pushButton_256_512_512_26_load_saved_weights,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_load_saved_weights_handler()));
     connect(ui->pushButton_256_512_512_26_stop_train,SIGNAL(clicked(bool)),this,SLOT(_256_512_512_26_stop_train_handler()));
-}
 
+    connect(ui->pushButton_scan_picture,SIGNAL(clicked(bool)),this,SLOT(scan_picture()));
+
+    QPixmap my_pixmap;
+    my_pixmap.load("/home/ahmet/Desktop/test_picture.png");
+    ui->label_text_read->setPixmap(my_pixmap);
+}
+void MainWindow::scan_picture(void){
+    QPixmap my_pix;
+    QImage read_image;
+    u8 tester[16][16];
+    u8 image_array[160][160];
+
+    read_image.load("/home/ahmet/Desktop/test_picture.png");
+    u16 img_height = read_image.height();
+    u16 img_width = read_image.width();
+
+    for(u16 i = 0; i < img_width ; i++){
+        for(u16 j = 0; j < img_height ; j++){
+            image_array[i][j] = 0;
+            if((read_image.pixel(i,j) & 0xFF) == 0xFF){
+                image_array[i][j] = 1;
+            }
+            //qDebug() << QString("image_array-%1-%2").arg(i).arg(j) << image_array[i][j];
+        }
+    }
+
+    for(u8 m = 0; m < 144; m++){
+        for(u8 i = 0; i < 144; i++){
+//            my_pix.load("/home/ahmet/Desktop/test_picture.png");
+
+//            QPainter my_painter(&my_pix);
+//            my_painter.setBrush(Qt::NoBrush);
+//            my_painter.setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::FlatCap));
+//            my_painter.drawRect(i,m,16,16);
+
+//            ui->label_text_read->setPixmap(my_pix);
+
+            for(u8 j = 0; j < 16; j++){
+                for(u8 k = 0; k < 16; k++){
+                    tester[j][k] = image_array[j+ i][k + m];
+                }
+            }
+            for(u16 t = 0; t < 16; t++){
+                for(u16 j = 0; j < 16; j++){
+                    ann_class->net_256_512_512_26.test_input[16*t + j] = tester[t][j];
+                }
+            }
+
+            ann_class->_256_512_512_26_ann_test(ann_class->net_256_512_512_26.test_input,
+                                                ann_class->net_256_512_512_26.hidden_neuron_bias_1,
+                                                ann_class->net_256_512_512_26.hidden_neuron_bias_2,
+                                                ann_class->net_256_512_512_26.output_bias,
+                                                ann_class->net_256_512_512_26.w_input_to_hidden,
+                                                ann_class->net_256_512_512_26.w_hidden_to_hidden,
+                                                ann_class->net_256_512_512_26.w_hidden_to_output);
+        }
+    }
+
+    qDebug() << "ok" << my_pix.size();
+}
 void MainWindow::_100_msec_timer_handle(void){
     if(ann_class->train_status == 1){
         ui->label_64_128_5_train->setText(QString("training status %  %1").arg(ann_class->epoch_status));

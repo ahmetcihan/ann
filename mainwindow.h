@@ -11,6 +11,8 @@
 #include <QSettings>
 #include <QProcess>
 #include <QDateTime>
+#include <QPainter>
+#include <QPixmap>
 
 typedef unsigned char   u8;
 typedef unsigned int    u32;
@@ -50,6 +52,8 @@ private:
 
 private slots:
     void _100_msec_timer_handle(void);
+
+    void scan_picture(void);
 
     void _64_128_5_random_initilize_handler(void);
     void _64_128_5_load_saved_weights_handler(void);
