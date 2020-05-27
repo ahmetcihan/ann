@@ -115,6 +115,8 @@ public:
                                     double w_input_to_hidden[256][512], double w_hidden_to_hidden[512][512], double w_hidden_to_output[512][26]);
     double _256_512_512_26_ann_calculate_total_error(void);
 
+    void _2_3_1_ann_train(void);
+
 private:
     Ui::ann *ui;
     MainWindow *mainwindow;
@@ -126,7 +128,6 @@ private:
     void _2_5_3_1_ann_train(void);
     void _2_5_2_1_ann_train(void);
     void _2_3_2_1_ann_train(void);
-    void _2_3_1_ann_train(void);
     void _2_5_1_ann_train(void);
     void _2_5_2_ann_train(void);
 

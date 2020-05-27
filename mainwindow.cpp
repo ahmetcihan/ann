@@ -40,6 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap my_pixmap;
     my_pixmap.load("/home/ahmet/Desktop/test_picture.png");
     ui->label_text_read->setPixmap(my_pixmap);
+
+    ann_class->_2_3_1_ann_train();
 }
 void MainWindow::scan_picture(void){
     QPixmap my_pix;
