@@ -526,6 +526,91 @@ void ann::_2_3_2_1_ann_train(void){
         qDebug() << "output : " << calculated_output[k];
     }
 }
+void ann::_2_2_1_ann_train(void){
+    double input1 = 1;
+    double input2 = 1;
+    double desired_output = 1;
+    double calculated_output = 0;
+    double Y_in,Y_out;
+    double w_input_to_hidden[2][2];
+    double w_hidden_to_output[2];
+
+    double A_in,B_in;
+    double A_out,B_out;
+    double output_error;
+
+    double biasA = 0.1;
+    double biasB = 0.2;
+    double bias_output = 0.6;
+
+    double errorA,errorB;
+
+    u32 epoch = 50;
+    double learning_rate = 1;
+
+    double global_error;
+    double err_sum;
+
+    qDebug() << " input1 : " << input1 << " input2 : " << input2 << "output : " << desired_output;
+
+    w_input_to_hidden[0][0] = 0.1;
+    w_input_to_hidden[0][1] = 0.1;
+
+    w_input_to_hidden[1][0] = 0.1;
+    w_input_to_hidden[1][1] = 0.1;
+
+    w_hidden_to_output[0] = 0.1;
+    w_hidden_to_output[1] = 0.1;
+
+    for(u32 era = 0; era < epoch; era++){
+        A_in = input1*w_input_to_hidden[0][0] + input2*w_input_to_hidden[1][0] + biasA;
+        B_in = input1*w_input_to_hidden[0][1] + input2*w_input_to_hidden[1][1] + biasB;
+
+        A_out = sigmoid_func(A_in);
+        B_out = sigmoid_func(B_in);
+
+        Y_in = A_out*w_hidden_to_output[0] + B_out*w_hidden_to_output[1] + bias_output;
+        Y_out = sigmoid_func(Y_in);
+        output_error = desired_output - Y_out;
+        calculated_output = Y_out;
+
+        err_sum = output_error;
+
+        global_error = derivative_of_sigmoid_func(Y_in) * output_error;
+
+        w_hidden_to_output[0] += global_error * A_out * learning_rate;
+        w_hidden_to_output[1] += global_error * B_out * learning_rate;
+
+        bias_output += global_error * learning_rate;
+
+        errorA = derivative_of_sigmoid_func(A_in) * global_error * w_hidden_to_output[0];
+        errorB = derivative_of_sigmoid_func(B_in) * global_error * w_hidden_to_output[1];
+
+        w_input_to_hidden[0][0] += errorA * input1 * learning_rate;
+        w_input_to_hidden[0][1] += errorB * input1 * learning_rate;
+
+        w_input_to_hidden[1][0] += errorA * input2 * learning_rate;
+        w_input_to_hidden[1][1] += errorB * input2 * learning_rate;
+
+        biasA += errorA * learning_rate;
+        biasB += errorB * learning_rate;
+
+        qDebug() << QString("era-%1").arg(era) << "error :" << err_sum;
+    }
+
+    for(u8 i = 0; i < 2; i++){
+        for(u8 j = 0; j < 2; j++){
+            qDebug() << QString("in_to_h_w[%1][%2] :").arg(i).arg(j) << w_input_to_hidden[i][j];
+        }
+    }
+    for(u8 j = 0; j < 2; j++){
+        qDebug() << QString("h_to_o_w[%1] :").arg(j) << w_hidden_to_output[j];
+    }
+    qDebug() << "biasA" << biasA;
+    qDebug() << "biasB" << biasB;
+    qDebug() << "bias_output" << bias_output;
+    qDebug() << "output : " << calculated_output;
+}
 void ann::_2_3_1_ann_train(void){
     double input1[4] = {0,0,1,1};
     double input2[4] = {0,1,0,1};
