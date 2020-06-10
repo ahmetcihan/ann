@@ -529,7 +529,7 @@ void ann::_2_3_2_1_ann_train(void){
 
 void ann::_2_2_1_ann_genetic(void){
     double input1 = 1;
-    double input2 = 1;
+    double input2 = 0;
     double desired_output = 1;
     double calculated_output = 0;
     double Y_in,Y_out;
@@ -543,39 +543,106 @@ void ann::_2_2_1_ann_genetic(void){
     double A_out,B_out;
     double output_error;
 
-    double population_1[9] = {0.11,0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19};
-    double population_2[9] = {0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29};
-    double population_3[9] = {0.31,0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39};
-    double population[3][9];
+    double population[6][9];
+    double error[6];
 
-    memcpy(&population[0][0],&population_1[0],9);
-    memcpy(&population[1][0],&population_2[0],9);
-    memcpy(&population[2][0],&population_3[0],9);
+    double new_population_1[9] = {0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19};
+    double new_population_2[9] = {0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29};
+    double new_population_3[9] = {0.31, 0.32, 0.33, 0.34, 0.35, 0.36, 0.37, 0.38, 0.39};
+    double new_population_4[9] = {0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.47, 0.48, 0.49};
+    double new_population_5[9] = {0.51, 0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59};
+    double new_population_6[9] = {0.61, 0.62, 0.63, 0.64, 0.65, 0.66, 0.67, 0.68, 0.69};
 
     qDebug() << " input1 : " << input1 << " input2 : " << input2 << "output : " << desired_output;
 
-    w_input_to_hidden[0][0] = population[][0];
-    w_input_to_hidden[0][1] = population_1[1];
-    w_input_to_hidden[1][0] = population_1[2];
-    w_input_to_hidden[1][1] = population_1[3];
-    w_hidden_to_output[0] = population_1[4];
-    w_hidden_to_output[1] = population_1[5];
-    biasA = population_1[6];
-    biasB = population_1[7];
-    bias_output = population_1[8];
 
-    A_in = input1*w_input_to_hidden[0][0] + input2*w_input_to_hidden[1][0] + biasA;
-    B_in = input1*w_input_to_hidden[0][1] + input2*w_input_to_hidden[1][1] + biasB;
+    for(u32 era = 0; era < 100; era++){
+        for(u8 i = 0; i < 9; i++){
+            population[0][i] = new_population_1[i];
+            population[1][i] = new_population_2[i];
+            population[2][i] = new_population_3[i];
+            population[3][i] = new_population_4[i];
+            population[4][i] = new_population_5[i];
+            population[5][i] = new_population_6[i];
+        }
 
-    A_out = sigmoid_func(A_in);
-    B_out = sigmoid_func(B_in);
+        for(u8 pop = 0; pop < 6; pop++){
+            w_input_to_hidden[0][0] = population[pop][0];
+            w_input_to_hidden[0][1] = population[pop][1];
+            w_input_to_hidden[1][0] = population[pop][2];
+            w_input_to_hidden[1][1] = population[pop][3];
+            w_hidden_to_output[0] = population[pop][4];
+            w_hidden_to_output[1] = population[pop][5];
+            biasA = population[pop][6];
+            biasB = population[pop][7];
+            bias_output = population[pop][8];
 
-    Y_in = A_out*w_hidden_to_output[0] + B_out*w_hidden_to_output[1] + bias_output;
-    Y_out = sigmoid_func(Y_in);
-    output_error = desired_output - Y_out;
-    calculated_output = Y_out;
+            A_in = input1*w_input_to_hidden[0][0] + input2*w_input_to_hidden[1][0] + biasA;
+            B_in = input1*w_input_to_hidden[0][1] + input2*w_input_to_hidden[1][1] + biasB;
 
-    qDebug() << "output : " << calculated_output << "output err :" << output_error;
+            A_out = sigmoid_func(A_in);
+            B_out = sigmoid_func(B_in);
+
+            Y_in = A_out*w_hidden_to_output[0] + B_out*w_hidden_to_output[1] + bias_output;
+            Y_out = sigmoid_func(Y_in);
+            output_error = desired_output - Y_out;
+            calculated_output = Y_out;
+            error[pop] = fabs(output_error);
+
+            //qDebug() << "output : " << calculated_output << "output err :" << output_error << QString("abs err-%1 :").arg(pop) << error[pop];
+
+        }
+        double min_val = 500;
+        u8 index1 = 255;
+        u8 index2 = 255;
+        u8 index3 = 255;
+
+        for(u8 i = 0; i < 6; i++){
+            if(error[i] < min_val){
+                min_val = error[i];
+                index1 = i;
+            }
+        }
+        //qDebug() << "min value" << min_val << "index1" << index1;
+
+        min_val = 500;
+        for(u8 i = 0; i < 6; i++){
+            if(i != index1){
+                if(error[i] < min_val){
+                    min_val = error[i];
+                    index2 = i;
+                }
+            }
+        }
+        //qDebug() << "min value" << min_val << "index2" << index2;
+
+        min_val = 500;
+        for(u8 i = 0; i < 6; i++){
+            if((i != index1)&&(i != index2)){
+                if(error[i] < min_val){
+                    min_val = error[i];
+                    index3 = i;
+                }
+            }
+        }
+        //qDebug() << "min value" << min_val << "index3" << index3;
+
+        for(u8 i = 0; i < 9; i++){
+            new_population_1[i] = population[index1][i];
+            new_population_2[i] = population[index2][i];
+            new_population_3[i] = population[index3][i];
+        }
+        for(u8 i = 0; i < 5; i++){
+            new_population_4[i] = new_population_1[i] + 0.01;
+            new_population_5[i] = new_population_2[i] - 0.01;
+            new_population_6[i] = new_population_3[i] + 0.03;
+        }
+        for(u8 i = 5; i < 9; i++){
+            new_population_4[i] = new_population_2[i] - 0.01;
+            new_population_5[i] = new_population_3[i] + 0.02;
+            new_population_6[i] = new_population_1[i] - 0.03;
+        }
+    }
 
     for(u8 i = 0; i < 2; i++){
         for(u8 j = 0; j < 2; j++){
@@ -588,10 +655,12 @@ void ann::_2_2_1_ann_genetic(void){
     qDebug() << "biasA" << biasA;
     qDebug() << "biasB" << biasB;
     qDebug() << "bias_output" << bias_output;
+    qDebug() << "calculated_output" << calculated_output;
+
 }
 void ann::_2_2_1_ann_train(void){
     double input1 = 1;
-    double input2 = 1;
+    double input2 = 0;
     double desired_output = 1;
     double calculated_output = 0;
     double Y_in,Y_out;
@@ -602,13 +671,13 @@ void ann::_2_2_1_ann_train(void){
     double A_out,B_out;
     double output_error;
 
-    double biasA = 0.1;
-    double biasB = 0.2;
-    double bias_output = 0.6;
+    double biasA = 0.17;
+    double biasB = 0.18;
+    double bias_output = 0.19;
 
     double errorA,errorB;
 
-    u32 epoch = 50;
+    u32 epoch = 10000;
     double learning_rate = 1;
 
     double global_error;
@@ -616,14 +685,14 @@ void ann::_2_2_1_ann_train(void){
 
     qDebug() << " input1 : " << input1 << " input2 : " << input2 << "output : " << desired_output;
 
-    w_input_to_hidden[0][0] = 0.1;
-    w_input_to_hidden[0][1] = 0.1;
+    w_input_to_hidden[0][0] = 0.11;
+    w_input_to_hidden[0][1] = 0.12;
 
-    w_input_to_hidden[1][0] = 0.1;
-    w_input_to_hidden[1][1] = 0.1;
+    w_input_to_hidden[1][0] = 0.13;
+    w_input_to_hidden[1][1] = 0.14;
 
-    w_hidden_to_output[0] = 0.1;
-    w_hidden_to_output[1] = 0.1;
+    w_hidden_to_output[0] = 0.15;
+    w_hidden_to_output[1] = 0.16;
 
     for(u32 era = 0; era < epoch; era++){
         A_in = input1*w_input_to_hidden[0][0] + input2*w_input_to_hidden[1][0] + biasA;
