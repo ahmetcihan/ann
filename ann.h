@@ -117,6 +117,7 @@ public:
 
     void _2_3_1_ann_train(void);
     void _2_2_1_ann_train(void);
+    void _2_2_1_ann_genetic(void);
 
 private:
     Ui::ann *ui;

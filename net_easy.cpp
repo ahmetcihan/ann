@@ -526,6 +526,69 @@ void ann::_2_3_2_1_ann_train(void){
         qDebug() << "output : " << calculated_output[k];
     }
 }
+
+void ann::_2_2_1_ann_genetic(void){
+    double input1 = 1;
+    double input2 = 1;
+    double desired_output = 1;
+    double calculated_output = 0;
+    double Y_in,Y_out;
+    double w_input_to_hidden[2][2];
+    double w_hidden_to_output[2];
+    double biasA;
+    double biasB;
+    double bias_output;
+
+    double A_in,B_in;
+    double A_out,B_out;
+    double output_error;
+
+    double population_1[9] = {0.11,0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19};
+    double population_2[9] = {0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29};
+    double population_3[9] = {0.31,0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39};
+    double population[3][9];
+
+    memcpy(&population[0][0],&population_1[0],9);
+    memcpy(&population[1][0],&population_2[0],9);
+    memcpy(&population[2][0],&population_3[0],9);
+
+    qDebug() << " input1 : " << input1 << " input2 : " << input2 << "output : " << desired_output;
+
+    w_input_to_hidden[0][0] = population[][0];
+    w_input_to_hidden[0][1] = population_1[1];
+    w_input_to_hidden[1][0] = population_1[2];
+    w_input_to_hidden[1][1] = population_1[3];
+    w_hidden_to_output[0] = population_1[4];
+    w_hidden_to_output[1] = population_1[5];
+    biasA = population_1[6];
+    biasB = population_1[7];
+    bias_output = population_1[8];
+
+    A_in = input1*w_input_to_hidden[0][0] + input2*w_input_to_hidden[1][0] + biasA;
+    B_in = input1*w_input_to_hidden[0][1] + input2*w_input_to_hidden[1][1] + biasB;
+
+    A_out = sigmoid_func(A_in);
+    B_out = sigmoid_func(B_in);
+
+    Y_in = A_out*w_hidden_to_output[0] + B_out*w_hidden_to_output[1] + bias_output;
+    Y_out = sigmoid_func(Y_in);
+    output_error = desired_output - Y_out;
+    calculated_output = Y_out;
+
+    qDebug() << "output : " << calculated_output << "output err :" << output_error;
+
+    for(u8 i = 0; i < 2; i++){
+        for(u8 j = 0; j < 2; j++){
+            qDebug() << QString("in_to_h_w[%1][%2] :").arg(i).arg(j) << w_input_to_hidden[i][j];
+        }
+    }
+    for(u8 j = 0; j < 2; j++){
+        qDebug() << QString("h_to_o_w[%1] :").arg(j) << w_hidden_to_output[j];
+    }
+    qDebug() << "biasA" << biasA;
+    qDebug() << "biasB" << biasB;
+    qDebug() << "bias_output" << bias_output;
+}
 void ann::_2_2_1_ann_train(void){
     double input1 = 1;
     double input2 = 1;

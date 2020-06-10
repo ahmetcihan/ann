@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     my_pixmap.load("/home/ahmet/Desktop/test_picture.png");
     ui->label_text_read->setPixmap(my_pixmap);
 
-    ann_class->_2_2_1_ann_train();
+    ann_class->_2_2_1_ann_genetic();
 }
 void MainWindow::scan_picture(void){
     QPixmap my_pix;
