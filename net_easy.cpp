@@ -543,21 +543,17 @@ void ann::_2_2_1_ann_genetic(void){
     double A_out,B_out;
     double output_error[4];
 
-    double population[12][9];
     double error[12];
+    double population[12][9];
+    double new_population[12][9];
 
-    double new_population_1[9] = {0.11, 0.12, 0.13, -0.14, 0.15, 0.16, 0.17, 0.18, 0.19};
-    double new_population_2[9] = {0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, -0.29};
-    double new_population_3[9] = {0.31, 0.32, 0.33, 0.34, -0.35, 0.36, 0.37, 0.38, 0.39};
-    double new_population_4[9] = {0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.47, 0.48, 0.49};
-    double new_population_5[9] = {0.51, 0.52, 0.53, 0.54, 0.55, -0.56, 0.57, 0.58, 0.59};
-    double new_population_6[9] = {0.61, 0.62, 0.63, 0.64, 0.65, 0.66, 0.67, 0.68, 0.69};
-    double new_population_7[9] = {-0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.47, 0.48, 0.49};
-    double new_population_8[9] = {0.51, -0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, -0.59};
-    double new_population_9[9] = {0.61, 0.62, -0.63, 0.64, 0.65, 0.66, 0.67, 0.68, 0.69};
-    double new_population_10[9] = {0.41, 0.42, 0.43, -0.44, 0.45, 0.46, 0.47, 0.48, 0.49};
-    double new_population_11[9] = {0.51, 0.52, 0.53, 0.54, -0.55, 0.56, 0.57, 0.58, 0.59};
-    double new_population_12[9] = {0.61, 0.62, 0.63, 0.64, 0.65, -0.66, 0.67, 0.68, 0.69};
+    qsrand(QDateTime::currentMSecsSinceEpoch());
+
+    for(u8 j = 0; j < 12; j++){
+        for(u8 i = 0; i < 9; i++){
+            new_population[j][i] = ((double) qrand()/RAND_MAX) * (-2) + 1;
+        }
+    }
 
     qDebug() << " input1 : " << input1[0] << " input2 : " << input2[0] << "output : " << desired_output[0];
     qDebug() << " input1 : " << input1[1] << " input2 : " << input2[1] << "output : " << desired_output[1];
@@ -566,19 +562,10 @@ void ann::_2_2_1_ann_genetic(void){
 
 
     for(u32 era = 0; era < 1000; era++){
-        for(u8 i = 0; i < 9; i++){
-            population[0][i] = new_population_1[i];
-            population[1][i] = new_population_2[i];
-            population[2][i] = new_population_3[i];
-            population[3][i] = new_population_4[i];
-            population[4][i] = new_population_5[i];
-            population[5][i] = new_population_6[i];
-            population[6][i] = new_population_7[i];
-            population[7][i] = new_population_8[i];
-            population[8][i] = new_population_9[i];
-            population[9][i] = new_population_10[i];
-            population[10][i] = new_population_11[i];
-            population[11][i] = new_population_12[i];
+        for(u8 j = 0; j < 12; j++){
+            for(u8 i = 0; i < 9; i++){
+                population[j][i] = new_population[j][i];
+            }
         }
         for(u8 pop = 0; pop < 12; pop++){
             for(u8 k = 0; k < 4; k++){
@@ -605,6 +592,8 @@ void ann::_2_2_1_ann_genetic(void){
             }
             error[pop] = output_error[0]*output_error[0] + output_error[1]*output_error[1]
                     + output_error[2]*output_error[2] + output_error[3]*output_error[3];
+//            error[pop] = output_error[0]*output_error[0]*output_error[0]*output_error[0] + output_error[1]*output_error[1]*output_error[1]*output_error[1]
+//                    + output_error[2]*output_error[2]*output_error[2]*output_error[2] + output_error[3]*output_error[3]*output_error[3]*output_error[3];
         }
 
         double min_val = 500;
@@ -643,43 +632,43 @@ void ann::_2_2_1_ann_genetic(void){
         //qDebug() << "min value" << min_val << "index3" << index3;
 
         for(u8 i = 0; i < 9; i++){
-            new_population_1[i] = population[index1][i];
-            new_population_2[i] = population[index2][i];
-            new_population_3[i] = population[index3][i];
+            new_population[0][i] = population[index1][i];
+            new_population[1][i] = population[index2][i];
+            new_population[2][i] = population[index3][i];
         }
         for(u8 i = 0; i < 9; i++){
-            if((i%2) == 0){
-                new_population_4[i] = new_population_1[i];
-            }
-            else{
-                new_population_4[i] = new_population_2[i];
-            }
-            if((i%2) == 0){
-                new_population_5[i] = new_population_2[i];
-            }
-            else{
-                new_population_5[i] = new_population_3[i];
-            }
-            if((i%2) == 0){
-                new_population_6[i] = new_population_3[i];
-            }
-            else{
-                new_population_6[i] = new_population_1[i];
-            }
-            new_population_7[i] = new_population_1[i];
-            new_population_8[i] = new_population_1[i];
-            new_population_9[i] = new_population_1[i];
-            new_population_10[i] = new_population_1[i];
-            new_population_11[i] = new_population_1[i];
-            new_population_12[i] = new_population_1[i];
+            new_population[3][i] = new_population[0][i];
+            new_population[4][i] = new_population[0][i];
+            new_population[5][i] = new_population[0][i];
+            new_population[6][i] = new_population[0][i];
+            new_population[7][i] = new_population[0][i];
+            new_population[8][i] = new_population[0][i];
+            new_population[9][i] = new_population[0][i];
+            new_population[10][i] = new_population[0][i];
+            new_population[11][i] = new_population[0][i];
         }
         //qDebug() << "val" << (era%9);
-        new_population_7[(era%9)] = new_population_7[(era%9)] + 0.1;
-        new_population_8[(era%9)] = new_population_8[(era%9)] - 0.1;
-        new_population_9[(era%9)] = new_population_9[(era%9)] + 0.001;
-        new_population_10[(era%9)] = new_population_10[(era%9)] - 0.001;
-        new_population_11[(era%9)] = new_population_11[(era%9)] + 0.00001;
-        new_population_12[(era%9)] = new_population_12[(era%9)] - 0.00001;
+
+        new_population[4][(era%9)] += 0.1;
+        new_population[5][(era%9)] -= 0.1;
+        new_population[6][(era%9)] += 0.001;
+        new_population[7][(era%9)] -= 0.001;
+        new_population[8][(era%9)] += 0.0001;
+        new_population[9][(era%9)] -= 0.0001;
+        new_population[10][(era%9)] += 0.000001;
+        new_population[11][(era%9)] -= 0.000001;
+
+        new_population[4][8 - (era%9)] += 0.01;
+        new_population[5][8 - (era%9)] -= 0.01;
+        new_population[6][8 - (era%9)] += 0.001;
+        new_population[7][8 - (era%9)] -= 0.001;
+        new_population[8][8 - (era%9)] += 0.0001;
+        new_population[9][8 - (era%9)] -= 0.0001;
+        new_population[10][8 - (era%9)] += 0.0000001;
+        new_population[11][8 - (era%9)] -= 0.0000001;
+
+        new_population[3][(era%9)] = new_population[3][(era%9)] + 0.000001 * ((double) qrand()/RAND_MAX) * (-2) + 1;
+
 
     }
 
