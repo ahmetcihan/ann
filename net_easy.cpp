@@ -590,10 +590,8 @@ void ann::_2_2_1_ann_genetic(void){
                 output_error[k] = fabs(desired_output[k] - Y_out);
                 calculated_output[k] = Y_out;
             }
-            error[pop] = output_error[0]*output_error[0] + output_error[1]*output_error[1]
-                    + output_error[2]*output_error[2] + output_error[3]*output_error[3];
-//            error[pop] = output_error[0]*output_error[0]*output_error[0]*output_error[0] + output_error[1]*output_error[1]*output_error[1]*output_error[1]
-//                    + output_error[2]*output_error[2]*output_error[2]*output_error[2] + output_error[3]*output_error[3]*output_error[3]*output_error[3];
+            error[pop] =  output_error[0]*output_error[0] + output_error[1]*output_error[1]
+                        + output_error[2]*output_error[2] + output_error[3]*output_error[3];
         }
 
         double min_val = 500;
@@ -638,12 +636,12 @@ void ann::_2_2_1_ann_genetic(void){
         }
         for(u8 i = 0; i < 9; i++){
             new_population[3][i] = new_population[0][i];
-            new_population[4][i] = new_population[0][i];
-            new_population[5][i] = new_population[0][i];
+            new_population[4][i] = new_population[1][i];
+            new_population[5][i] = new_population[1][i];
             new_population[6][i] = new_population[0][i];
             new_population[7][i] = new_population[0][i];
-            new_population[8][i] = new_population[0][i];
-            new_population[9][i] = new_population[0][i];
+            new_population[8][i] = new_population[2][i];
+            new_population[9][i] = new_population[2][i];
             new_population[10][i] = new_population[0][i];
             new_population[11][i] = new_population[0][i];
         }
@@ -667,8 +665,7 @@ void ann::_2_2_1_ann_genetic(void){
         new_population[10][8 - (era%9)] += 0.0000001;
         new_population[11][8 - (era%9)] -= 0.0000001;
 
-        new_population[3][(era%9)] = new_population[3][(era%9)] + 0.000001 * ((double) qrand()/RAND_MAX) * (-2) + 1;
-
+        new_population[3][(era%9)] = new_population[3][(era%9)] + 0.00001 * ((double) qrand()/RAND_MAX) * (-2) + 1;
 
     }
 
